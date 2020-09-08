@@ -1,0 +1,29 @@
+{
+  "name": "wastemanagementapp",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build-dev": "rm -r ./build; tsc && mkdir ./build/config && cp ./src/config/.env.development ./build/config/.env.development",
+    "build-prod": "rm -r ./build; tsc && mkdir ./build/config && cp ./src/config/.env.production ./build/config/.env.production",
+    "start-dev": "export NODE_ENV=development && nodemon ./build/index.js",
+    "start-prod": "export NODE_ENV=production && node ./build/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@googlemaps/google-maps-services-js": "^3.1.5",
+    "@types/dotenv": "^8.2.0",
+    "@types/express": "^4.17.7",
+    "@types/mongoose": "^5.7.36",
+    "@types/node": "^14.0.27",
+    "@types/node-fetch": "^2.5.7",
+    "@types/node-schedule": "^1.3.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.10.0",
+    "node-fetch": "^2.6.0",
+    "node-schedule": "^1.3.2"
+  }
+}
