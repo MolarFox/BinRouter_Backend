@@ -20,6 +20,10 @@ const fleetVehicle = new mongoose.Schema({
     icon: {
         type: mongoose.Schema.Types.Number
     },
+    belongTo: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Depot"
+    }
 }, {
     autoIndex: false,
     collection: "FleetVehicle"

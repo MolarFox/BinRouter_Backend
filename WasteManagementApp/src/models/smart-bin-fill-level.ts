@@ -5,7 +5,6 @@ const smartBinFillLevelSchema = new mongoose.Schema({
     serialNumber: {
         type: mongoose.Schema.Types.Number,
         required: true,
-        ref: "Bin"
     },
     fullness: {
         type: mongoose.Schema.Types.Number,
@@ -20,5 +19,16 @@ const smartBinFillLevelSchema = new mongoose.Schema({
     autoIndex: false,
     collection: "SmartBinsFillLevels"
 });
+
+smartBinFillLevelSchema.virtual("smartBin", {
+    ref: "SmartBin",
+    localField: "serialNumber",
+    foreignField: "serialNumber",
+    justOne: false
+});
+
+// If using populated projections, make sure foreignField is included in the projection
+// For example
+// SmartBinFillLevel.find({}).populate({path: "smartBin", select: "location serialNumber"}).exec(function(err, docs) {});
 
 export default mongoose.model("SmartBinFillLevel", smartBinFillLevelSchema);

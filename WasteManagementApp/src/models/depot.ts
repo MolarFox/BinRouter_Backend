@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const dumbBinSchema = new mongoose.Schema({
+const depotSchema = new mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     location: {
         type: {
@@ -26,19 +26,9 @@ const dumbBinSchema = new mongoose.Schema({
         minlength: 1,
         required: true
     },
-    capacity: {
-        type: mongoose.Schema.Types.Number,
-        min: 10,
-        max: 1000,
-        required: true
-    },
-    nearestSmartBin: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "SmartBin"
-    }
 }, {
     autoIndex: false,
-    collection: "DumbBins"
+    collection: "Depots"
 });
 
-export default mongoose.model("DumbBin", dumbBinSchema);
+export default mongoose.model("Depot", depotSchema);

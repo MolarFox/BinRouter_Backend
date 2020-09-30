@@ -16,6 +16,7 @@ import { GoogleMapsServices } from "./utils/google-maps-services";
 import { distancematrix } from "@googlemaps/google-maps-services-js/dist/distance";
 import BinDistance from "./models/bin-distance";
 import smartBin from "./models/smart-bin";
+import BinCollectionRoute from "./models/bin-collection-route";
 
 // Load all environment variables from the .env configuration file
 let dotenvResult;
@@ -39,6 +40,113 @@ if (dotenvResult.error) throw dotenvResult.error;
 console.log("Environment is initialized successfully");
 
 const googleMapsServices = new GoogleMapsServices();
+const bins = [
+    {
+        longitude: 144.6601949611,
+        latitude: -37.9018111376
+    }, 
+    {
+        longitude: 144.6614092517,
+        latitude: -37.9007616667,
+    },
+    {
+        longitude: 144.6601949611,
+        latitude: -37.9018111376
+    }, 
+    {
+        longitude: 144.6614092517,
+        latitude: -37.9007616667,
+    },
+    {
+        longitude: 144.6601949611,
+        latitude: -37.9018111376
+    }, 
+    {
+        longitude: 144.6614092517,
+        latitude: -37.9007616667,
+    },
+    {
+        longitude: 144.6601949611,
+        latitude: -37.9018111376
+    }, 
+    {
+        longitude: 144.6614092517,
+        latitude: -37.9007616667,
+    },
+    {
+        longitude: 144.6601949611,
+        latitude: -37.9018111376
+    }, 
+    {
+        longitude: 144.6614092517,
+        latitude: -37.9007616667,
+    },
+    {
+        longitude: 144.6601949611,
+        latitude: -37.9018111376
+    }, 
+    {
+        longitude: 144.6614092517,
+        latitude: -37.9007616667,
+    },
+    {
+        longitude: 144.6601949611,
+        latitude: -37.9018111376
+    }, 
+    {
+        longitude: 144.6614092517,
+        latitude: -37.9007616667,
+    },
+    {
+        longitude: 144.6601949611,
+        latitude: -37.9018111376
+    }, 
+    {
+        longitude: 144.6614092517,
+        latitude: -37.9007616667,
+    },
+    {
+        longitude: 144.6601949611,
+        latitude: -37.9018111376
+    }, 
+    {
+        longitude: 144.6614092517,
+        latitude: -37.9007616667,
+    },
+    {
+        longitude: 144.6601949611,
+        latitude: -37.9018111376
+    }, 
+    {
+        longitude: 144.6614092517,
+        latitude: -37.9007616667,
+    },
+    {
+        longitude: 144.6601949611,
+        latitude: -37.9018111376
+    }, 
+    {
+        longitude: 144.6614092517,
+        latitude: -37.9007616667,
+    },
+    {
+        longitude: 144.6601949611,
+        latitude: -37.9018111376
+    }, 
+    {
+        longitude: 144.6614092517,
+        latitude: -37.9007616667,
+    },
+    {
+        longitude: 144.6514192517,
+        latitude: -37.9017716667,
+    },
+    {
+        longitude: 144.662400,
+        latitude: -37.901760,
+    },
+]
+
 
 // Start connecting to mongodb first
 console.log("Start connecting to the database...");
@@ -57,6 +165,25 @@ mongoose.connection.once("open", function() {
 
     mongoose.connection.db.collection("SmartBins").countDocuments(async function(error, count) {
         if (error) return console.error(error);
+        googleMapsServices.computeDirections(bins[0], bins[25], bins.slice(1, 25)).then(data => {
+            console.log(data);
+            console.log(data[0].routes);
+            // const route = new BinCollectionRoute({
+            //     _id: new mongoose.Types.ObjectId(),
+            //     searchStrategy: "AUTOMATIC",
+            //     routeByVehicle: [
+            //         {
+            //             vehicle: "5f73fea3a3af8f1ab7fa9dd5",
+            //             path: data
+            //         }
+            //     ]
+            // });
+            // route.save(function(err, doc) {
+            //     if (err) return console.error(err);
+            //     console.log(doc);
+            // })
+            // console.log(data[0].routes[0].legs);
+        });
         if (count === 0) {
             const smartBinsCurrentFillLevelsInfo = 
                 await fetch(process.env.SMART_BINS_CURRENT_FILL_LEVELS_URL as string)

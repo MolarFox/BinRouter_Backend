@@ -34,7 +34,6 @@ const binDistanceSchema = new mongoose.Schema({
     }
 }, {
     autoIndex: false,
-    selectPopulatedPaths: false,
     collection: "BinDistances"
 });
 
