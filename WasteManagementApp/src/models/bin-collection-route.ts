@@ -7,14 +7,14 @@ const binCollectionRouteSchema = new mongoose.Schema({
         required: true,
         enum: ["AUTOMATIC", "GREEDY_DESCENT", "GUIDED_LOCAL_SEARCH", "SIMULATED_ANNEALING", "TABU_SEARCH", "OBJECTIVE_TABU_SEARCH"]
     },
-    routeByVehicle: [
+    routes: [
         {
             vehicle: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "FleetVehicle",
                 required: true
             }, 
-            path: {
+            directions: {
                 type: [mongoose.Schema.Types.Mixed],
                 required: true
             }

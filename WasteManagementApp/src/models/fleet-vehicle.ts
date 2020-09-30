@@ -22,11 +22,12 @@ const fleetVehicle = new mongoose.Schema({
     },
     belongTo: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Depot"
+        ref: "Depot",
+        required: true
     }
 }, {
     autoIndex: false,
-    collection: "FleetVehicle"
+    collection: "FleetVehicles"
 });
 
 export default mongoose.model("FleetVehicle", fleetVehicle);

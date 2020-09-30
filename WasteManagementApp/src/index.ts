@@ -4,18 +4,18 @@ import fetch from "node-fetch";
 import schedule from "node-schedule";
 import express, { response } from "express";
 import router from "./router";
-import mongoose, { Mongoose } from "mongoose";
+import mongoose, { mongo } from "mongoose";
 import * as HTTP from "./constants/http";
 import * as MISC from "./constants/misc";
 import SmartBin from "./models/smart-bin";
 import DumbBin from "./models/dumb-bin";
 import SmartBinDailyFillLevel from "./models/smart-bin-fill-level";
-import FleetVehicle from "./models/fleet-vehicle";
 import { SmartBinsInfo, SmartBinsCurrentFillLevelsInfo } from "./utils/helper";
 import { GoogleMapsServices } from "./utils/google-maps-services";
 import { distancematrix } from "@googlemaps/google-maps-services-js/dist/distance";
+import FleetVehicle from "./models/fleet-vehicle";
 import BinDistance from "./models/bin-distance";
-import smartBin from "./models/smart-bin";
+import Depot from "./models/depot";
 import BinCollectionRoute from "./models/bin-collection-route";
 
 // Load all environment variables from the .env configuration file
@@ -165,9 +165,9 @@ mongoose.connection.once("open", function() {
 
     mongoose.connection.db.collection("SmartBins").countDocuments(async function(error, count) {
         if (error) return console.error(error);
-        googleMapsServices.computeDirections(bins[0], bins[25], bins.slice(1, 25)).then(data => {
-            console.log(data);
-            console.log(data[0].routes);
+        // googleMapsServices.computeDirections(bins[0], bins[25], bins.slice(1, 25)).then(data => {
+        //     console.log(data);
+        //     console.log(data[0].routes);
             // const route = new BinCollectionRoute({
             //     _id: new mongoose.Types.ObjectId(),
             //     searchStrategy: "AUTOMATIC",
@@ -183,7 +183,7 @@ mongoose.connection.once("open", function() {
             //     console.log(doc);
             // })
             // console.log(data[0].routes[0].legs);
-        });
+        // });
         if (count === 0) {
             const smartBinsCurrentFillLevelsInfo = 
                 await fetch(process.env.SMART_BINS_CURRENT_FILL_LEVELS_URL as string)
@@ -369,7 +369,43 @@ schedule.scheduleJob(MISC.DAILY_UPDATE_TIME, (fireTime) => {
 //     )()
 // );
 
+// new Depot({
+//     _id: new mongoose.Types.ObjectId(),
+//     location: {
+//         type: "Point",
+//         coordinates: [-1, 1]
+//     },
+//     address: "Monash University"
+// }).save();
+
+// new FleetVehicle({
+//     _id: new mongoose.Types.ObjectId(),
+//     rego: "ABCDEF",
+//     capacity: 120,
+//     available: true,
+//     icon: -1,
+//     belongTo: "5f73fea8a3af8f1ab7fa9116"
+// }).save(function(err, doc) {
+//     if (err) return console.error(err);
+//     console.log("Saved!");
+// });
+
+// new DumbBin({
+//     _id: new mongoose.Types.ObjectId(),
+//     location: {
+//         type: "Point",
+//         coordinates: [-66, 66]
+//     },
+//     address: "Australia",
+//     capacity: 666,
+//     nearestSmartBin: "5f73fea3a3af8f1ab7fa90c6"
+// }).save(function(err, doc) {
+//     if (err) return console.error(err);
+//     console.log("Saved!");
+// });
+
 const app = express();
 
+app.use(express.json());
 app.use("/", router);
 app.listen(8080);
