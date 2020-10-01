@@ -37,7 +37,6 @@ const dumbBinSchema = new mongoose.Schema({
         ref: "SmartBin"
     }
 }, {
-    autoIndex: false,
     collection: "DumbBins"
 });
 

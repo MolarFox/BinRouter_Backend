@@ -2,9 +2,10 @@ import * as dotenv from "dotenv";
 import path from "path";
 import fetch from "node-fetch";
 import schedule from "node-schedule";
-import express, { response } from "express";
+import express from "express";
+import mongoose from "mongoose";
 import router from "./router";
-import mongoose, { mongo } from "mongoose";
+import Database from "./database";
 import * as HTTP from "./constants/http";
 import * as MISC from "./constants/misc";
 import SmartBin from "./models/smart-bin";
@@ -147,23 +148,9 @@ const bins = [
     },
 ]
 
-
 // Start connecting to mongodb first
-console.log("Start connecting to the database...");
-mongoose.connect(
-    "mongodb://" + process.env.DB_HOST + ":" + process.env.DB_PORT + "/" + process.env.DB_NAME,
-    {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        poolSize: 10,
-    }
-).catch(console.error.bind(console, "Initial connection error: "));
-mongoose.connection.on("error", console.error.bind(console, "Connection error: "));
-
-mongoose.connection.once("open", function() {
-    console.log("A connection to the database is successfully established");
-
-    mongoose.connection.db.collection("SmartBins").countDocuments(async function(error, count) {
+Database.connect().then((connection) => {
+    connection.db.collection("SmartBins").countDocuments(async function(error, count) {
         if (error) return console.error(error);
         // googleMapsServices.computeDirections(bins[0], bins[25], bins.slice(1, 25)).then(data => {
         //     console.log(data);
@@ -255,9 +242,7 @@ mongoose.connection.once("open", function() {
             // TODO: update the database when new data comes in
         }
     });
-
 });
-
 
 // const googleMapsServices = new GoogleMapsServices();
 // googleMapsServices.computeDistanceMatrix(origins, destinations).then(distanceMatrix => distanceMatrix.forEach((row, i) => row.forEach((col, j) => console.log(`row: ${i}, col: ${j}\n`, col, "\n"))))
@@ -283,8 +268,8 @@ mongoose.connection.once("open", function() {
 
 // new FleetVehicle({
 //     _id: new mongoose.Types.ObjectId(),
-//     rego: "ZPW772",
-//     capacity: 10.512451234124125125124123123,
+//     rego: "ZZZZZ",
+//     capacity: 10.1,
 //     available: true,
 //     icon: 1
 // }).save(function(err) {
@@ -403,6 +388,59 @@ schedule.scheduleJob(MISC.DAILY_UPDATE_TIME, (fireTime) => {
 //     if (err) return console.error(err);
 //     console.log("Saved!");
 // });
+
+// FleetVehicle.bulkWrite([
+//     {
+//         insertOne: {
+//             document: {
+//                 _id: new mongoose.Types.ObjectId(),
+//                 rego: "EFEFEF",
+//                 capacity: 100,
+//                 available: true,
+//                 icon: -1,
+//                 belongTo: undefined
+//             }
+//         }
+//     },
+    // {
+    //     insertOne: {
+    //         document: {
+    //             _id: new mongoose.Types.ObjectId(),
+    //             rego: "EFEFEF",
+    //             capacity: 200,
+    //             available: false,
+    //             icon: 10,
+    //             belongTo: undefined
+    //         }
+    //     }
+    // },
+    // {
+    //     deleteOne: {
+    //         filter: {
+    //             rego: "ABABA",
+    //             available: true
+    //         }
+    //     }
+    // },
+    // {
+    //     updateOne: {
+    //         filter: {
+    //             rego: "ABABAB"
+    //         },
+    //         update: {
+    //             rego: "ABABAB",
+    //             capacity: 500,
+    //             available: true,
+    //             icon: 1000,
+    //             belongTo: null
+    //         }
+    //     }
+    // },
+// ]).then(res => console.log(res)).catch(error => console.error(error.writeErrors[0]));
+
+// FleetVehicle.where("belongTo").ne(undefined).exec(function(error, result) {
+//     console.log(result);
+// })
 
 const app = express();
 

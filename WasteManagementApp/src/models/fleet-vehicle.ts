@@ -22,11 +22,9 @@ const fleetVehicle = new mongoose.Schema({
     },
     belongTo: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Depot",
-        required: true
+        ref: "Depot"
     }
 }, {
-    autoIndex: false,
     collection: "FleetVehicles"
 });
 

@@ -16,7 +16,6 @@ const smartBinFillLevelSchema = new mongoose.Schema({
         required: true
     },
 }, {
-    autoIndex: false,
     collection: "SmartBinsFillLevels"
 });
 

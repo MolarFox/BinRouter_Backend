@@ -27,7 +27,6 @@ const depotSchema = new mongoose.Schema({
         required: true
     },
 }, {
-    autoIndex: false,
     collection: "Depots"
 });
 

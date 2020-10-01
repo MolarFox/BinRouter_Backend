@@ -33,7 +33,6 @@ const binDistanceSchema = new mongoose.Schema({
         min: 0
     }
 }, {
-    autoIndex: false,
     collection: "BinDistances"
 });
 

@@ -52,7 +52,6 @@ const smartBinSchema = new mongoose.Schema({
         required: true
     }
 }, {
-    autoIndex: false,
     collection: "SmartBins"
 });
 

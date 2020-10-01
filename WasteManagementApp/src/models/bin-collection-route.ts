@@ -21,7 +21,6 @@ const binCollectionRouteSchema = new mongoose.Schema({
         }
     ]
 }, {
-    autoIndex: false,
     collection: "BinCollectionRoutes"
 });
 
