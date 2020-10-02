@@ -11,13 +11,14 @@ import * as MISC from "./constants/misc";
 import SmartBin from "./models/smart-bin";
 import DumbBin from "./models/dumb-bin";
 import SmartBinDailyFillLevel from "./models/smart-bin-fill-level";
-import { SmartBinsInfo, SmartBinsCurrentFillLevelsInfo } from "./utils/helper";
+import { SmartBinsInfo, SmartBinsCurrentFillLevelsInfo } from "./utils/type-information";
 import { GoogleMapsServices } from "./utils/google-maps-services";
 import { distancematrix } from "@googlemaps/google-maps-services-js/dist/distance";
 import FleetVehicle from "./models/fleet-vehicle";
 import BinDistance from "./models/bin-distance";
 import Depot from "./models/depot";
 import BinCollectionRoute from "./models/bin-collection-route";
+import { updateBinDistances, convertFromDistanceMatrixToBinDistanceDocuments } from "./controllers/bin";
 
 // Load all environment variables from the .env configuration file
 let dotenvResult;
@@ -217,9 +218,9 @@ Database.connect().then((connection) => {
                         distanceMatrix.flatMap((row, originIndex) => 
                             row.map((col, destinationIndex) => ({
                                 origin: smartBins[originIndex]._id,
-                                originBinType: "SmartBin",
+                                originType: "SmartBin",
                                 destination: smartBins[destinationIndex]._id,
-                                destinationBinType: "SmartBin",
+                                destinationType: "SmartBin",
                                 distance: col.distance,
                                 duration: col.duration
                             }))
@@ -228,6 +229,61 @@ Database.connect().then((connection) => {
                             console.log("Initial population of distances between each pair of smart bins completes successfully");
                         }
                     );
+                    // insert distances between bins and depots
+                    Depot.find({}).exec(function(error, depots) {
+                        const depotsIdLocation = depots.map((depot: any) => ({
+                            _id: depot._id,
+                            longitude: depot.location.coordinates[1],
+                            latitude: depot.location.coordinates[0]
+                        }));
+                        const depotsLocation = depots.map((depot: any) => ({
+                            longitude: depot.location.coordinates[1],
+                            latitude: depot.location.coordinates[0]
+                        }));
+                        Promise
+                            .all([
+                                googleMapsServices
+                                    .computeDistanceMatrix(depotsLocation, depotsLocation),
+                                googleMapsServices
+                                    .computeDistanceMatrix(depotsLocation, smartBinsLocation),
+                                googleMapsServices
+                                    .computeDistanceMatrix(smartBinsLocation, depotsLocation)
+                            ])
+                            .then((distanceMatrices) => {
+                                const smartBinsIdLocation = smartBins.map((smartBin: any) => ({
+                                    _id: smartBin._id,
+                                    latitude: smartBin.location.coordinates[1] as number,
+                                    longitude: smartBin.location.coordinates[0] as number
+                                }));
+                                return Promise.all([
+                                    convertFromDistanceMatrixToBinDistanceDocuments(
+                                        distanceMatrices[0],
+                                        depotsIdLocation,
+                                        "Depot",
+                                        depotsIdLocation,
+                                        "Depot"
+                                    ),
+                                    convertFromDistanceMatrixToBinDistanceDocuments(
+                                        distanceMatrices[1],
+                                        depotsIdLocation,
+                                        "Depot",
+                                        smartBinsIdLocation,
+                                        "SmartBin"
+                                    ),
+                                    convertFromDistanceMatrixToBinDistanceDocuments(
+                                        distanceMatrices[2],
+                                        smartBinsIdLocation,
+                                        "SmartBin",
+                                        depotsIdLocation,
+                                        "Depot"
+                                    )
+                                ]);
+                            })
+                            .then((binDistancesInfo) => BinDistance.insertMany(binDistancesInfo.flatMap(binDistanceInfo => binDistanceInfo)))
+                            .then((result) => {
+                                console.log("Success!", result);
+                            });
+                    });
             });
 
             SmartBinDailyFillLevel.insertMany(
@@ -442,8 +498,68 @@ schedule.scheduleJob(MISC.DAILY_UPDATE_TIME, (fireTime) => {
 //     console.log(result);
 // })
 
+// FleetVehicle.deleteMany({
+//     $and: [
+//         {
+//             available: true
+//         },
+//         {
+//             rego: {
+//                 $in: ["ZZZZZ", "EFEFEF"]
+//             }
+//         }
+//     ]
+// }).then(res => console.log(res));
+
 const app = express();
 
+app.set("GoogleMapsServices", googleMapsServices);
 app.use(express.json());
 app.use("/", router);
 app.listen(8080);
+
+// BinDistance.insertMany([{
+    
+// }])
+// BinDistance.deleteOne({duration: undefined}).exec((err, res) => console.log(res));
+// BinDistance.find({duration: undefined}).exec((err, res) => console.log(res));
+// computeBinDistances(googleMapsServices, ["5f771ce4692113ab337ceffd", "5f771d39692113ab337ceffe"], [], [{_id: "5f771d5d692113ab337cefff", latitude: 1, longitude: 2}], true).then(() => {});
+// SmartBin.find({}, "_id location.coordinates").then((docs) => {console.log(docs)});
+// SmartBin.aggregate([
+//     {
+//         $match: {
+//             _id: {
+//                 $in: [new mongoose.Types.ObjectId("5f7598e78cc1903f8e7a541a"), new mongoose.Types.ObjectId("5f7598e78cc1903f8e7a541b")]
+//             }
+//         }
+//     },
+//     {
+//         $project: {
+//             _id: true,
+//             latitude: {
+//                 $arrayElemAt: ["$location.coordinates", 1]
+//             },
+//             longitude: {
+//                 $arrayElemAt: ["$location.coordinates", 0]
+//             }
+//         }
+//     }
+// ]).then(docs => {console.log(docs.length)})
+
+// SmartBin.find({}).exec(function(error, smartBins) {
+//     const deletedBinsInfo = smartBins.map((smartBin) => smartBin._id);
+//     const createdBinsInfo = smartBins.map((smartBin: any) => ({
+//         _id: smartBin._id,
+//         longitude: smartBin.location.coordinates[0],
+//         latitude: smartBin.location.coordinates[1]
+//     }));
+//     updateBinDistances(
+//         googleMapsServices,
+//         deletedBinsInfo,
+//         createdBinsInfo,
+//         [],
+//         true
+//     ).then((docs) => {
+//         console.log(docs);
+//     });
+// })

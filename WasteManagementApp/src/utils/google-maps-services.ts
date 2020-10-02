@@ -1,12 +1,12 @@
 import { Client, TravelMode, UnitSystem, Status, Language } from "@googlemaps/google-maps-services-js";
 import { DirectionsResponseData } from "@googlemaps/google-maps-services-js/dist/directions";
 
-interface LatLng {
+export interface LatLng {
     latitude: number,
     longitude: number
 }
 
-interface DistanceMatrixElement {
+export interface DistanceMatrixElement {
     distance: number,
     duration: number
 }

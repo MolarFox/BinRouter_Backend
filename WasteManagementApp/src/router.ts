@@ -6,6 +6,7 @@ import * as routes from "./controllers/route";
 const router = express.Router();
 
 // router.get("/", function(request, response) {
+//     console.log(request.app.get("GoogleMapsServices"));
 //     console.dir(request.body);
 //     response.send("Hello World!");
 // });

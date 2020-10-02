@@ -5,32 +5,30 @@ const binDistanceSchema = new mongoose.Schema({
     origin: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        refPath: "originBinType"
+        refPath: "originType"
     },
-    originBinType: {
+    originType: {
         type: mongoose.Schema.Types.String,
         required: true,
-        enum: ["SmartBin", "DumbBin"]
+        enum: ["Depot", "SmartBin", "DumbBin"]
     },
     destination: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        refPath: "destinationBinType"
+        refPath: "destinationType"
     },
-    destinationBinType: {
+    destinationType: {
         type: mongoose.Schema.Types.String,
         required: true,
-        enum: ["SmartBin", "DumbBin"]
+        enum: ["Depot", "SmartBin", "DumbBin"]
     },
     distance: {
         type: mongoose.Schema.Types.Number,
         required: true,
-        min: 0
     },
     duration: {
         type: mongoose.Schema.Types.Number,
         required: true,
-        min: 0
     }
 }, {
     collection: "BinDistances"
