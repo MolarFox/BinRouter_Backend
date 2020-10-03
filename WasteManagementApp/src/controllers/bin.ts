@@ -81,21 +81,43 @@ export function modifyBins(request: express.Request, response: express.Response)
         }
     }));
 
-    DumbBin
-        .bulkWrite((dumbBinsDeleteBulkOperations as any[]).concat(dumbBinsCreateBulkOperations).concat(dumbBinsUpdateBulkOperations))
+    Promise
+        .resolve()
+        .then(() => 
+            DumbBin.bulkWrite((dumbBinsDeleteBulkOperations as any[]).concat(dumbBinsCreateBulkOperations).concat(dumbBinsUpdateBulkOperations))
+        )
         .then((bulkWriteOperationResult) => {
             if (bulkWriteOperationResult.result && bulkWriteOperationResult.result.ok === 1 && bulkWriteOperationResult.result.writeErrors.length === 0) {
                 response.status(HTTP.CREATED).send(bulkWriteOperationResult.insertedIds);
+                
                 // Recompute the bin distances using google maps computeDistanceMatrix
+                return updateBinDistances(
+                    request.app.get("GoogleMapsServices") as GoogleMapsServices,
+                    dumbBinsDelete,
+                    dumbBinsCreate.map((dumbBin, index) => ({
+                        _id: bulkWriteOperationResult.insertedIds[index] as string,
+                        longitude: dumbBin.longitude,
+                        latitude: dumbBin.latitude,
+                    })),
+                    dumbBinsUpdate.map((dumbBin, index) => ({
+                        _id: dumbBin._id,
+                        longitude: dumbBin.longitude,
+                        latitude: dumbBin.latitude,
+                    })),
+                    false
+                );
             } else {
                 response.status(HTTP.BAD_REQUEST).send(bulkWriteOperationResult.result.writeErrors);
                 return Promise.reject(bulkWriteOperationResult.result);
             }
         })
         // Chain another then for resolving promise of recomputation of bin distances
+        .then((insertedBinDistances) => {
+            
+        })
         .catch((error) => {
             console.error(error);
-            response.status(HTTP.BAD_REQUEST).send(error.writeErrors);
+            response.status(HTTP.BAD_REQUEST).send(error);
         });
 
     if (dumbBinsCreate.length > 0 || dumbBinsDelete.length > 0 || dumbBinsUpdate.length > 0) {
@@ -113,7 +135,7 @@ export function updateBinDistances(
     createdBinsInfo: CreatedBinInfo[], 
     updatedBinsInfo: UpdatedBinInfo[],
     isSmart: boolean
-) {
+): Promise<mongoose.Document[]> {
     return Promise
             .resolve()
             .then(() => {
@@ -299,8 +321,7 @@ export function updateBinDistances(
                         ), 
                 ]); 
             })
-            .then((binDistancesInfo) => BinDistance.insertMany(binDistancesInfo.flatMap(binDistanceInfo => binDistanceInfo)))
-            .catch((error) => console.error(error));
+            .then((binDistancesInfo) => BinDistance.insertMany(binDistancesInfo.flatMap(binDistanceInfo => binDistanceInfo)));
 }
 
 export function convertFromDistanceMatrixToBinDistanceDocuments(

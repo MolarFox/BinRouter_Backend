@@ -55,4 +55,8 @@ const smartBinSchema = new mongoose.Schema({
     collection: "SmartBins"
 });
 
+smartBinSchema.index({
+    location: "2dsphere"
+});
+
 export default mongoose.model("SmartBin", smartBinSchema);

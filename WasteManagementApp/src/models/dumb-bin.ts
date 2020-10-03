@@ -40,4 +40,8 @@ const dumbBinSchema = new mongoose.Schema({
     collection: "DumbBins"
 });
 
+dumbBinSchema.index({
+    location: "2dsphere"
+});
+
 export default mongoose.model("DumbBin", dumbBinSchema);

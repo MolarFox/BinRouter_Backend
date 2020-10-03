@@ -450,7 +450,7 @@ schedule.scheduleJob(MISC.DAILY_UPDATE_TIME, (fireTime) => {
 //         insertOne: {
 //             document: {
 //                 _id: new mongoose.Types.ObjectId(),
-//                 rego: "EFEFEF",
+//                 rego: "CZCZCZ",
 //                 capacity: 100,
 //                 available: true,
 //                 icon: -1,
@@ -458,18 +458,18 @@ schedule.scheduleJob(MISC.DAILY_UPDATE_TIME, (fireTime) => {
 //             }
 //         }
 //     },
-    // {
-    //     insertOne: {
-    //         document: {
-    //             _id: new mongoose.Types.ObjectId(),
-    //             rego: "EFEFEF",
-    //             capacity: 200,
-    //             available: false,
-    //             icon: 10,
-    //             belongTo: undefined
-    //         }
-    //     }
-    // },
+//     {
+//         insertOne: {
+//             document: {
+//                 _id: new mongoose.Types.ObjectId(),
+//                 rego: "HDHDHD",
+//                 capacity: 200,
+//                 available: false,
+//                 icon: 10,
+//                 belongTo: undefined
+//             }
+//         }
+//     },
     // {
     //     deleteOne: {
     //         filter: {
@@ -563,3 +563,20 @@ app.listen(8080);
 //         console.log(docs);
 //     });
 // })
+
+// DumbBin.find({}).exec(function(error, dumbBins) {
+//     console.log(dumbBins);
+//     console.log((dumbBins[0] as any).location.coordinates);
+//     dumbBins.forEach((dumbBin: any) => {
+//         SmartBin.find({
+//             location: {
+//                 $near: {
+//                     $geometry: dumbBin.location,
+//                     $maxDistance: 10
+//                 }
+//             }
+//         }).exec(function(error, smartBins) {
+//             console.log(smartBins);
+//         });
+//     });
+// });

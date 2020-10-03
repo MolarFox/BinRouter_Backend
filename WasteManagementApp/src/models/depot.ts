@@ -30,4 +30,8 @@ const depotSchema = new mongoose.Schema({
     collection: "Depots"
 });
 
+depotSchema.index({
+    location: "2dsphere"
+});
+
 export default mongoose.model("Depot", depotSchema);
