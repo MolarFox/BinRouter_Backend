@@ -10,3 +10,5 @@
     └───────────────────────── second (0 - 59, OPTIONAL)
 */
 export const DAILY_UPDATE_TIME = "0 0 11 * * *";
+
+export const BIN_SEARCH_DISTANCE = 1000;

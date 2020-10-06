@@ -224,8 +224,11 @@ Database.connect().then((connection) => {
                                 distance: col.distance,
                                 duration: col.duration
                             }))
-                        ), function(error, binDistances) {
+                        ), {
+                            rawResult: true,
+                        }, function(error, binDistances) {
                             if (error) return console.error(error);
+                            console.log(binDistances);
                             console.log("Initial population of distances between each pair of smart bins completes successfully");
                         }
                     );
@@ -564,19 +567,41 @@ app.listen(8080);
 //     });
 // })
 
+// DumbBin.insertMany(
+//     [{
+//         _id: new mongoose.Types.ObjectId(),
+//         serialNumber: 123456789,
+//         location: {
+//             type: "Point",
+//             coordinates: [144.6664092517, -37.9097616667]
+//         },
+//         address: "Cash Converters H Werribee",
+//         capacity: 99.67,
+//         nearestSmartBinId: new mongoose.Types.ObjectId()
+//     }],
+//     {
+//         rawResult: true
+//     },
+//     function(error, res) {
+//         console.log(res);
+//     }
+// )
+
 // DumbBin.find({}).exec(function(error, dumbBins) {
 //     console.log(dumbBins);
 //     console.log((dumbBins[0] as any).location.coordinates);
 //     dumbBins.forEach((dumbBin: any) => {
-//         SmartBin.find({
+//         SmartBin.findOne({
 //             location: {
 //                 $near: {
 //                     $geometry: dumbBin.location,
 //                     $maxDistance: 10
 //                 }
 //             }
-//         }).exec(function(error, smartBins) {
+//         }, "_id").exec(function(error, smartBins) {
 //             console.log(smartBins);
 //         });
 //     });
 // });
+
+// SmartBin.findById("5f7bfd762815199d74a8b5a8").then(console.log)

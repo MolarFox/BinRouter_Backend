@@ -90,3 +90,16 @@ export type FleetVehicleUpdateInfo = {
     icon: number,
     belongTo?: string
 };
+
+export type mongooseInsertWriteOpResult = {
+    insertedCount: number,
+    ops: object[],
+    insertedIds: {
+        [index: number]: string
+    }[],
+    connection: object,
+    result?: {
+        ok: number,
+        n: number
+    }
+}
