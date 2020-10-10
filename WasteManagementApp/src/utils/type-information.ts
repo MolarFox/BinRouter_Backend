@@ -65,6 +65,7 @@ export type CreatedBinInfo = {
 };
 export type UpdatedBinInfo = CreatedBinInfo;
 export type DepotInfo = CreatedBinInfo;
+
 export type BinDistanceInfo = {
     origin: string;
     originType: string;
@@ -72,6 +73,19 @@ export type BinDistanceInfo = {
     destinationType: string;
     distance: number;
     duration: number;
+};
+
+export type SmartBinCollectInfo = {
+    _id: string,
+    longitude: number,
+    latitude: number,
+    volume: number
+};
+export type DumbBinCollectInfo = SmartBinCollectInfo;
+export type DepotCollectInfo = SmartBinCollectInfo;
+export type FleetVehicleCollectInfo = {
+    _id: string,
+    capacity: number
 };
 
 export type FleetVehicleDeleteInfo = string;
