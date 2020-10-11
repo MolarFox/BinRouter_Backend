@@ -3,16 +3,52 @@ import SmartBin from "../models/smart-bin";
 import DumbBin from "../models/dumb-bin";
 import Depot from "../models/depot";
 import BinDistance from "../models/bin-distance";
-import { DistanceMatrixElement, GoogleMapsServicesAdapter, LatLng } from "./google-maps-services-adapter";
-import { DeletedBinInfo, CreatedBinInfo, UpdatedBinInfo, BinDistanceInfo, DepotInfo } from "./type-information";
-
-interface IdLatLng extends LatLng {
-    _id: string
-}
+import { GoogleMapsServicesAdapter } from "./google-maps-services-adapter";
+import { DeletedBinInfo, CreatedBinInfo, UpdatedBinInfo, BinDistanceInfo, DepotInfo, IdLatLng, DistanceMatrixElement } from "./type-information";
 
 export class BinDistanceHelper {
+    public static async computeAllBinDistances(
+        googleMapsServicesAdapter: GoogleMapsServicesAdapter
+    ): Promise<BinDistanceInfo[]> {
+        const projectPipelineStage = {
+            $project: {
+                longitude: {
+                    $arrayElemAt: ["$location.coordinates", 0]
+                },
+                latitude: {
+                    $arrayElemAt: ["$location.coordinates", 1]
+                }
+            }
+        };
+        const depots: IdLatLng[] = await Depot.aggregate([
+            // Limited to only one depot in this project as the routing solver is unable to support multiple depots
+            {
+                $limit: 1
+            },
+            projectPipelineStage
+        ]);
+        const smartBins: IdLatLng[] = await SmartBin.aggregate([projectPipelineStage]);
+        const dumbBins: IdLatLng[] = await DumbBin.aggregate([projectPipelineStage]);
+        
+        const origins = depots.concat(smartBins).concat(dumbBins);
+        const originTypes = 
+            ["Depot"].concat(new Array(smartBins.length).fill("SmartBin")).concat(new Array(dumbBins.length).fill("DumbBin"));
+        const destinations = origins;
+        const destinationTypes = originTypes;
+        
+        const allBinDistancesInfo = BinDistanceHelper.convertFromDistanceMatrixToBinDistanceDocuments(
+            await googleMapsServicesAdapter.computeDistanceMatrix(origins, destinations),
+            origins,
+            originTypes,
+            destinations,
+            destinationTypes
+        );
+        
+        return allBinDistancesInfo;
+    }
+
     public static async computeBinDistances(
-        googleMapsServices: GoogleMapsServicesAdapter,
+        googleMapsServicesAdapter: GoogleMapsServicesAdapter,
         deletedBinsInfo: DeletedBinInfo[], 
         createdBinsInfo: CreatedBinInfo[], 
         updatedBinsInfo: UpdatedBinInfo[],
@@ -107,49 +143,49 @@ export class BinDistanceHelper {
                 ]);
                 binDistancesInfo = [
                     BinDistanceHelper.convertFromDistanceMatrixToBinDistanceDocuments(
-                        await googleMapsServices.computeDistanceMatrix(binsCreated, binsCreated), 
+                        await googleMapsServicesAdapter.computeDistanceMatrix(binsCreated, binsCreated), 
                         binsCreated, 
                         isSmart ? "SmartBin" : "DumbBin", 
                         binsCreated, 
                         isSmart ? "SmartBin" : "DumbBin"
                     ),
                     BinDistanceHelper.convertFromDistanceMatrixToBinDistanceDocuments(
-                        await googleMapsServices.computeDistanceMatrix(binsCreated, binsCreatedComplement), 
+                        await googleMapsServicesAdapter.computeDistanceMatrix(binsCreated, binsCreatedComplement), 
                         binsCreated, 
                         isSmart ? "SmartBin" : "DumbBin", 
                         binsCreatedComplement, 
                         isSmart ? "SmartBin" : "DumbBin"
                     ), 
                     BinDistanceHelper.convertFromDistanceMatrixToBinDistanceDocuments(
-                        await googleMapsServices.computeDistanceMatrix(binsCreatedComplement, binsCreated), 
+                        await googleMapsServicesAdapter.computeDistanceMatrix(binsCreatedComplement, binsCreated), 
                         binsCreatedComplement, 
                         isSmart ? "SmartBin" : "DumbBin", 
                         binsCreated, 
                         isSmart ? "SmartBin" : "DumbBin"
                     ), 
                     BinDistanceHelper.convertFromDistanceMatrixToBinDistanceDocuments(
-                        await googleMapsServices.computeDistanceMatrix(binsCreated, binsDifferentType), 
+                        await googleMapsServicesAdapter.computeDistanceMatrix(binsCreated, binsDifferentType), 
                         binsCreated, 
                         isSmart ? "SmartBin" : "DumbBin", 
                         binsDifferentType, 
                         isSmart ? "DumbBin" : "SmartBin"
                     ),
                     BinDistanceHelper.convertFromDistanceMatrixToBinDistanceDocuments(
-                        await googleMapsServices.computeDistanceMatrix(binsDifferentType, binsCreated), 
+                        await googleMapsServicesAdapter.computeDistanceMatrix(binsDifferentType, binsCreated), 
                         binsDifferentType, 
                         isSmart ? "DumbBin" : "SmartBin", 
                         binsCreated, 
                         isSmart ? "SmartBin" : "DumbBin"
                     ), 
                     BinDistanceHelper.convertFromDistanceMatrixToBinDistanceDocuments(
-                        await googleMapsServices.computeDistanceMatrix(binsCreated, depots), 
+                        await googleMapsServicesAdapter.computeDistanceMatrix(binsCreated, depots), 
                         binsCreated, 
                         isSmart ? "SmartBin" : "DumbBin", 
                         depots, 
                         "Depot"
                     ), 
                     BinDistanceHelper.convertFromDistanceMatrixToBinDistanceDocuments(
-                        await googleMapsServices.computeDistanceMatrix(depots, binsCreated), 
+                        await googleMapsServicesAdapter.computeDistanceMatrix(depots, binsCreated), 
                         depots, 
                         "Depot", 
                         binsCreated, 
@@ -165,17 +201,17 @@ export class BinDistanceHelper {
     public static convertFromDistanceMatrixToBinDistanceDocuments(
         distanceMatrix: DistanceMatrixElement[][], 
         origins: IdLatLng[],
-        originType: string,
+        originTypes: string | string[],
         destinations: IdLatLng[],
-        destinationType: string
+        destinationTypes: string | string[]
     ): BinDistanceInfo[] {
         return (
             distanceMatrix.flatMap((row, originIndex) => 
                 row.map((col, destinationIndex) => ({
                     origin: origins[originIndex]._id,
-                    originType: originType,
+                    originType: Array.isArray(originTypes) ? originTypes[originIndex] : originTypes,
                     destination: destinations[destinationIndex]._id,
-                    destinationType: destinationType,
+                    destinationType: Array.isArray(destinationTypes) ? destinationTypes[destinationIndex]: destinationTypes,
                     distance: col.distance,
                     duration: col.duration
                 }))

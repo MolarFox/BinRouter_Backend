@@ -126,3 +126,16 @@ export type mongooseInsertWriteOpResult = {
         n: number
     }
 }
+
+export interface LatLng {
+    latitude: number,
+    longitude: number
+};
+export interface IdLatLng extends LatLng {
+    _id: string
+}
+
+export type DistanceMatrixElement = {
+    distance: number,
+    duration: number
+}

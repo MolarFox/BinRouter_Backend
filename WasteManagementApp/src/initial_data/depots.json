@@ -1,0 +1,11 @@
+{
+	"depots": [
+		{
+			"location": {
+				"type": "Point",
+				"coordinates": [ 145.133957, -37.907803 ]
+			},
+			"address": "Monash University"
+		}
+	]
+}

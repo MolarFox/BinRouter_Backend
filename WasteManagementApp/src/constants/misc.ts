@@ -13,6 +13,6 @@ export const DAILY_UPDATE_TIME = "0 0 11 * * *";
 
 export const BIN_SEARCH_DISTANCE = 1000;
 
-export const ROUTING_SOLVER_EXECUTABLE_RELATIVE_PATH = "./src/routing-solver/bin/routing";
+export const ROUTING_SOLVER_EXECUTABLE_RELATIVE_PATH = "./routing_solver/bin/routing";
 
 export const FULLNESS_THRESHOLD_RATIO_SELECTION_CRITERION = 0.5;

@@ -1,0 +1,28 @@
+{
+	"dumbBins" : [
+		{
+			"location" : {
+				"type" : "Point",
+				"coordinates" : [ 144.6633949611, -37.9026111376 ]
+			},
+			"address" : "38 Duncans Rd, Werribee VIC 3030",
+			"capacity" : 500
+		},
+		{
+			"location" : {
+				"type" : "Point",
+				"coordinates" : [ 144.6664192517, -37.9087716667 ]
+			},
+			"address" : "7-29 Chirnside Ave, Werribee VIC 3030",
+			"capacity" : 200
+		},
+		{
+			"location" : {
+				"type" : "Point",
+				"coordinates" : [ 144.7336233333, -37.8885216667 ]
+			},
+			"address" : "7-29 Chirnside Ave, Werribee VIC 3030",
+			"capacity" : 100
+		}
+	]
+}

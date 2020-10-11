@@ -96,7 +96,7 @@ export async function modifyFleetVehicles(request: express.Request, response: ex
         try {
             // Recompute the route by calling the recomputation routine
             const binCollectionSchedules = await BinCollectionScheduleHelper.createAllPossibleBinCollectionSchedules(
-                request.app.get("GoogleMapsServices") as GoogleMapsServicesAdapter
+                request.app.get("GoogleMapsServicesAdapter") as GoogleMapsServicesAdapter
             );
             const binCollectionSchedulesInsertWriteResult = await BinCollectionSchedule.insertMany(
                 binCollectionSchedules.map(binCollectionSchedule => 
@@ -107,7 +107,7 @@ export async function modifyFleetVehicles(request: express.Request, response: ex
                     rawResult: true
                 }
             ) as unknown as mongooseInsertWriteOpResult;
-            if (binCollectionSchedulesInsertWriteResult.result && binCollectionSchedulesInsertWriteResult.result.ok !== 1) {
+            if (binCollectionSchedulesInsertWriteResult.result?.ok !== 1) {
                 console.error(binCollectionSchedulesInsertWriteResult);
             }
         } catch(error) {

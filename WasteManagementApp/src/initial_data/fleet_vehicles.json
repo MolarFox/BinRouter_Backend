@@ -1,0 +1,16 @@
+{
+	"fleetVehicles": [
+		{
+			"rego": "ABCDEF",
+			"capacity": 10000,
+			"available": true,
+			"icon": 1
+		},
+		{
+			"rego": "GHIJKL",
+			"capacity": 5000,
+			"available": false,
+			"icon": 10
+		}
+	]
+}

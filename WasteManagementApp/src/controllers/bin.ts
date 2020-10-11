@@ -10,6 +10,7 @@ import { DumbBinCreateInfo, DumbBinDeleteInfo, DumbBinUpdateInfo, mongooseInsert
 import { GoogleMapsServicesAdapter } from "../utils/google-maps-services-adapter";
 import { BinDistanceHelper } from "../utils/bin-distance-helper";
 import { BinCollectionScheduleHelper } from "../utils/bin-collection-schedule-helper";
+import { BinHelper } from "../utils/bin-helper";
 
 export async function getBins(request: express.Request, response: express.Response) {
     try {
@@ -90,9 +91,8 @@ export async function modifyBins(request: express.Request, response: express.Res
                 .concat(dumbBinsUpdateBulkOperations)
         );
 
-        if (dumbBinsDeleteCreateUpdatebulkWriteResult.result && 
-            dumbBinsDeleteCreateUpdatebulkWriteResult.result.ok === 1 && 
-            dumbBinsDeleteCreateUpdatebulkWriteResult.result.writeErrors.length === 0) {
+        if (dumbBinsDeleteCreateUpdatebulkWriteResult.result?.ok === 1 && 
+            dumbBinsDeleteCreateUpdatebulkWriteResult.result?.writeErrors.length === 0) {
             response.status(HTTP.CREATED).send(dumbBinsDeleteCreateUpdatebulkWriteResult.insertedIds);
 
             const dumbBinsCreateFormatted = dumbBinsCreate.map((dumbBin, index) => ({
@@ -107,7 +107,7 @@ export async function modifyBins(request: express.Request, response: express.Res
             }));
             const binDistancesInsertWriteResult = await BinDistance.insertMany(
                 BinDistanceHelper.computeBinDistances(
-                    request.app.get("GoogleMapsServices") as GoogleMapsServicesAdapter,
+                    request.app.get("GoogleMapsServicesAdapter") as GoogleMapsServicesAdapter,
                     dumbBinsDelete,
                     dumbBinsCreateFormatted,
                     dumbBinsUpdateFormatted,
@@ -117,26 +117,9 @@ export async function modifyBins(request: express.Request, response: express.Res
                 }
             ) as unknown as mongooseInsertWriteOpResult;
 
-            if (binDistancesInsertWriteResult.result && binDistancesInsertWriteResult.result.ok === 1) {
+            if (binDistancesInsertWriteResult.result?.ok === 1) {
                 const dumbBinsToBeUpdated = dumbBinsCreateFormatted.concat(dumbBinsUpdateFormatted);
-                const nearestSmartBins = await Promise.all(
-                    dumbBinsToBeUpdated.map((dumbBin) => 
-                        SmartBin.findOne(
-                            {
-                                location: {
-                                    $near: {
-                                        $geometry: {
-                                            type: "Point",
-                                            coordinates: [dumbBin.longitude, dumbBin.latitude]
-                                        },
-                                        $maxDistance: BIN_SEARCH_DISTANCE
-                                    }
-                                }
-                            },
-                            "_id"
-                        )
-                    )
-                );
+                const nearestSmartBins = await BinHelper.computeNearestSmartBins(dumbBinsToBeUpdated);
 
                 const dumbBinsUpdateOnNearestSmartBinBulkWriteResult = await DumbBin.bulkWrite(
                     nearestSmartBins.map((nearestSmartBin, index) => 
@@ -146,16 +129,15 @@ export async function modifyBins(request: express.Request, response: express.Res
                                     _id: dumbBinsToBeUpdated[index]._id,
                                 },
                                 update: {
-                                    nearestSmartBin: nearestSmartBin._id
+                                    nearestSmartBin: nearestSmartBin
                                 }
                             }
                         }) : null
                     ).filter(operation => operation)
                 );
 
-                if (dumbBinsUpdateOnNearestSmartBinBulkWriteResult.result &&   
-                    (dumbBinsUpdateOnNearestSmartBinBulkWriteResult.result.ok !== 1 || 
-                        dumbBinsUpdateOnNearestSmartBinBulkWriteResult.result.writeErrors.length !== 0)) {
+                if (dumbBinsUpdateOnNearestSmartBinBulkWriteResult.result?.ok !== 1 || 
+                        dumbBinsUpdateOnNearestSmartBinBulkWriteResult.result?.writeErrors.length !== 0) {
                     console.error(dumbBinsUpdateOnNearestSmartBinBulkWriteResult);
                 }
             } else {
@@ -185,7 +167,7 @@ export async function modifyBins(request: express.Request, response: express.Res
                     rawResult: true
                 }
             ) as unknown as mongooseInsertWriteOpResult;
-            if (binCollectionSchedulesInsertWriteResult.result && binCollectionSchedulesInsertWriteResult.result.ok === 1) {
+            if (binCollectionSchedulesInsertWriteResult.result?.ok === 1) {
                 console.error(binCollectionSchedulesInsertWriteResult);
             }
         } catch(error) {
