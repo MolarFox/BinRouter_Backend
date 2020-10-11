@@ -1,3 +1,5 @@
+import { DirectionsResponseData } from "@googlemaps/google-maps-services-js/dist/directions";
+
 export type SmartBinsInfo = {
     type: string,
     name: string,
@@ -73,6 +75,13 @@ export type BinDistanceInfo = {
     destinationType: string;
     distance: number;
     duration: number;
+};
+export type BinCollectionScheduleInfo = {
+    routes: {
+        vehicle: string;
+        directions: DirectionsResponseData[];
+    }[];
+    timestamp: Date;
 };
 
 export type SmartBinCollectInfo = {

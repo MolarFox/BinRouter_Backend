@@ -1,30 +1,29 @@
 import express from "express";
-import BinCollectionSchedule from "../models/bin-collection-schedule";
-import Depot from "../models/depot";
 import * as HTTP from "../constants/http"
+import Depot from "../models/depot";
+import BinCollectionSchedule from "../models/bin-collection-schedule";
 
-export function getBinCollectionSchedules(request: express.Request, response: express.Response) {
-    Promise
-        .all([
-            Depot.find({}),
-            BinCollectionSchedule.find({})
-        ])
-        .then(([depots, binCollectionSchedules]) => 
-            response.status(HTTP.OK).json({
-                depots: depots.map((depot: any) => ({
-                    _id: depot._id,
-                    longitude: depot.location.coordinates[0],
-                    latitude: depot.location.coordinates[1],
-                    address: depot.address
+export async function getBinCollectionSchedules(request: express.Request, response: express.Response) {
+    try {
+        const depots = await Depot.find({});
+        const binCollectionSchedules = await BinCollectionSchedule.find({});
+        response.status(HTTP.OK).json({
+            depots: depots.map((depot: any) => ({
+                _id: depot._id,
+                longitude: depot.location.coordinates[0],
+                latitude: depot.location.coordinates[1],
+                address: depot.address
+            })),
+            binCollectionSchedules: binCollectionSchedules.map((binCollectionSchedule: any) => ({
+                routes: (binCollectionSchedule.routes as Array<any>).map((route) => ({
+                    vehicle: route.vehicle,
+                    directions: route.directions
                 })),
-                binCollectionSchedules: binCollectionSchedules.map((binCollectionSchedule: any) => ({
-                    searchStrategy: binCollectionSchedule.searchStrategy,
-                    routes: (binCollectionSchedule.routes as Array<any>).map((route) => ({
-                        vehicle: route.vehicle,
-                        directions: route.directions
-                    }))
-                }))
-            })
-        )
-        .catch((error) => console.error(error));
+                timestamp: binCollectionSchedule.timestamp
+            }))
+        });
+    } catch(error) {
+        response.status(HTTP.INTERNAL_SERVER_ERROR).send();
+        console.error(error);
+    }
 }

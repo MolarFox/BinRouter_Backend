@@ -92,7 +92,9 @@ export class RoutingSolverAdapter {
     ): Promise<number[][][]> {
         const routesByStrategy: number[][][] = [];
         for (const routingStrategy of $enum(RoutingStrategy).values()) {
-           routesByStrategy.push(await RoutingSolverAdapter.execute(distanceMatrix, nodeWeights, vehicleCapacities, routingStrategy));
+            routesByStrategy.push(
+               await RoutingSolverAdapter.execute(distanceMatrix, nodeWeights, vehicleCapacities, routingStrategy)
+            );
         }
         return Array.from(
             new Set(

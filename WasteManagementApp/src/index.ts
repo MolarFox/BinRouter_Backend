@@ -615,12 +615,12 @@ app.listen(8080);
 // DumbBin.insertMany(
 //     [{
 //         _id: new mongoose.Types.ObjectId(),
-//         serialNumber: 123456789,
+//         serialNumber: 66666666,
 //         location: {
 //             type: "Point",
 //             coordinates: [144.6664092517, -37.9097616667]
 //         },
-//         address: "Cash Converters H Werribee",
+//         address: "Cash Converters A Werribee",
 //         capacity: 99.67,
 //         nearestSmartBinId: new mongoose.Types.ObjectId()
 //     }],
@@ -628,7 +628,7 @@ app.listen(8080);
 //         rawResult: true
 //     },
 //     function(error, res) {
-//         console.log(res);
+//         console.dir(res, { depth: 6 });
 //     }
 // )
 
@@ -700,5 +700,5 @@ app.listen(8080);
 //     console.log(data.toString());
 // });
 
-BinCollectionScheduleHelper.createAllPossibleBinCollectionSchedules(googleMapsServices);
+// BinCollectionScheduleHelper.createAllPossibleBinCollectionSchedules(googleMapsServices);
 // googleMapsServices.computeDirections({latitude: -37.9018111376, longitude: 144.6601949611}, {latitude: -37.9018111376, longitude: 144.6601949611}, []).then(console.log);
