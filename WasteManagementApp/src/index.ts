@@ -51,8 +51,9 @@ Database.connect().then(async (connection) => {
     const app = express();
 
     app.use(express.json());
+    app.use("/", express.static(path.join(__dirname, "views/")));
     app.use("/", router);
-    app.listen(8080);
+    app.listen(80);
 
     const googleMapsServicesAdapter = new GoogleMapsServicesAdapter();
     app.set("GoogleMapsServicesAdapter", googleMapsServicesAdapter);
@@ -183,7 +184,7 @@ Database.connect().then(async (connection) => {
         } else {
             console.log(`Initial population of bin collection schedules data failed with error code ${binCollectionSchedulesInsertWriteResult.result?.ok}`);
         }
-        
+
         // if (error) return console.error(error);
         // googleMapsServices.computeDirections(bins[0], bins[25], bins.slice(1, 25)).then(data => {
         //     console.log(data);

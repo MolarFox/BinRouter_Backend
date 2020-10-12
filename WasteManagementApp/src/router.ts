@@ -14,14 +14,16 @@ const router = express.Router();
 // Heatmap-related endpoints
 
 // Bins-related endpoints
-router.get("/bins", bins.getBins);
-router.put("/bins", bins.modifyBins);
+router.get("/data/bins", bins.getBins);
+router.put("/data/bins", bins.modifyBins);
 
 // Vehicles-related endpoints
-router.get("/vehicles", vehicles.getFleetVehicles);
-router.put("/vehicles", vehicles.modifyFleetVehicles);
+router.get("/data/vehicles", vehicles.getFleetVehicles);
+router.put("/data/vehicles", vehicles.modifyFleetVehicles);
 
 // Routes-related endpoints
-router.get("/routes", schedules.getBinCollectionSchedules);
+router.get("/data/routes", schedules.getBinCollectionSchedules);
+
+// 404 page send
 
 export default router;
