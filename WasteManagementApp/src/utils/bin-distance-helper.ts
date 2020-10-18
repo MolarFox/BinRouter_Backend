@@ -4,12 +4,12 @@ import DumbBin from "../models/dumb-bin";
 import Depot from "../models/depot";
 import BinDistance from "../models/bin-distance";
 import { GoogleMapsServicesAdapter } from "./google-maps-services-adapter";
-import { DeletedBinInfo, CreatedBinInfo, UpdatedBinInfo, BinDistanceInfo, DepotInfo, IdLatLng, DistanceMatrixElement } from "./type-information";
+import { DeletedBinInfo, CreatedBinInfo, UpdatedBinInfo, BinDistanceInfo, DepotInfo, IdLatLng, DistanceMatrixElement, mongooseInsertWriteOpResult } from "./type-information";
 
 export class BinDistanceHelper {
-    public static async computeAllBinDistances(
+    public static async updateAllBinDistances(
         googleMapsServicesAdapter: GoogleMapsServicesAdapter
-    ): Promise<BinDistanceInfo[]> {
+    ): Promise<mongooseInsertWriteOpResult> {
         const projectPipelineStage = {
             $project: {
                 longitude: {
@@ -44,16 +44,21 @@ export class BinDistanceHelper {
             destinationTypes
         );
         
-        return allBinDistancesInfo;
+        await BinDistance.deleteMany({});
+        
+        return BinDistance.insertMany(allBinDistancesInfo, {
+            rawResult: true
+        }) as unknown as Promise<mongooseInsertWriteOpResult>;
     }
 
-    public static async computeBinDistances(
+    public static async updateBinDistances(
         googleMapsServicesAdapter: GoogleMapsServicesAdapter,
         deletedBinsInfo: DeletedBinInfo[], 
         createdBinsInfo: CreatedBinInfo[], 
         updatedBinsInfo: UpdatedBinInfo[],
         isSmart: boolean
-    ): Promise<BinDistanceInfo[]> {
+    ): Promise<boolean> {
+        let updateResult = false;
         const binsIdsDeleted = deletedBinsInfo.concat(updatedBinsInfo.map((updatedBinInfo) => updatedBinInfo._id));
         const deleteResult = binsIdsDeleted.length > 0 ? 
             await BinDistance.deleteMany({
@@ -86,9 +91,7 @@ export class BinDistanceHelper {
             }) : {
                 ok: 1
             };
-        
-        let binDistancesInfo: BinDistanceInfo[] = [];
-        
+
         if (deleteResult.ok === 1) {
             const binsCreated = createdBinsInfo.concat(updatedBinsInfo);
 
@@ -141,7 +144,7 @@ export class BinDistanceHelper {
                         }
                     }
                 ]);
-                binDistancesInfo = [
+                const binDistancesInfo = [
                     BinDistanceHelper.convertFromDistanceMatrixToBinDistanceDocuments(
                         await googleMapsServicesAdapter.computeDistanceMatrix(binsCreated, binsCreated), 
                         binsCreated, 
@@ -192,10 +195,16 @@ export class BinDistanceHelper {
                         isSmart ? "SmartBin" : "DumbBin"
                     ), 
                 ].flatMap(binDistanceInfo => binDistanceInfo);
+
+                const insertResult = await BinDistance.insertMany(binDistancesInfo, {
+                        rawResult: true
+                    }
+                ) as unknown as mongooseInsertWriteOpResult;
+                
+                updateResult = insertResult.result?.ok === 1;
             }
         }
-        
-        return binDistancesInfo;
+        return updateResult;
     }
     
     public static convertFromDistanceMatrixToBinDistanceDocuments(

@@ -27,3 +27,8 @@ export async function getBinCollectionSchedules(request: express.Request, respon
         console.error(error);
     }
 }
+
+export async function getBinCollectionSchedulesTimestamp(request: express.Request, response: express.Response) {
+    const timestampDoc = await BinCollectionSchedule.findOne({}, "-_id timestamp") as unknown as { timestamp: Date };
+    response.status(HTTP.OK).json(timestampDoc ? timestampDoc : {});
+}

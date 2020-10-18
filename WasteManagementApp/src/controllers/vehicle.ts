@@ -25,7 +25,7 @@ export async function getFleetVehicles(request: express.Request, response: expre
                 capacity: fleetVehicle.capacity,
                 available: fleetVehicle.available,
                 icon: fleetVehicle.icon,
-                belongTo: fleetVehicle.belongTo
+                homeDepot: fleetVehicle.homeDepot
             }))
         });
     } catch(error) {
@@ -54,7 +54,7 @@ export async function modifyFleetVehicles(request: express.Request, response: ex
                 capacity: fleetVehicle.capacity,
                 available: fleetVehicle.available,
                 icon: fleetVehicle.icon,
-                belongTo: fleetVehicle.belongTo ? fleetVehicle.belongTo : undefined
+                homeDepot: fleetVehicle.homeDepot ? fleetVehicle.homeDepot : undefined
             }
         }
     }));
@@ -68,7 +68,7 @@ export async function modifyFleetVehicles(request: express.Request, response: ex
                 capacity: fleetVehicle.capacity, 
                 available: fleetVehicle.available,
                 icon: fleetVehicle.icon,
-                belongTo: fleetVehicle.belongTo ? fleetVehicle.belongTo : undefined
+                homeDepot: fleetVehicle.homeDepot ? fleetVehicle.homeDepot : undefined
             }
         }
     }));
@@ -95,18 +95,9 @@ export async function modifyFleetVehicles(request: express.Request, response: ex
     if (fleetVehiclesDelete.length > 0 || fleetVehiclesCreate.length > 0 || fleetVehiclesUpdate.length > 0) {
         try {
             // Recompute the route by calling the recomputation routine
-            const binCollectionSchedules = await BinCollectionScheduleHelper.createAllPossibleBinCollectionSchedules(
+            const binCollectionSchedulesInsertWriteResult = await BinCollectionScheduleHelper.updateBinCollectionSchedules(
                 request.app.get("GoogleMapsServicesAdapter") as GoogleMapsServicesAdapter
             );
-            const binCollectionSchedulesInsertWriteResult = await BinCollectionSchedule.insertMany(
-                binCollectionSchedules.map(binCollectionSchedule => 
-                    Object.assign(binCollectionSchedule, {
-                        _id: new mongoose.Types.ObjectId()
-                    })
-                ), {
-                    rawResult: true
-                }
-            ) as unknown as mongooseInsertWriteOpResult;
             if (binCollectionSchedulesInsertWriteResult.result?.ok !== 1) {
                 console.error(binCollectionSchedulesInsertWriteResult);
             }

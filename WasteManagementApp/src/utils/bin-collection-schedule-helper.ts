@@ -3,7 +3,9 @@
  * Last modified date: 
  * Description: 
  */
+import mongoose from "mongoose";
 import { FULLNESS_THRESHOLD_RATIO_SELECTION_CRITERION } from "../constants/misc";
+import BinCollectionSchedule from "../models/bin-collection-schedule";
 import BinDistance from "../models/bin-distance";
 import Depot from "../models/depot";
 import DumbBin from "../models/dumb-bin";
@@ -11,12 +13,12 @@ import FleetVehicle from "../models/fleet-vehicle";
 import SmartBin from "../models/smart-bin";
 import { GoogleMapsServicesAdapter } from "./google-maps-services-adapter";
 import { RoutingSolverAdapter } from "./routing-solver-adapter";
-import { BinCollectionScheduleInfo, BinDistanceInfo, DepotCollectInfo, DumbBinCollectInfo, FleetVehicleCollectInfo, SmartBinCollectInfo } from "./type-information";
+import { BinDistanceInfo, DepotCollectInfo, DumbBinCollectInfo, FleetVehicleCollectInfo, mongooseInsertWriteOpResult, SmartBinCollectInfo } from "./type-information";
 
 export class BinCollectionScheduleHelper {
-    public static async createAllPossibleBinCollectionSchedules(
+    public static async updateBinCollectionSchedules(
         googleMapsServicesAdapter: GoogleMapsServicesAdapter
-    ): Promise<BinCollectionScheduleInfo[]> {
+    ): Promise<mongooseInsertWriteOpResult> {
         const [depot]: DepotCollectInfo[] = await Depot.aggregate([
             // Limited to only one depot in this project as the routing solver is unable to support multiple depots
             {
@@ -125,7 +127,7 @@ export class BinCollectionScheduleHelper {
             {
                 $match: {
                     available: true,
-                    belongTo: depot._id
+                    homeDepot: depot._id
                 }
             },
             {
@@ -271,18 +273,32 @@ export class BinCollectionScheduleHelper {
         );
 
         const setOfBinCollectionSchedules = 
-            await Promise.all(uniqueSetOfRoutesUsingCoordinates.map(async (routesUsingCoordinates) => ({
-                routes: await Promise.all(routesUsingCoordinates.map(async (routeUsingCoordinates, index) => ({
-                    vehicle: fleetVehicles[index]._id,
-                    directions: await googleMapsServicesAdapter.computeDirections(
-                        routeUsingCoordinates[0],
-                        routeUsingCoordinates[routeUsingCoordinates.length - 1],
-                        routeUsingCoordinates.slice(1, routeUsingCoordinates.length - 1)
-                    )
-                }))),
-                timestamp: new Date()
-            })));
+            await Promise.all(
+                uniqueSetOfRoutesUsingCoordinates.map(async (routesUsingCoordinates) => ({
+                    routes: await Promise.all(
+                        routesUsingCoordinates.map(async (routeUsingCoordinates, index) => ({
+                            vehicle: fleetVehicles[index]._id,
+                            directions: await googleMapsServicesAdapter.computeDirections(
+                                routeUsingCoordinates[0],
+                                routeUsingCoordinates[routeUsingCoordinates.length - 1],
+                                routeUsingCoordinates.slice(1, routeUsingCoordinates.length - 1)
+                            )
+                        }))
+                    ),
+                    timestamp: new Date()
+                }))
+            );
 
-        return setOfBinCollectionSchedules;
+        await BinCollectionSchedule.deleteMany({});
+        
+        return BinCollectionSchedule.insertMany(
+            setOfBinCollectionSchedules.map(binCollectionSchedule => 
+                Object.assign(binCollectionSchedule, {
+                    _id: new mongoose.Types.ObjectId()
+                })
+            ), {
+                rawResult: true
+            }
+        ) as unknown as Promise<mongooseInsertWriteOpResult>;
     }
 }

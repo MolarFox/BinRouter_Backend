@@ -22,6 +22,7 @@ router.get("/data/vehicles", vehicles.getFleetVehicles);
 router.put("/data/vehicles", vehicles.modifyFleetVehicles);
 
 // Routes-related endpoints
+router.get("/data/routes_last_updated", schedules.getBinCollectionSchedulesTimestamp);
 router.get("/data/routes", schedules.getBinCollectionSchedules);
 
 // 404 page send

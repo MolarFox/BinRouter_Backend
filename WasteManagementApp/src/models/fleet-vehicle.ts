@@ -20,7 +20,7 @@ const fleetVehicle = new mongoose.Schema({
     icon: {
         type: mongoose.Schema.Types.Number
     },
-    belongTo: {
+    homeDepot: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Depot"
     }

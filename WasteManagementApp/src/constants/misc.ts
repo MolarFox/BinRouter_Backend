@@ -16,3 +16,7 @@ export const BIN_SEARCH_DISTANCE = 1000;
 export const ROUTING_SOLVER_EXECUTABLE_RELATIVE_PATH = "./routing_solver/bin/routing";
 
 export const FULLNESS_THRESHOLD_RATIO_SELECTION_CRITERION = 0.5;
+
+export const LOG_DIRECTORY_RELATIVE_PATH = "./logs";
+export const SYSTEM_LOG_FILENAME = "system_log.log";
+export const SYSTEM_ERROR_FILENAME = "system_error.log";

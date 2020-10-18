@@ -34,7 +34,7 @@ export class RoutingSolverAdapter {
                 RoutingSolverAdapter.routingSolverProcess = null;
             }
 
-            const routingSolver = spawn(
+            RoutingSolverAdapter.routingSolverProcess = spawn(
                 ROUTING_SOLVER_EXECUTABLE_RELATIVE_PATH, 
                 [
                     distanceMatrix.map(
@@ -51,7 +51,7 @@ export class RoutingSolverAdapter {
                 }
             );
             
-            routingSolver.stdout.on("data", (result: Buffer) => {
+            RoutingSolverAdapter.routingSolverProcess.stdout.on("data", (result: Buffer) => {
                 result
                     .toString()
                     .split(RoutingSolverAdapter.ROUTE_DELIMITER)
@@ -60,7 +60,7 @@ export class RoutingSolverAdapter {
                     .forEach((route) => routes.push(route));
             });
 
-            routingSolver.on("exit", (code, signal) => {
+            RoutingSolverAdapter.routingSolverProcess.on("exit", (code, signal) => {
                 RoutingSolverAdapter.routingSolverProcess = null;
                 if (code === 0 && signal === null) {
                     console.log(`Routing solver ${$enum.mapValue(routingStrategy).with({
@@ -77,7 +77,7 @@ export class RoutingSolverAdapter {
                 }
             });
 
-            routingSolver.on("error", (error) => {
+            RoutingSolverAdapter.routingSolverProcess.on("error", (error) => {
                 RoutingSolverAdapter.routingSolverProcess = null;
                 console.error(error);
                 reject(error);

@@ -1,12 +1,10 @@
 import express from "express";
 import mongoose from "mongoose";
 import * as HTTP from "../constants/http"
-import { BIN_SEARCH_DISTANCE } from "../constants/misc"
 import SmartBin from "../models/smart-bin";
 import DumbBin from "../models/dumb-bin";
-import BinDistance from "../models/bin-distance";
 import BinCollectionSchedule from "../models/bin-collection-schedule";
-import { DumbBinCreateInfo, DumbBinDeleteInfo, DumbBinUpdateInfo, mongooseInsertWriteOpResult } from "../utils/type-information";
+import { BinCreateInfo, BinDeleteInfo, BinUpdateInfo, mongooseInsertWriteOpResult } from "../utils/type-information";
 import { GoogleMapsServicesAdapter } from "../utils/google-maps-services-adapter";
 import { BinDistanceHelper } from "../utils/bin-distance-helper";
 import { BinCollectionScheduleHelper } from "../utils/bin-collection-schedule-helper";
@@ -43,60 +41,26 @@ export async function getBins(request: express.Request, response: express.Respon
 }
 
 export async function modifyBins(request: express.Request, response: express.Response) {
-    const dumbBinsDelete: DumbBinDeleteInfo[] = Array.isArray(request.body.dumbBinsDelete) ? request.body.dumbBinsDelete : [];
-    const dumbBinsCreate: DumbBinCreateInfo[] = Array.isArray(request.body.dumbBinsCreate) ? request.body.dumbBinsCreate : [];
-    const dumbBinsUpdate: DumbBinUpdateInfo[] = Array.isArray(request.body.dumbBinsUpdate) ? request.body.dumbBinsUpdate : [];
+    const dumbBinsDelete: BinDeleteInfo[] = Array.isArray(request.body.dumbBinsDelete) ? request.body.dumbBinsDelete : [];
+    const dumbBinsCreate: BinCreateInfo[] = Array.isArray(request.body.dumbBinsCreate) ? request.body.dumbBinsCreate : [];
+    const dumbBinsUpdate: BinUpdateInfo[] = Array.isArray(request.body.dumbBinsUpdate) ? request.body.dumbBinsUpdate : [];
 
-    const dumbBinsDeleteBulkOperations = dumbBinsDelete.map((_id) => ({
-        deleteOne: {
-            filter: { 
-                _id: _id
-            }
-        }
-    }));
-    const dumbBinsCreateBulkOperations = dumbBinsCreate.map((dumbBin) => ({
-        insertOne: {
-            document: {
-                _id: new mongoose.Types.ObjectId(),
-                location: {
-                    type: "Point",
-                    coordinates: [dumbBin.longitude, dumbBin.latitude]
-                },
-                address: dumbBin.address,
-                capacity: dumbBin.capacity,
-            }
-        }
-    }));
-    const dumbBinsUpdateBulkOperations = dumbBinsUpdate.map((dumbBin) => ({
-        updateOne: {
-            filter: {
-                _id: dumbBin._id,
-            },
-            update: {
-                location: {
-                    type: "Point",
-                    coordinates: [dumbBin.longitude, dumbBin.latitude]
-                },
-                address: dumbBin.address,
-                capacity: dumbBin.capacity,
-                nearestSmartBin: undefined
-            }
-        }
-    }));
-
+    // check if all of these arrays are empty or not
     try {
-        const dumbBinsDeleteCreateUpdatebulkWriteResult = await DumbBin.bulkWrite(
-            (dumbBinsDeleteBulkOperations as any[])
-                .concat(dumbBinsCreateBulkOperations)
-                .concat(dumbBinsUpdateBulkOperations)
+        const dumbBinsDeleteCreateUpdateBulkWriteResult = await BinHelper.updateBins(
+            dumbBinsDelete,
+            dumbBinsCreate,
+            dumbBinsUpdate,
+            false
         );
+        console.log(dumbBinsDeleteCreateUpdateBulkWriteResult);
 
-        if (dumbBinsDeleteCreateUpdatebulkWriteResult.result?.ok === 1 && 
-            dumbBinsDeleteCreateUpdatebulkWriteResult.result?.writeErrors.length === 0) {
-            response.status(HTTP.CREATED).send(dumbBinsDeleteCreateUpdatebulkWriteResult.insertedIds);
+        if (dumbBinsDeleteCreateUpdateBulkWriteResult.result?.ok === 1 && 
+            dumbBinsDeleteCreateUpdateBulkWriteResult.result?.writeErrors.length === 0) {
+            response.status(HTTP.CREATED).send(dumbBinsDeleteCreateUpdateBulkWriteResult.insertedIds);
 
             const dumbBinsCreateFormatted = dumbBinsCreate.map((dumbBin, index) => ({
-                _id: dumbBinsDeleteCreateUpdatebulkWriteResult.insertedIds[index] as string,
+                _id: dumbBinsDeleteCreateUpdateBulkWriteResult.insertedIds[index] as string,
                 longitude: dumbBin.longitude,
                 latitude: dumbBin.latitude,
             }));
@@ -105,68 +69,42 @@ export async function modifyBins(request: express.Request, response: express.Res
                 longitude: dumbBin.longitude,
                 latitude: dumbBin.latitude,
             }));
-            const binDistancesInsertWriteResult = await BinDistance.insertMany(
-                BinDistanceHelper.computeBinDistances(
-                    request.app.get("GoogleMapsServicesAdapter") as GoogleMapsServicesAdapter,
-                    dumbBinsDelete,
-                    dumbBinsCreateFormatted,
-                    dumbBinsUpdateFormatted,
-                    false
-                ), {
-                    rawResult: true
-                }
-            ) as unknown as mongooseInsertWriteOpResult;
+            const binDistancesUpdateResult = await BinDistanceHelper.updateBinDistances(
+                request.app.get("GoogleMapsServicesAdapter") as GoogleMapsServicesAdapter,
+                dumbBinsDelete,
+                dumbBinsCreateFormatted,
+                dumbBinsUpdateFormatted,
+                false
+            );
 
-            if (binDistancesInsertWriteResult.result?.ok === 1) {
-                const dumbBinsToBeUpdated = dumbBinsCreateFormatted.concat(dumbBinsUpdateFormatted);
-                const nearestSmartBins = await BinHelper.computeNearestSmartBins(dumbBinsToBeUpdated);
-
-                const dumbBinsUpdateOnNearestSmartBinBulkWriteResult = await DumbBin.bulkWrite(
-                    nearestSmartBins.map((nearestSmartBin, index) => 
-                        nearestSmartBin ? ({
-                            updateOne: {
-                                filter: {
-                                    _id: dumbBinsToBeUpdated[index]._id,
-                                },
-                                update: {
-                                    nearestSmartBin: nearestSmartBin
-                                }
-                            }
-                        }) : null
-                    ).filter(operation => operation)
-                );
+            if (binDistancesUpdateResult) {
+                const dumbBinsUpdateOnNearestSmartBinBulkWriteResult = 
+                    await BinHelper.updateNearestSmartBins(
+                        dumbBinsCreateFormatted.concat(dumbBinsUpdateFormatted)
+                    );
 
                 if (dumbBinsUpdateOnNearestSmartBinBulkWriteResult.result?.ok !== 1 || 
-                        dumbBinsUpdateOnNearestSmartBinBulkWriteResult.result?.writeErrors.length !== 0) {
+                    dumbBinsUpdateOnNearestSmartBinBulkWriteResult.result?.writeErrors.length !== 0) {
                     console.error(dumbBinsUpdateOnNearestSmartBinBulkWriteResult);
                 }
             } else {
-                console.error(binDistancesInsertWriteResult);
+                console.error(binDistancesUpdateResult);
             }
         } else {
-            response.status(HTTP.BAD_REQUEST).send(dumbBinsDeleteCreateUpdatebulkWriteResult.result.writeErrors);
-            console.error(dumbBinsDeleteCreateUpdatebulkWriteResult);
+            response.status(HTTP.BAD_REQUEST).send(dumbBinsDeleteCreateUpdateBulkWriteResult.result.writeErrors);
+            console.error(dumbBinsDeleteCreateUpdateBulkWriteResult);
         }
     } catch(error) {
-        response.status(HTTP.BAD_REQUEST).send(error.writeErrors);
+        response.status(HTTP.INTERNAL_SERVER_ERROR).send(error.writeErrors);
         console.error(error);
     }
 
     if (dumbBinsCreate.length > 0 || dumbBinsDelete.length > 0 || dumbBinsUpdate.length > 0) {
         try {
             // Recompute the route by calling the recomputation routine
-            const binCollectionSchedules = await BinCollectionScheduleHelper.createAllPossibleBinCollectionSchedules(
-                request.app.get("GoogleMapsServices") as GoogleMapsServicesAdapter
+            const binCollectionSchedulesInsertWriteResult = await BinCollectionScheduleHelper.updateBinCollectionSchedules(
+                request.app.get("GoogleMapsServicesAdapter") as GoogleMapsServicesAdapter
             );
-            const binCollectionSchedulesInsertWriteResult = await BinCollectionSchedule.insertMany(
-                binCollectionSchedules.map(binCollectionSchedule => 
-                    Object.assign(binCollectionSchedule, {
-                        _id: new mongoose.Types.ObjectId()
-                    })
-                ), {
-                    rawResult: true
-                }
-            ) as unknown as mongooseInsertWriteOpResult;
             if (binCollectionSchedulesInsertWriteResult.result?.ok === 1) {
                 console.error(binCollectionSchedulesInsertWriteResult);
             }

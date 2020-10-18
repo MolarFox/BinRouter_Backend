@@ -1,6 +1,6 @@
 import { DirectionsResponseData } from "@googlemaps/google-maps-services-js/dist/directions";
 
-export type SmartBinsInfo = {
+export type SmartBinsJSON = {
     type: string,
     name: string,
     features: {
@@ -11,6 +11,7 @@ export type SmartBinsInfo = {
         },
         properties: {
             bin_detail: string,
+            capacity: number,
             fullness_threshold: number,
             position: string,
             status: string,
@@ -20,7 +21,7 @@ export type SmartBinsInfo = {
     }[]
 };
 
-export type SmartBinsCurrentFillLevelsInfo = {
+export type SmartBinsCurrentFillLevelsJSON = {
     type: string,
     name: string,
     features: {
@@ -45,20 +46,39 @@ export type SmartBinsCurrentFillLevelsInfo = {
     }[]
 };
 
-export type DumbBinDeleteInfo = string;
-export type DumbBinCreateInfo = {
+export type SmartBinInfo = {
+    _id?: string,
+    serialNumber: number,
+    location: {
+        type: string,
+        coordinates: [number, number]
+    },
+    address: string,
+    capacity: number,
+    threshold: number,
+    lastUpdated: Date
+}
+
+export type BinDeleteInfo = string;
+export type BinCreateInfo = {
     longitude: number,
     latitude: number,
     address: string,
-    capacity: number
+    capacity: number,
+    serialNumber?: number,
+    threshold?: number,
+    lastUpdated?: Date
 };
-export type DumbBinUpdateInfo = {
+export type BinUpdateInfo = {
     _id: string,
     longitude: number,
     latitude: number,
-    address: number,
-    capacity: number
+    address: string,
+    capacity: number,
+    threshold?: number,
+    lastUpdated?: Date
 };
+
 export type DeletedBinInfo = string;
 export type CreatedBinInfo = {
     _id: string,
@@ -103,7 +123,7 @@ export type FleetVehicleCreateInfo = {
     capacity: number,
     available: boolean,
     icon: number,
-    belongTo?: string
+    homeDepot?: string
 };
 export type FleetVehicleUpdateInfo = {
     _id: string,
@@ -111,7 +131,7 @@ export type FleetVehicleUpdateInfo = {
     capacity: number,
     available: boolean,
     icon: number,
-    belongTo?: string
+    homeDepot?: string
 };
 
 export type mongooseInsertWriteOpResult = {

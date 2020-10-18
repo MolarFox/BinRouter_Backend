@@ -1,28 +1,554 @@
 {
 	"dumbBins" : [
 		{
-			"location" : {
-				"type" : "Point",
-				"coordinates" : [ 144.6633949611, -37.9026111376 ]
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.7331147,
+				  -37.8932189
+			   ]
 			},
-			"address" : "38 Duncans Rd, Werribee VIC 3030",
-			"capacity" : 500
-		},
-		{
-			"location" : {
-				"type" : "Point",
-				"coordinates" : [ 144.6664192517, -37.9087716667 ]
+			"address":"Grainger Circuit, Innisfail, Point Cook, City of Wyndham, Victoria, 3030, Australia",
+			"capacity":347
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.76199238594253,
+				  -37.92533475
+			   ]
 			},
-			"address" : "7-29 Chirnside Ave, Werribee VIC 3030",
-			"capacity" : 200
-		},
-		{
-			"location" : {
-				"type" : "Point",
-				"coordinates" : [ 144.7336233333, -37.8885216667 ]
+			"address":"RAAF Lake, Main Drive, Point Cook, City of Wyndham, Victoria, 3028, Australia",
+			"capacity":234
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.719789,
+				  -37.6555917
+			   ]
 			},
-			"address" : "7-29 Chirnside Ave, Werribee VIC 3030",
-			"capacity" : 100
-		}
+			"address":"Outer Metropolitan Ring Road / E6, Oaklands Junction, City of Hume, Victoria, 3336, Australia",
+			"capacity":278
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.6398406,
+				  -37.8478183
+			   ]
+			},
+			"address":"Mornington Avenue, Newgate, Tarneit, City of Wyndham, Victoria, 3024, Australia",
+			"capacity":151
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.7077463,
+				  -37.8761503
+			   ]
+			},
+			"address":"Gildan Court, Woodville Gardens, Hoppers Crossing, City of Wyndham, Victoria, 3030, Australia",
+			"capacity":196
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.6906656,
+				  -37.8857409
+			   ]
+			},
+			"address":"Bernhardt Avenue, Woodville, Hoppers Crossing, Werribee, City of Wyndham, Victoria, 3030, Australia",
+			"capacity":158
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.7963634,
+				  -37.8821372
+			   ]
+			},
+			"address":"Hobsons Bay Coastal Trail, Altona Meadows, City of Hobsons Bay, Victoria, 3018, Australia",
+			"capacity":472
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.5919382,
+				  -37.9053532
+			   ]
+			},
+			"address":"Porter Street, Cornerstone, Werribee, City of Wyndham, Victoria, 3024, Australia",
+			"capacity":198
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.7012669,
+				  -37.864668
+			   ]
+			},
+			"address":"Hogans Road, Hoppers Crossing, City of Wyndham, Victoria, 3029, Australia",
+			"capacity":184
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.5845217,
+				  -37.8392179
+			   ]
+			},
+			"address":"Spring Plains Road, Wyndham Vale, City of Wyndham, Victoria, 3024, Australia",
+			"capacity":354
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.7650453,
+				  -37.9101396
+			   ]
+			},
+			"address":"Design Drive, Catalina, Point Cook, City of Wyndham, Victoria, 3028, Australia",
+			"capacity":337
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.7091116,
+				  -37.925814
+			   ]
+			},
+			"address":"Aviation Road, Werribee South, City of Wyndham, Victoria, 3030, Australia",
+			"capacity":122
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.719789,
+				  -37.6555917
+			   ]
+			},
+			"address":"Outer Metropolitan Ring Road / E6, Oaklands Junction, City of Hume, Victoria, 3336, Australia",
+			"capacity":454
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.7060389,
+				  -37.8757367
+			   ]
+			},
+			"address":"Hotham Crescent, Woodville Gardens, Hoppers Crossing, City of Wyndham, Victoria, 3030, Australia",
+			"capacity":181
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.703414,
+				  -37.8209958
+			   ]
+			},
+			"address":"Dohertys Road, Villages of Rothwell, Truganina, City of Wyndham, Victoria, 3029, Australia",
+			"capacity":465
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.81019271582454,
+				  -37.8391534
+			   ]
+			},
+			"address":"NQX Freight Systems, Horsburgh Drive, Altona North, City of Hobsons Bay, Victoria, 3018, Australia",
+			"capacity":318
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.6736408,
+				  -37.8999415
+			   ]
+			},
+			"address":"Nantilla Crescent, Werribee, City of Wyndham, Victoria, 3030, Australia",
+			"capacity":277
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.6373449,
+				  -37.842572
+			   ]
+			},
+			"address":"Celestial Circuit, Grand Central, Tarneit, City of Wyndham, Victoria, 3024, Australia",
+			"capacity":275
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.7045887,
+				  -37.8972515
+			   ]
+			},
+			"address":"Princes Freeway Onramp, Werribee, City of Wyndham, Victoria, 3030, Australia",
+			"capacity":328
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.6765344,
+				  -37.8627356
+			   ]
+			},
+			"address":"Connor Place, Cambridge, Hoppers Crossing, City of Wyndham, Victoria, 3029, Australia",
+			"capacity":424
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.6536102,
+				  -37.8826914
+			   ]
+			},
+			"address":"Bunyip Court, Riverdene, Werribee, City of Wyndham, Victoria, 3030, Australia",
+			"capacity":416
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.6769283,
+				  -37.9211348
+			   ]
+			},
+			"address":"Main Drive, Werribee South, Werribee, City of Wyndham, Victoria, 3030, Australia",
+			"capacity":320
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.7950889,
+				  -37.8520775
+			   ]
+			},
+			"address":"Modal Place, Altona, City of Hobsons Bay, Victoria, 3018, Australia",
+			"capacity":471
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.735035,
+				  -37.8242766
+			   ]
+			},
+			"address":"four ate five, Dohertys Road, Truganina, City of Wyndham, Victoria, 3027, Australia",
+			"capacity":405
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.655948,
+				  -37.926216
+			   ]
+			},
+			"address":"Main Drive, Cocoroc, Werribee, City of Wyndham, Victoria, 3030, Australia",
+			"capacity":218
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.6780052,
+				  -36.5986096
+			   ]
+			},
+			"address":"Victoria, Australia",
+			"capacity":485
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.6571881,
+				  -37.9212778
+			   ]
+			},
+			"address":"Werribee River Trail, Cocoroc, Werribee, City of Wyndham, Victoria, 3030, Australia",
+			"capacity":143
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.6784907,
+				  -37.9041918
+			   ]
+			},
+			"address":"Edwards Road, Werribee, City of Wyndham, Victoria, 3030, Australia",
+			"capacity":334
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.6634438,
+				  -37.8508007
+			   ]
+			},
+			"address":"Chlorinda Road, Bethany Park, Tarneit, City of Wyndham, Victoria, 3029, Australia",
+			"capacity":116
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.6200485,
+				  -37.840776
+			   ]
+			},
+			"address":"Sayers Road, Tarneit, City of Wyndham, Victoria, 3024, Australia",
+			"capacity":119
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.6334621,
+				  -37.8910811
+			   ]
+			},
+			"address":"Kent Court, Windsor Park, Werribee, City of Wyndham, Victoria, 3030, Australia",
+			"capacity":370
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.5930506,
+				  -37.9061735
+			   ]
+			},
+			"address":"Ryebank Avenue, Cornerstone, Werribee, City of Wyndham, Victoria, 3024, Australia",
+			"capacity":267
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.8043032,
+				  -37.8155283
+			   ]
+			},
+			"address":"Raymond Road, Laverton North, City of Wyndham, Victoria, 3026, Australia",
+			"capacity":308
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.6621966,
+				  -37.8365961
+			   ]
+			},
+			"address":"Tallinga Street, The Heartlands, Tarneit, City of Wyndham, Victoria, 3029, Australia",
+			"capacity":136
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.6896866,
+				  -37.9154122
+			   ]
+			},
+			"address":"Harrisons Road, Werribee South, Werribee, City of Wyndham, Victoria, 3030, Australia",
+			"capacity":403
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.6615621,
+				  -37.9146919
+			   ]
+			},
+			"address":"18, Loop Road, Werribee, City of Wyndham, Victoria, 3030, Australia",
+			"capacity":230
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.7645583,
+				  -37.8848613
+			   ]
+			},
+			"address":"Peppercorn Court, Sanctuary Lakes, Point Cook, City of Wyndham, Victoria, 3028, Australia",
+			"capacity":229
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.72765143437016,
+				  -37.89068635
+			   ]
+			},
+			"address":"Stella Maris Catholic Primary School, 54-70, Innisfail Drive, Innisfail, Point Cook, City of Wyndham, Victoria, 3030, Australia",
+			"capacity":184
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.6872588,
+				  -37.8701996
+			   ]
+			},
+			"address":"Bourke Crescent, Mossfiel, Hoppers Crossing, City of Wyndham, Victoria, 3030, Australia",
+			"capacity":225
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.7850633,
+				  -37.8560508
+			   ]
+			},
+			"address":"Danglow Avenue, Altona, City of Hobsons Bay, Victoria, 3026, Australia",
+			"capacity":344
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.7543930363833,
+				  -37.93110825
+			   ]
+			},
+			"address":"RAAF Base Williams, Williams Road, Point Cook, City of Wyndham, Victoria, Australia",
+			"capacity":344
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.6739163,
+				  -37.8913249
+			   ]
+			},
+			"address":"Shaws Road, Werribee, City of Wyndham, Victoria, 3030, Australia",
+			"capacity":400
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.7018364,
+				  -37.9019127
+			   ]
+			},
+			"address":"Princes Freeway, Werribee, Werribee South, City of Wyndham, Victoria, 3030, Australia",
+			"capacity":276
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.5903845,
+				  -37.8618526
+			   ]
+			},
+			"address":"Honeycomb Avenue, Manor Lakes, City of Wyndham, Victoria, 3024, Australia",
+			"capacity":173
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.5845217,
+				  -37.8392179
+			   ]
+			},
+			"address":"Spring Plains Road, Wyndham Vale, City of Wyndham, Victoria, 3024, Australia",
+			"capacity":303
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.5884681,
+				  -37.870333
+			   ]
+			},
+			"address":"Bregman Esplanade, Manor Lakes, City of Wyndham, Victoria, 3024, Australia",
+			"capacity":328
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.76367330107155,
+				  -37.89960765
+			   ]
+			},
+			"address":"Sanctuary Lakes, Middle Park Drive, Sanctuary Lakes, Point Cook, City of Wyndham, Victoria, 3028, Australia",
+			"capacity":490
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.7270034,
+				  -37.9252958
+			   ]
+			},
+			"address":"Lignum Road, Point Cook, City of Wyndham, Victoria, 3030, Australia",
+			"capacity":274
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.6084185,
+				  -37.8722432
+			   ]
+			},
+			"address":"Wyndham Vale, City of Wyndham, Victoria, 3024, Australia",
+			"capacity":384
+		 },
+		 {
+			"location":{
+			   "type":"Point",
+			   "coordinates":[
+				  144.7401004,
+				  -37.9133493
+			   ]
+			},
+			"address":"Urchin Way, Alamanda, Point Cook, City of Wyndham, Victoria, 3030, Australia",
+			"capacity":316
+		 }
 	]
 }

@@ -6,14 +6,12 @@ import express from "express";
 import mongoose from "mongoose";
 import router from "./router";
 import Database from "./database";
-import * as HTTP from "./constants/http";
 import * as MISC from "./constants/misc";
 import SmartBin from "./models/smart-bin";
 import DumbBin from "./models/dumb-bin";
 import SmartBinDailyFillLevel from "./models/smart-bin-fill-level";
-import { SmartBinsInfo, SmartBinsCurrentFillLevelsInfo, mongooseInsertWriteOpResult } from "./utils/type-information";
+import { SmartBinsJSON, SmartBinsCurrentFillLevelsJSON, mongooseInsertWriteOpResult, SmartBinInfo, BinUpdateInfo, BinCreateInfo, BinDeleteInfo, IdLatLng } from "./utils/type-information";
 import { GoogleMapsServicesAdapter } from "./utils/google-maps-services-adapter";
-import { distancematrix } from "@googlemaps/google-maps-services-js/dist/distance";
 import FleetVehicle from "./models/fleet-vehicle";
 import BinDistance from "./models/bin-distance";
 import Depot from "./models/depot";
@@ -24,6 +22,9 @@ import dumbBinsInfo from "./initial_data/dumb_bins.json";
 import fleetVehiclesInfo from "./initial_data/fleet_vehicles.json";
 import BinCollectionSchedule from "./models/bin-collection-schedule";
 import { BinHelper } from "./utils/bin-helper";
+import { Logger } from "./utils/logger";
+
+Logger.initialise();
 
 // Load all environment variables from the .env configuration file
 let dotenvResult;
@@ -50,271 +51,295 @@ console.log("Environment has been initialized successfully");
 Database.connect().then(async (connection) => {
     const app = express();
 
+    const googleMapsServicesAdapter = new GoogleMapsServicesAdapter();
+    app.set("GoogleMapsServicesAdapter", googleMapsServicesAdapter);
+
+    const smartBinsCountInitial = await SmartBin.countDocuments();
+    if (smartBinsCountInitial === 0) {
+        await populateInitialData(googleMapsServicesAdapter);
+    }
+
+    const recurrentUpdateJob = schedule.scheduleJob(MISC.DAILY_UPDATE_TIME, async (fireTime) => {
+        await syncSmartBinsAndUpdateBinDistances(googleMapsServicesAdapter);
+        await syncSmartBinsCurrentFillLevels();
+        const binCollectionSchedulesInsertWriteResult = 
+            await BinCollectionScheduleHelper.updateBinCollectionSchedules(googleMapsServicesAdapter);
+        if (binCollectionSchedulesInsertWriteResult.result?.ok !== 1) {
+            console.error(binCollectionSchedulesInsertWriteResult);
+        }
+    });
+
+    if (smartBinsCountInitial !== 0) {
+        recurrentUpdateJob.invoke();
+    }
+
     app.use(express.json());
     app.use("/", express.static(path.join(__dirname, "views/")));
     app.use("/", router);
     app.listen(80);
+});
 
-    const googleMapsServicesAdapter = new GoogleMapsServicesAdapter();
-    app.set("GoogleMapsServicesAdapter", googleMapsServicesAdapter);
+async function populateInitialData(googleMapsServicesAdapter: GoogleMapsServicesAdapter) {
+    const depots = depotsInfo.depots.map((depot) => 
+        Object.assign(depot, {
+            _id: new mongoose.Types.ObjectId()
+        })
+    );
+    const depotsInsertWriteResult = await Depot.insertMany(depots, {
+        rawResult: true
+    }) as unknown as mongooseInsertWriteOpResult;
+    if (depotsInsertWriteResult.result?.ok === 1) {
+        console.log("Initial population of depots data completed successfully");
+    } else {
+        console.log(`Initial population of depots data failed with error code ${depotsInsertWriteResult.result?.ok}`);
+    }
 
-    const smartBinsCount = await SmartBin.countDocuments();
-    if (smartBinsCount === 0) {
-        const depots = depotsInfo.depots.map((depot) => 
-            Object.assign(depot, {
-                _id: new mongoose.Types.ObjectId()
-            })
-        );
-        const depotsInsertWriteResult = await Depot.insertMany(depots, {
-            rawResult: true
-        }) as unknown as mongooseInsertWriteOpResult;
-        if (depotsInsertWriteResult.result?.ok === 1) {
-            console.log("Initial population of depots data completed successfully");
-        } else {
-            console.log(`Initial population of depots data failed with error code ${depotsInsertWriteResult.result?.ok}`);
-        }
-
-        const fleetVehicles = fleetVehiclesInfo.fleetVehicles.map((fleetVehicle) => 
-            Object.assign(fleetVehicle, {
-                _id: new mongoose.Types.ObjectId(),
-                belongTo: depots[0]._id
-            })
-        );
-        const fleetVehiclesInsertWriteResult = await FleetVehicle.insertMany(fleetVehicles, {
-            rawResult: true
-        }) as unknown as mongooseInsertWriteOpResult;
-        if (fleetVehiclesInsertWriteResult.result?.ok === 1) {
-            console.log("Initial population of fleet vehicles data completed successfully");
-        } else {
-            console.log(`Initial population of fleet vehicles data failed with error code ${fleetVehiclesInsertWriteResult.result?.ok}`);
-        }
-
-        const smartBinsCurrentFillLevelsInfo = 
-            await fetch(process.env.SMART_BINS_CURRENT_FILL_LEVELS_URL as string)
-                    .then(response => response.json() as Promise<SmartBinsCurrentFillLevelsInfo>);
-        const smartBinsCurrentFillLevels: { 
-            [serialNumber: number]: {
-                serialNumber: number,
-                fullness: number,
-                timestamp: Date
-            }
-        } = {};
-        smartBinsCurrentFillLevelsInfo.features.forEach((smartBinCurrentFillLevelInfo) => 
-            smartBinsCurrentFillLevels[smartBinCurrentFillLevelInfo.properties.serial_num] = {
-                serialNumber: smartBinCurrentFillLevelInfo.properties.serial_num,
-                fullness: smartBinCurrentFillLevelInfo.properties.fill_lvl,
-                timestamp: new Date(smartBinCurrentFillLevelInfo.properties.timestamp)
-            }
-        );
-        const smartBinsInfo = await fetch(process.env.SMART_BINS_URL as string)
-                                        .then(response => response.json() as Promise<SmartBinsInfo>);
-        const smartBins = smartBinsInfo.features.map((smartBinInfo) => ({
+    const fleetVehicles = fleetVehiclesInfo.fleetVehicles.map((fleetVehicle) => 
+        Object.assign(fleetVehicle, {
             _id: new mongoose.Types.ObjectId(),
+            homeDepot: depots[0]._id
+        })
+    );
+    const fleetVehiclesInsertWriteResult = await FleetVehicle.insertMany(fleetVehicles, {
+        rawResult: true
+    }) as unknown as mongooseInsertWriteOpResult;
+    if (fleetVehiclesInsertWriteResult.result?.ok === 1) {
+        console.log("Initial population of fleet vehicles data completed successfully");
+    } else {
+        console.log(`Initial population of fleet vehicles data failed with error code ${fleetVehiclesInsertWriteResult.result?.ok}`);
+    }
+
+    const smartBinsCurrentFillLevelsInfo = 
+        await fetch(process.env.SMART_BINS_CURRENT_FILL_LEVELS_URL as string)
+                .then(response => response.json() as Promise<SmartBinsCurrentFillLevelsJSON>);
+    const smartBinsCurrentFillLevels: { 
+        [serialNumber: number]: {
+            serialNumber: number,
+            fullness: number,
+            timestamp: Date
+        }
+    } = {};
+    smartBinsCurrentFillLevelsInfo.features.forEach((smartBinCurrentFillLevelInfo) => 
+        smartBinsCurrentFillLevels[smartBinCurrentFillLevelInfo.properties.serial_num] = {
+            serialNumber: smartBinCurrentFillLevelInfo.properties.serial_num,
+            fullness: smartBinCurrentFillLevelInfo.properties.fill_lvl,
+            timestamp: new Date(smartBinCurrentFillLevelInfo.properties.timestamp)
+        }
+    );
+    const smartBinsInfo = 
+        await fetch(process.env.SMART_BINS_URL as string).then(response => response.json() as Promise<SmartBinsJSON>);
+    const smartBins = smartBinsInfo.features.map((smartBinInfo) => ({
+        _id: new mongoose.Types.ObjectId(),
+        serialNumber: smartBinInfo.properties.serial_number,
+        location: smartBinInfo.geometry,
+        address: smartBinInfo.properties.bin_detail,
+        capacity: smartBinInfo.properties.capacity,
+        threshold: smartBinInfo.properties.fullness_threshold,
+        currentFullness: smartBinsCurrentFillLevels[smartBinInfo.properties.serial_number].fullness,
+        lastUpdated: smartBinInfo.properties.last_updated
+    }));
+    const smartBinsInsertWriteResult = await SmartBin.insertMany(smartBins, {
+        rawResult: true
+    }) as unknown as mongooseInsertWriteOpResult;
+    if (smartBinsInsertWriteResult.result?.ok === 1) {
+        console.log("Initial population of smart bins data completed successfully");
+    } else {
+        console.log(`Initial population of smart bins data failed with error code ${smartBinsInsertWriteResult.result?.ok}`);
+    }
+    const smartBinDailyFillLevelsInsertWriteResult = await SmartBinDailyFillLevel.insertMany(
+        Object.values(smartBinsCurrentFillLevels), {
+            rawResult: true
+        }
+    ) as unknown as mongooseInsertWriteOpResult;
+    if (smartBinDailyFillLevelsInsertWriteResult.result?.ok === 1) {
+        console.log("Initial population of smart bin daily fill levels data completed successfully");
+    } else {
+        console.log(`Initial population of smart bin daily fill levels data failed with error code ${smartBinDailyFillLevelsInsertWriteResult.result?.ok}`);
+    }
+
+    const nearestSmartBins = await BinHelper.computeNearestSmartBins(
+        dumbBinsInfo.dumbBins.map((dumbBin) => ({
+            longitude: dumbBin.location.coordinates[0],
+            latitude: dumbBin.location.coordinates[1],
+        }))
+    );
+    const dumbBins = dumbBinsInfo.dumbBins.map((dumbBin, index) => 
+        Object.assign(dumbBin, {
+            _id: new mongoose.Types.ObjectId(),
+            nearestSmartBin: nearestSmartBins[index]
+        })
+    );
+    const dumbBinsInsertWriteResult = await DumbBin.insertMany(dumbBins, {
+        rawResult: true
+    }) as unknown as mongooseInsertWriteOpResult;
+    if (dumbBinsInsertWriteResult.result?.ok === 1) {
+        console.log("Initial population of dumb bins data completed successfully");
+    } else {
+        console.log(`Initial population of dumb bins data failed with error code ${dumbBinsInsertWriteResult.result?.ok}`);
+    }
+
+    const allBinDistancesInsertWriteResult = await BinDistanceHelper.updateAllBinDistances(googleMapsServicesAdapter);
+    if (allBinDistancesInsertWriteResult.result?.ok === 1) {
+        console.log("Initial population of all bin distances data completed successfully");
+    } else {
+        console.log(`Initial population of all bin distances data failed with error code ${allBinDistancesInsertWriteResult.result?.ok}`);
+    }
+
+    const binCollectionSchedulesInsertWriteResult = 
+        await BinCollectionScheduleHelper.updateBinCollectionSchedules(googleMapsServicesAdapter);
+    if (binCollectionSchedulesInsertWriteResult.result?.ok === 1) {
+        console.log("Initial population of bin collection schedules data completed successfully");
+    } else {
+        console.log(`Initial population of bin collection schedules data failed with error code ${binCollectionSchedulesInsertWriteResult.result?.ok}`);
+    }
+}
+
+async function syncSmartBinsAndUpdateBinDistances(googleMapsServicesAdapter: GoogleMapsServicesAdapter) {
+    const localSmartBins: { 
+        [serialNumber: number]: SmartBinInfo
+    } = {};
+    const remoteSmartBins: {
+        [serialNumber: number]: SmartBinInfo
+    } = {};
+
+    (await SmartBin.find({}) as unknown as SmartBinInfo[])
+        .forEach((smartBinDoc) => localSmartBins[smartBinDoc.serialNumber] = smartBinDoc);
+    (await fetch(process.env.SMART_BINS_URL as string).then(response => response.json() as Promise<SmartBinsJSON>))
+        .features
+        .forEach((smartBinInfo) => remoteSmartBins[smartBinInfo.properties.serial_number] = {
             serialNumber: smartBinInfo.properties.serial_number,
             location: smartBinInfo.geometry,
             address: smartBinInfo.properties.bin_detail,
+            capacity: smartBinInfo.properties.capacity,
             threshold: smartBinInfo.properties.fullness_threshold,
-            currentFullness: smartBinsCurrentFillLevels[smartBinInfo.properties.serial_number].fullness,
-            lastUpdated: smartBinInfo.properties.last_updated
-        }));
-        const smartBinsInsertWriteResult = await SmartBin.insertMany(smartBins, {
-            rawResult: true
-        }) as unknown as mongooseInsertWriteOpResult;
-        if (smartBinsInsertWriteResult.result?.ok === 1) {
-            console.log("Initial population of smart bins data completed successfully");
-        } else {
-            console.log(`Initial population of smart bins data failed with error code ${smartBinsInsertWriteResult.result?.ok}`);
-        }
-        const smartBinDailyFillLevelsInsertWriteResult = await SmartBinDailyFillLevel.insertMany(
-            Object.values(smartBinsCurrentFillLevels), {
-                rawResult: true
-            }
-        ) as unknown as mongooseInsertWriteOpResult;
-        if (smartBinDailyFillLevelsInsertWriteResult.result?.ok === 1) {
-            console.log("Initial population of smart bin daily fill levels data completed successfully");
-        } else {
-            console.log(`Initial population of smart bin daily fill levels data failed with error code ${smartBinDailyFillLevelsInsertWriteResult.result?.ok}`);
-        }
-
-        const nearestSmartBins = await BinHelper.computeNearestSmartBins(
-            dumbBinsInfo.dumbBins.map((dumbBin) => ({
-                longitude: dumbBin.location.coordinates[0],
-                latitude: dumbBin.location.coordinates[1],
-            }))
+            lastUpdated: new Date(smartBinInfo.properties.last_updated)
+        });
+    
+    const localSmartBinsSerialNumbers = Object.keys(localSmartBins).map((serialNumber) => parseInt(serialNumber, 10));
+    const remoteSmartBinsSerialNumbers = Object.keys(remoteSmartBins).map((serialNumber) => parseInt(serialNumber, 10));
+    
+    const smartBinsDelete = 
+        localSmartBinsSerialNumbers
+            .filter((serialNumber) => !remoteSmartBinsSerialNumbers.includes(serialNumber))
+            .map((serialNumber) => localSmartBins[serialNumber]._id!) as BinDeleteInfo[];
+    const smartBinsCreate = 
+        remoteSmartBinsSerialNumbers
+            .filter((serialNumber) => !localSmartBinsSerialNumbers.includes(serialNumber))
+            .map((serialNumber) => ({
+                longitude: remoteSmartBins[serialNumber].location.coordinates[0],
+                latitude: remoteSmartBins[serialNumber].location.coordinates[1],
+                address: remoteSmartBins[serialNumber].address,
+                capacity: remoteSmartBins[serialNumber].capacity,
+                serialNumber: remoteSmartBins[serialNumber].serialNumber,
+                threshold: remoteSmartBins[serialNumber].threshold,
+                lastUpdated: remoteSmartBins[serialNumber].lastUpdated
+            })) as BinCreateInfo[];
+    const smartBinsUpdate = 
+        localSmartBinsSerialNumbers
+            .filter((serialNumber) => remoteSmartBinsSerialNumbers.includes(serialNumber))
+            .map((serialNumber) => 
+                localSmartBins[serialNumber].lastUpdated.getTime() !== remoteSmartBins[serialNumber].lastUpdated.getTime() ? {
+                    _id: localSmartBins[serialNumber]._id!,
+                    longitude: remoteSmartBins[serialNumber].location.coordinates[0],
+                    latitude: remoteSmartBins[serialNumber].location.coordinates[1],
+                    address: remoteSmartBins[serialNumber].address,
+                    capacity: remoteSmartBins[serialNumber].capacity,
+                    threshold: remoteSmartBins[serialNumber].threshold,
+                    lastUpdated: remoteSmartBins[serialNumber].lastUpdated,
+                } : null
+            )
+            .filter(smartBin => smartBin) as BinUpdateInfo[];
+    
+    if (smartBinsDelete.length !== 0 || smartBinsCreate.length !== 0 || smartBinsUpdate.length !== 0) {
+        const smartBinsDeleteCreateUpdateBulkWriteResult = await BinHelper.updateBins(
+            smartBinsDelete, 
+            smartBinsCreate,
+            smartBinsUpdate,
+            true
         );
-        const dumbBins = dumbBinsInfo.dumbBins.map((dumbBin, index) => 
-            Object.assign(dumbBin, {
-                _id: new mongoose.Types.ObjectId(),
-                nearestSmartBin: nearestSmartBins[index]
-            })
-        );
-        const dumbBinsInsertWriteResult = await DumbBin.insertMany(dumbBins, {
-            rawResult: true
-        }) as unknown as mongooseInsertWriteOpResult;
-        if (dumbBinsInsertWriteResult.result?.ok === 1) {
-            console.log("Initial population of dumb bins data completed successfully");
-        } else {
-            console.log(`Initial population of dumb bins data failed with error code ${dumbBinsInsertWriteResult.result?.ok}`);
-        }
 
-        const allBinDistances = await BinDistanceHelper.computeAllBinDistances(googleMapsServicesAdapter);
-        const allBinDistancesInsertWriteResult = await BinDistance.insertMany(allBinDistances, {
-            rawResult: true
-        }) as unknown as mongooseInsertWriteOpResult;
-        if (allBinDistancesInsertWriteResult.result?.ok === 1) {
-            console.log("Initial population of all bin distances data completed successfully");
-        } else {
-            console.log(`Initial population of all bin distances data failed with error code ${allBinDistancesInsertWriteResult.result?.ok}`);
-        }
-
-        const allPossibleBinCollectionSchedulesInfo = 
-            await BinCollectionScheduleHelper.createAllPossibleBinCollectionSchedules(googleMapsServicesAdapter);
-        const allPossibleBinCollectionSchedules = 
-            allPossibleBinCollectionSchedulesInfo.map((binCollectionScheduleInfo) => 
-                Object.assign(binCollectionScheduleInfo, {
-                    _id: new mongoose.Types.ObjectId()
-                })
+        if (smartBinsDeleteCreateUpdateBulkWriteResult.result?.ok === 1 && 
+            smartBinsDeleteCreateUpdateBulkWriteResult.result?.writeErrors.length === 0) {
+            const smartBinsCreateFormatted = smartBinsCreate.map((smartBin, index) => ({
+                _id: smartBinsDeleteCreateUpdateBulkWriteResult.insertedIds[index] as string,
+                longitude: smartBin.longitude,
+                latitude: smartBin.latitude,
+            }));
+            const smartBinsUpdateFormatted = smartBinsUpdate.map((smartBin) => ({
+                _id: smartBin._id,
+                longitude: smartBin.longitude,
+                latitude: smartBin.latitude,
+            }));
+            const binDistancesUpdateResult = await BinDistanceHelper.updateBinDistances(
+                googleMapsServicesAdapter, 
+                smartBinsDelete, 
+                smartBinsCreateFormatted, 
+                smartBinsUpdateFormatted, 
+                true 
             );
-        const binCollectionSchedulesInsertWriteResult = 
-            await BinCollectionSchedule.insertMany(allPossibleBinCollectionSchedules, {
-                rawResult: true
-            }) as unknown as mongooseInsertWriteOpResult;
-        if (binCollectionSchedulesInsertWriteResult.result?.ok === 1) {
-            console.log("Initial population of bin collection schedules data completed successfully");
-        } else {
-            console.log(`Initial population of bin collection schedules data failed with error code ${binCollectionSchedulesInsertWriteResult.result?.ok}`);
+            
+            if (binDistancesUpdateResult) {
+                const dumbBinsUpdateOnNearestSmartBinBulkWriteResult = 
+                    await BinHelper.updateNearestSmartBins(
+                        await DumbBin.aggregate([
+                            {
+                                $project: {
+                                    longitude: {
+                                        $arrayElemAt: ["$location.coordinates", 0]
+                                    },
+                                    latitude: {
+                                        $arrayElemAt: ["$location.coordinates", 1]
+                                    }
+                                }
+                            }
+                        ]) as IdLatLng[]
+                    );
+                
+                if (dumbBinsUpdateOnNearestSmartBinBulkWriteResult.result?.ok !== 1 || 
+                    dumbBinsUpdateOnNearestSmartBinBulkWriteResult.result?.writeErrors.length !== 0) {
+                    console.error(dumbBinsUpdateOnNearestSmartBinBulkWriteResult);
+                }
+            }
         }
-
-        // if (error) return console.error(error);
-        // googleMapsServices.computeDirections(bins[0], bins[25], bins.slice(1, 25)).then(data => {
-        //     console.log(data);
-        //     console.log(data[0].routes);
-            // const route = new BinCollectionRoute({
-            //     _id: new mongoose.Types.ObjectId(),
-            //     searchStrategy: "AUTOMATIC",
-            //     routeByVehicle: [
-            //         {
-            //             vehicle: "5f73fea3a3af8f1ab7fa9dd5",
-            //             path: data
-            //         }
-            //     ]
-            // });
-            // route.save(function(err, doc) {
-            //     if (err) return console.error(err);
-            //     console.log(doc);
-            // })
-            // console.log(data[0].routes[0].legs);
-        // });
-
-        // insert distances between bins and depots
-        // const depots = await Depot.find({});
-        // const depotsIdLocation = depots.map((depot: any) => ({
-        //     _id: depot._id,
-        //     latitude: depot.location.coordinates[1],
-        //     longitude: depot.location.coordinates[0]
-        // }));
-        // const depotsLocation = depots.map((depot: any) => ({
-        //     latitude: depot.location.coordinates[1],
-        //     longitude: depot.location.coordinates[0]
-        // }));
-        // const smartBinsIdLocation = smartBins.map((smartBin: any) => ({
-        //     _id: smartBin._id,
-        //     latitude: smartBin.location.coordinates[1] as number,
-        //     longitude: smartBin.location.coordinates[0] as number
-        // }));
-        // await BinDistance.insertMany((await Promise.all([
-        //     googleMapsServicesAdapter
-        //         .computeDistanceMatrix(depotsLocation, depotsLocation)
-        //         .then(distanceMatrix => BinDistanceHelper.convertFromDistanceMatrixToBinDistanceDocuments(
-        //             distanceMatrix,
-        //             depotsIdLocation,
-        //             "Depot",
-        //             depotsIdLocation,
-        //             "Depot"
-        //         )),
-        //     googleMapsServicesAdapter
-        //         .computeDistanceMatrix(depotsLocation, smartBinsLocation)
-        //         .then(distanceMatrix => BinDistanceHelper.convertFromDistanceMatrixToBinDistanceDocuments(
-        //             distanceMatrix,
-        //             depotsIdLocation,
-        //             "Depot",
-        //             smartBinsIdLocation,
-        //             "SmartBin"
-        //         )),
-        //     googleMapsServicesAdapter
-        //         .computeDistanceMatrix(smartBinsLocation, depotsLocation)
-        //         .then(distanceMatrix => BinDistanceHelper.convertFromDistanceMatrixToBinDistanceDocuments(
-        //             distanceMatrix,
-        //             smartBinsIdLocation,
-        //             "SmartBin",
-        //             depotsIdLocation,
-        //             "Depot"
-        //         ))
-        // ])).flatMap(binDistanceInfo => binDistanceInfo));
-        // console.log("Initial population of distances between each pair of depots and smart bins completes successfully");
-
-        // const dumbBins = await DumbBin.find({});
-        // const dumbBinsIdLocation = dumbBins.map((dumbBin: any) => ({
-        //     _id: dumbBin._id,
-        //     latitude: dumbBin.location.coordinates[1],
-        //     longitude: dumbBin.location.coordinates[0]
-        // }));
-        // const dumbBinsLocation = dumbBins.map((dumbBin: any) => ({
-        //     latitude: dumbBin.location.coordinates[1],
-        //     longitude: dumbBin.location.coordinates[0]
-        // }));
-        // await BinDistance.insertMany((await Promise.all([
-        //     googleMapsServicesAdapter
-        //         .computeDistanceMatrix(dumbBinsLocation, dumbBinsLocation)
-        //         .then(distanceMatrix => BinDistanceHelper.convertFromDistanceMatrixToBinDistanceDocuments(
-        //             distanceMatrix,
-        //             dumbBinsIdLocation,
-        //             "DumbBin",
-        //             dumbBinsIdLocation,
-        //             "DumbBin"
-        //         )),
-        //     googleMapsServicesAdapter
-        //         .computeDistanceMatrix(dumbBinsLocation, depotsLocation)
-        //         .then(distanceMatrix => BinDistanceHelper.convertFromDistanceMatrixToBinDistanceDocuments(
-        //             distanceMatrix,
-        //             dumbBinsIdLocation,
-        //             "DumbBin",
-        //             depotsIdLocation,
-        //             "Depot"
-        //         )),
-        //     googleMapsServicesAdapter
-        //         .computeDistanceMatrix(depotsLocation, dumbBinsLocation)
-        //         .then(distanceMatrix => BinDistanceHelper.convertFromDistanceMatrixToBinDistanceDocuments(
-        //             distanceMatrix,
-        //             depotsIdLocation,
-        //             "Depot",
-        //             dumbBinsIdLocation,
-        //             "DumbBin"
-        //         )),
-        //     googleMapsServicesAdapter
-        //         .computeDistanceMatrix(dumbBinsLocation, smartBinsLocation)
-        //         .then(distanceMatrix => BinDistanceHelper.convertFromDistanceMatrixToBinDistanceDocuments(
-        //             distanceMatrix,
-        //             dumbBinsIdLocation,
-        //             "DumbBin",
-        //             smartBinsIdLocation,
-        //             "SmartBin"
-        //         )),
-        //     googleMapsServicesAdapter
-        //         .computeDistanceMatrix(smartBinsLocation, dumbBinsLocation)
-        //         .then(distanceMatrix => BinDistanceHelper.convertFromDistanceMatrixToBinDistanceDocuments(
-        //             distanceMatrix,
-        //             smartBinsIdLocation,
-        //             "SmartBin",
-        //             dumbBinsIdLocation,
-        //             "DumbBin"
-        //         ))
-        // ])).flatMap(binDistanceInfo => binDistanceInfo));
-        // console.log("Initial population of distances between each pair of bins and depots completes successfully");
-
-        // TODO: update the database when new data comes in
     }
-});
+}
+
+async function syncSmartBinsCurrentFillLevels() {
+    const smartBinsUpdateOnCurrentFullnessBulkWriteResult = await SmartBin.bulkWrite(
+        (await fetch(process.env.SMART_BINS_CURRENT_FILL_LEVELS_URL as string).then(response => response.json() as Promise<SmartBinsCurrentFillLevelsJSON>))
+            .features
+            .map((smartBinCurrentFillLevelInfo) => ({
+                updateOne: {
+                    filter: {
+                        serialNumber: smartBinCurrentFillLevelInfo.properties.serial_num,
+                    },
+                    update: {
+                        currentFullness: smartBinCurrentFillLevelInfo.properties.fill_lvl 
+                    }
+                }
+            }))
+    );
+    
+    if (smartBinsUpdateOnCurrentFullnessBulkWriteResult.result?.ok !== 1 || 
+        smartBinsUpdateOnCurrentFullnessBulkWriteResult.result?.writeErrors.length !== 0) {
+        console.error(smartBinsUpdateOnCurrentFullnessBulkWriteResult);
+    }
+}
+
+
+// DumbBin.aggregate([
+//     {
+//         $project: {
+//             longitude: {
+//                 $arrayElemAt: ["$location.coordinates", 0]
+//             },
+//             latitude: {
+//                 $arrayElemAt: ["$location.coordinates", 1]
+//             }
+//         }
+//     }
+// ]).then(x => console.log(x));
+
 
 // const googleMapsServices = new GoogleMapsServices();
 // googleMapsServices.computeDistanceMatrix(origins, destinations).then(distanceMatrix => distanceMatrix.forEach((row, i) => row.forEach((col, j) => console.log(`row: ${i}, col: ${j}\n`, col, "\n"))))
@@ -395,15 +420,6 @@ Database.connect().then(async (connection) => {
 //     console.log(docs);
 // })
 
-schedule.scheduleJob(MISC.DAILY_UPDATE_TIME, (fireTime) => {
-    fetch(process.env.SMART_BIN_CURRENT_FILL_LEVEL_URL as string, { method: HTTP.GET })
-        .then(response => response.json())
-        .then(data => {
-        console.log(data);
-    });
-    console.log(fireTime);
-});
-
 // setTimeout(
 //     () => {
 //         // const x = fetch(URL.SMART_BINS, {
@@ -463,14 +479,36 @@ schedule.scheduleJob(MISC.DAILY_UPDATE_TIME, (fireTime) => {
 
 // FleetVehicle.bulkWrite([
 //     {
+//         deleteOne: {
+//             filter: {
+//                 rego: "ABABA",
+//                 available: true
+//             }
+//         }
+//     },
+//     {
+//         updateOne: {
+//             filter: {
+//                 rego: "GHJKL"
+//             },
+//             update: {
+//                 rego: "ZZZZZ",
+//                 capacity: 6666,
+//                 available: true,
+//                 icon: 10,
+//                 homeDepot: null
+//             }
+//         }
+//     },
+//     {
 //         insertOne: {
 //             document: {
 //                 _id: new mongoose.Types.ObjectId(),
 //                 rego: "CZCZCZ",
-//                 capacity: 100,
-//                 available: true,
-//                 icon: -1,
-//                 belongTo: undefined
+//                 capacity: 1000,
+//                 available: false,
+//                 icon: 6,
+//                 homeDepot: undefined
 //             }
 //         }
 //     },
@@ -479,36 +517,14 @@ schedule.scheduleJob(MISC.DAILY_UPDATE_TIME, (fireTime) => {
 //             document: {
 //                 _id: new mongoose.Types.ObjectId(),
 //                 rego: "HDHDHD",
-//                 capacity: 200,
+//                 capacity: 2000,
 //                 available: false,
 //                 icon: 10,
-//                 belongTo: undefined
+//                 homeDepot: undefined
 //             }
 //         }
 //     },
-    // {
-    //     deleteOne: {
-    //         filter: {
-    //             rego: "ABABA",
-    //             available: true
-    //         }
-    //     }
-    // },
-    // {
-    //     updateOne: {
-    //         filter: {
-    //             rego: "ABABAB"
-    //         },
-    //         update: {
-    //             rego: "ABABAB",
-    //             capacity: 500,
-    //             available: true,
-    //             icon: 1000,
-    //             belongTo: null
-    //         }
-    //     }
-    // },
-// ]).then(res => console.log(res)).catch(error => console.error(error.writeErrors[0]));
+// ]).then(res => console.dir(res, {depth: 5})).catch(error => console.error(error.writeErrors[0]));
 
 // FleetVehicle.where("belongTo").ne(undefined).exec(function(error, result) {
 //     console.log(result);
@@ -602,11 +618,11 @@ schedule.scheduleJob(MISC.DAILY_UPDATE_TIME, (fireTime) => {
 //             location: {
 //                 $near: {
 //                     $geometry: dumbBin.location,
-//                     $maxDistance: 10
+//                     $maxDistance: 1000
 //                 }
 //             }
-//         }, "_id").exec(function(error, smartBins) {
-//             console.log(smartBins);
+//         }, "_id").exec(function(error, smartBin) {
+//             console.log(smartBin);
 //         });
 //     });
 // });
@@ -663,7 +679,7 @@ schedule.scheduleJob(MISC.DAILY_UPDATE_TIME, (fireTime) => {
 // });
 
 // BinCollectionScheduleHelper.createAllPossibleBinCollectionSchedules(new GoogleMapsServicesAdapter());
-BinDistanceHelper.computeAllBinDistances(new GoogleMapsServicesAdapter());
+// BinDistanceHelper.computeAllBinDistances(new GoogleMapsServicesAdapter());
 // googleMapsServices.computeDirections({latitude: -37.9018111376, longitude: 144.6601949611}, {latitude: -37.9018111376, longitude: 144.6601949611}, []).then(console.log);
 
 // BinCollectionScheduleHelper
