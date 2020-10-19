@@ -5,50 +5,75 @@ import Depot from "../models/depot";
 import BinDistance from "../models/bin-distance";
 import { GoogleMapsServicesAdapter } from "./google-maps-services-adapter";
 import { DeletedBinInfo, CreatedBinInfo, UpdatedBinInfo, BinDistanceInfo, DepotInfo, IdLatLng, DistanceMatrixElement, mongooseInsertWriteOpResult } from "./type-information";
+import { Logger } from "./logger";
+import { UPDATE_ALL_BIN_DISTANCES_LOG_TAG, UPDATE_BIN_DISTANCES_LOG_TAG } from "../constants/log-tag";
 
 export class BinDistanceHelper {
     public static async updateAllBinDistances(
         googleMapsServicesAdapter: GoogleMapsServicesAdapter
-    ): Promise<mongooseInsertWriteOpResult> {
-        const projectPipelineStage = {
-            $project: {
-                longitude: {
-                    $arrayElemAt: ["$location.coordinates", 0]
-                },
-                latitude: {
-                    $arrayElemAt: ["$location.coordinates", 1]
+    ): Promise<boolean> {
+        try {
+            const projectPipelineStage = {
+                $project: {
+                    longitude: {
+                        $arrayElemAt: ["$location.coordinates", 0]
+                    },
+                    latitude: {
+                        $arrayElemAt: ["$location.coordinates", 1]
+                    }
                 }
+            };
+            const depots: IdLatLng[] = await Depot.aggregate([
+                // Limited to only one depot in this project as the routing solver is unable to support multiple depots
+                {
+                    $limit: 1
+                },
+                projectPipelineStage
+            ]);
+            Logger.verboseLog(UPDATE_ALL_BIN_DISTANCES_LOG_TAG, "depots", depots, "\n");
+
+            const smartBins: IdLatLng[] = await SmartBin.aggregate([projectPipelineStage]);
+            Logger.verboseLog(UPDATE_ALL_BIN_DISTANCES_LOG_TAG, "smartBins", smartBins, "\n");
+
+            const dumbBins: IdLatLng[] = await DumbBin.aggregate([projectPipelineStage]);
+            Logger.verboseLog(UPDATE_ALL_BIN_DISTANCES_LOG_TAG, "dumbBins", dumbBins, "\n");
+            
+            const origins = depots.concat(smartBins).concat(dumbBins);
+            const originTypes = 
+                ["Depot"].concat(new Array(smartBins.length).fill("SmartBin")).concat(new Array(dumbBins.length).fill("DumbBin"));
+            const destinations = origins;
+            const destinationTypes = originTypes;
+            
+            const allBinDistancesInfo = BinDistanceHelper.convertFromDistanceMatrixToBinDistanceDocuments(
+                await googleMapsServicesAdapter.computeDistanceMatrix(origins, destinations),
+                origins,
+                originTypes,
+                destinations,
+                destinationTypes
+            );
+            Logger.verboseLog(UPDATE_ALL_BIN_DISTANCES_LOG_TAG, "allBinDistancesInfo", allBinDistancesInfo, "\n");
+            
+            const oldBinDistancesDeleteResult = await BinDistance.deleteMany({});
+            if (oldBinDistancesDeleteResult.ok !== 1) {
+                Logger.verboseError(UPDATE_ALL_BIN_DISTANCES_LOG_TAG, "oldBinDistancesDeleteResult", oldBinDistancesDeleteResult, "\n");
+                throw new Error("Failed to delete old bin distances");
             }
-        };
-        const depots: IdLatLng[] = await Depot.aggregate([
-            // Limited to only one depot in this project as the routing solver is unable to support multiple depots
-            {
-                $limit: 1
-            },
-            projectPipelineStage
-        ]);
-        const smartBins: IdLatLng[] = await SmartBin.aggregate([projectPipelineStage]);
-        const dumbBins: IdLatLng[] = await DumbBin.aggregate([projectPipelineStage]);
-        
-        const origins = depots.concat(smartBins).concat(dumbBins);
-        const originTypes = 
-            ["Depot"].concat(new Array(smartBins.length).fill("SmartBin")).concat(new Array(dumbBins.length).fill("DumbBin"));
-        const destinations = origins;
-        const destinationTypes = originTypes;
-        
-        const allBinDistancesInfo = BinDistanceHelper.convertFromDistanceMatrixToBinDistanceDocuments(
-            await googleMapsServicesAdapter.computeDistanceMatrix(origins, destinations),
-            origins,
-            originTypes,
-            destinations,
-            destinationTypes
-        );
-        
-        await BinDistance.deleteMany({});
-        
-        return BinDistance.insertMany(allBinDistancesInfo, {
-            rawResult: true
-        }) as unknown as Promise<mongooseInsertWriteOpResult>;
+            Logger.verboseLog(UPDATE_ALL_BIN_DISTANCES_LOG_TAG, "oldBinDistancesDeleteResult", oldBinDistancesDeleteResult, "\n");
+            
+            const newBinDistancesInsertResult = await BinDistance.insertMany(allBinDistancesInfo, {
+                rawResult: true
+            }) as unknown as mongooseInsertWriteOpResult;
+            if (newBinDistancesInsertResult.result?.ok !== 1) {
+                Logger.verboseError(UPDATE_ALL_BIN_DISTANCES_LOG_TAG, "oldBinDistancesDeleteResult", oldBinDistancesDeleteResult, "\n");
+                throw new Error("Failed to insert new bin distances");
+            }
+            Logger.verboseLog(UPDATE_ALL_BIN_DISTANCES_LOG_TAG, "newBinDistancesInsertResult", newBinDistancesInsertResult, "\n");
+            
+            return true;
+        } catch (error) {
+            Logger.error(UPDATE_ALL_BIN_DISTANCES_LOG_TAG, error, "\n");
+            return false;
+        }
     }
 
     public static async updateBinDistances(
@@ -58,41 +83,47 @@ export class BinDistanceHelper {
         updatedBinsInfo: UpdatedBinInfo[],
         isSmart: boolean
     ): Promise<boolean> {
-        let updateResult = false;
-        const binsIdsDeleted = deletedBinsInfo.concat(updatedBinsInfo.map((updatedBinInfo) => updatedBinInfo._id));
-        const deleteResult = binsIdsDeleted.length > 0 ? 
-            await BinDistance.deleteMany({
-                $or: [
-                    {
-                        $and: [
-                            {
-                                originType: isSmart ? "SmartBin" : "DumbBin"
-                            },
-                            {
-                                origin: {
-                                    $in: binsIdsDeleted
+        try {
+            const binsIdsDeleted = deletedBinsInfo.concat(updatedBinsInfo.map((updatedBinInfo) => updatedBinInfo._id));
+            const oldBinDistancesDeleteResult = binsIdsDeleted.length > 0 ? 
+                await BinDistance.deleteMany({
+                    $or: [
+                        {
+                            $and: [
+                                {
+                                    originType: isSmart ? "SmartBin" : "DumbBin"
+                                },
+                                {
+                                    origin: {
+                                        $in: binsIdsDeleted.map(_id => new mongoose.Types.ObjectId(_id))
+                                    }
                                 }
-                            }
-                        ]
-                    },
-                    {
-                        $and: [
-                            {
-                                destinationType: isSmart ? "SmartBin" : "DumbBin"
-                            },
-                            {
-                                destination: {
-                                    $in: binsIdsDeleted
+                            ]
+                        },
+                        {
+                            $and: [
+                                {
+                                    destinationType: isSmart ? "SmartBin" : "DumbBin"
+                                },
+                                {
+                                    destination: {
+                                        $in: binsIdsDeleted.map(_id => new mongoose.Types.ObjectId(_id))
+                                    }
                                 }
-                            }
-                        ]
-                    }
-                ]
-            }) : {
-                ok: 1
-            };
-
-        if (deleteResult.ok === 1) {
+                            ]
+                        }
+                    ]
+                }) : {
+                    ok: 1,
+                    n: 0,
+                    deletedCount: 0
+                };
+            if (oldBinDistancesDeleteResult.ok !== 1) {
+                Logger.verboseError(UPDATE_BIN_DISTANCES_LOG_TAG, "oldBinDistancesDeleteResult", oldBinDistancesDeleteResult, "\n");
+                throw new Error("Failed to delete old bin distances");
+            }
+            Logger.verboseLog(UPDATE_BIN_DISTANCES_LOG_TAG, "oldBinDistancesDeleteResult", oldBinDistancesDeleteResult, "\n");
+            
             const binsCreated = createdBinsInfo.concat(updatedBinsInfo);
 
             if (binsCreated.length > 0) {
@@ -118,6 +149,8 @@ export class BinDistanceHelper {
                         }
                     }
                 ]);
+                Logger.verboseLog(UPDATE_BIN_DISTANCES_LOG_TAG, "binsCreatedComplement", binsCreatedComplement, "\n");
+
                 const binsDifferentType: CreatedBinInfo[] = await BinModelDifferentType.aggregate([
                     {
                         $project: {
@@ -131,6 +164,8 @@ export class BinDistanceHelper {
                         }
                     }
                 ]);
+                Logger.verboseLog(UPDATE_BIN_DISTANCES_LOG_TAG, "binsDifferentType", binsDifferentType, "\n");
+
                 const depots: DepotInfo[] = await Depot.aggregate([
                     {
                         $project: {
@@ -144,6 +179,8 @@ export class BinDistanceHelper {
                         }
                     }
                 ]);
+                Logger.verboseLog(UPDATE_BIN_DISTANCES_LOG_TAG, "depots", depots, "\n");
+
                 const binDistancesInfo = [
                     BinDistanceHelper.convertFromDistanceMatrixToBinDistanceDocuments(
                         await googleMapsServicesAdapter.computeDistanceMatrix(binsCreated, binsCreated), 
@@ -195,16 +232,24 @@ export class BinDistanceHelper {
                         isSmart ? "SmartBin" : "DumbBin"
                     ), 
                 ].flatMap(binDistanceInfo => binDistanceInfo);
+                Logger.verboseLog(UPDATE_BIN_DISTANCES_LOG_TAG, "binDistancesInfo", binDistancesInfo, "\n");
 
-                const insertResult = await BinDistance.insertMany(binDistancesInfo, {
+                const newBinDistancesInsertResult = await BinDistance.insertMany(binDistancesInfo, {
                         rawResult: true
                     }
                 ) as unknown as mongooseInsertWriteOpResult;
-                
-                updateResult = insertResult.result?.ok === 1;
+                if (newBinDistancesInsertResult.result?.ok !== 1) {
+                    Logger.verboseError(UPDATE_BIN_DISTANCES_LOG_TAG, "newBinDistancesInsertResult", newBinDistancesInsertResult, "\n");
+                    throw new Error("Failed to insert new bin distances");
+                }
+                Logger.verboseLog(UPDATE_BIN_DISTANCES_LOG_TAG, "newBinDistancesInsertResult", newBinDistancesInsertResult, "\n");
             }
+
+            return true;
+        } catch (error) {
+            Logger.error(UPDATE_BIN_DISTANCES_LOG_TAG, error, "\n");
+            return false;
         }
-        return updateResult;
     }
     
     public static convertFromDistanceMatrixToBinDistanceDocuments(

@@ -61,6 +61,7 @@ export type SmartBinInfo = {
 
 export type BinDeleteInfo = string;
 export type BinCreateInfo = {
+    _id: string,
     longitude: number,
     latitude: number,
     address: string,

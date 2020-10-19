@@ -9,7 +9,7 @@ const fleetVehicle = new mongoose.Schema({
     },
     capacity: {
         type: mongoose.Schema.Types.Number,
-        min: 10,
+        min: 1,
         max: 50000,
         required: true
     },

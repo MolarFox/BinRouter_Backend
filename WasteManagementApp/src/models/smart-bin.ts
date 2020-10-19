@@ -33,9 +33,8 @@ const smartBinSchema = new mongoose.Schema({
     },
     capacity: {
         type: mongoose.Schema.Types.Number,
-        min: 10,
+        min: 1,
         max: 1000,
-        default: 100,
         required: true
     },
     threshold: {

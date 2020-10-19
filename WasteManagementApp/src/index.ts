@@ -9,20 +9,20 @@ import Database from "./database";
 import * as MISC from "./constants/misc";
 import SmartBin from "./models/smart-bin";
 import DumbBin from "./models/dumb-bin";
-import SmartBinDailyFillLevel from "./models/smart-bin-fill-level";
+import SmartBinFillLevel from "./models/smart-bin-fill-level";
 import { SmartBinsJSON, SmartBinsCurrentFillLevelsJSON, mongooseInsertWriteOpResult, SmartBinInfo, BinUpdateInfo, BinCreateInfo, BinDeleteInfo, IdLatLng } from "./utils/type-information";
 import { GoogleMapsServicesAdapter } from "./utils/google-maps-services-adapter";
 import FleetVehicle from "./models/fleet-vehicle";
-import BinDistance from "./models/bin-distance";
 import Depot from "./models/depot";
 import { BinDistanceHelper } from "./utils/bin-distance-helper";
 import { BinCollectionScheduleHelper } from "./utils/bin-collection-schedule-helper";
 import depotsInfo from "./initial_data/depots.json";
 import dumbBinsInfo from "./initial_data/dumb_bins.json";
 import fleetVehiclesInfo from "./initial_data/fleet_vehicles.json";
-import BinCollectionSchedule from "./models/bin-collection-schedule";
 import { BinHelper } from "./utils/bin-helper";
 import { Logger } from "./utils/logger";
+import { INDEX_LOG_TAG } from "./constants/log-tag";
+import smartBinFillLevel from "./models/smart-bin-fill-level";
 
 Logger.initialise();
 
@@ -30,54 +30,65 @@ Logger.initialise();
 let dotenvResult;
 switch(process.env.NODE_ENV) {
     case "development":
-        console.log("Starts initialization of development environment...");   
+        Logger.log("Starts initialization of development environment...", "\n");   
         dotenvResult = dotenv.config({
             path: path.join(__dirname, "config/.env.development")
         });
         break;
     case "production":
-        console.log("Starts initialization of production environment...");
+        Logger.log("Starts initialization of production environment...", "\n");
         dotenvResult = dotenv.config({
             path: path.join(__dirname, "config/.env.production")
         });
         break;
     default:
-        throw new Error(`Unrecognized ${process.env.NODE_ENV} environment`);
+        const error = new Error(`Unrecognized ${process.env.NODE_ENV} environment`);
+        Logger.verboseError(error);
+        throw error;
 }
-if (dotenvResult.error) throw dotenvResult.error;
-console.log("Environment has been initialized successfully");
+if (dotenvResult.error) {
+    Logger.verboseError(dotenvResult.error);
+    throw dotenvResult.error;
+}
+
+Logger.log("Environment has been initialized successfully", "\n");
 
 // Start connecting to mongodb first
-Database.connect().then(async (connection) => {
-    const app = express();
+Database.connect()
+    .then(async (connection) => {
+        const app = express();
 
-    const googleMapsServicesAdapter = new GoogleMapsServicesAdapter();
-    app.set("GoogleMapsServicesAdapter", googleMapsServicesAdapter);
+        const googleMapsServicesAdapter = new GoogleMapsServicesAdapter();
+        app.set("GoogleMapsServicesAdapter", googleMapsServicesAdapter);
 
-    const smartBinsCountInitial = await SmartBin.countDocuments();
-    if (smartBinsCountInitial === 0) {
-        await populateInitialData(googleMapsServicesAdapter);
-    }
-
-    const recurrentUpdateJob = schedule.scheduleJob(MISC.DAILY_UPDATE_TIME, async (fireTime) => {
-        await syncSmartBinsAndUpdateBinDistances(googleMapsServicesAdapter);
-        await syncSmartBinsCurrentFillLevels();
-        const binCollectionSchedulesInsertWriteResult = 
-            await BinCollectionScheduleHelper.updateBinCollectionSchedules(googleMapsServicesAdapter);
-        if (binCollectionSchedulesInsertWriteResult.result?.ok !== 1) {
-            console.error(binCollectionSchedulesInsertWriteResult);
+        const smartBinsCountInitial = await SmartBin.countDocuments();
+        if (smartBinsCountInitial === 0) {
+            await populateInitialData(googleMapsServicesAdapter);
         }
-    });
 
-    if (smartBinsCountInitial !== 0) {
-        recurrentUpdateJob.invoke();
-    }
+        const recurrentUpdateJob = schedule.scheduleJob(MISC.DAILY_UPDATE_TIME, async (fireTime) => {
+            await syncSmartBinsAndUpdateBinDistances(googleMapsServicesAdapter);
+            await syncSmartBinsCurrentFillLevels();
+            const binCollectionSchedulesUpdateResult = 
+                await BinCollectionScheduleHelper.updateBinCollectionSchedules(googleMapsServicesAdapter);
+            if (!binCollectionSchedulesUpdateResult) {
+                Logger.verboseError(INDEX_LOG_TAG, "binCollectionSchedulesUpdateResult", binCollectionSchedulesUpdateResult, "\n");
+                throw new Error("Failed to update bin collection schedules");
+            }
+            Logger.verboseLog(INDEX_LOG_TAG, "binCollectionSchedulesUpdateResult", binCollectionSchedulesUpdateResult, "\n");
+            Logger.log("Update of bin collection schedules completed successfully", "\n");
+        });
 
-    app.use(express.json());
-    app.use("/", express.static(path.join(__dirname, "views/")));
-    app.use("/", router);
-    app.listen(80);
-});
+        if (smartBinsCountInitial !== 0) {
+            recurrentUpdateJob.invoke();
+        }
+
+        app.use(express.json());
+        app.use("/", express.static(path.join(__dirname, "views/")));
+        app.use("/", router);
+        app.listen(80);
+    })
+    .catch(error => Logger.error(error, "\n"));
 
 async function populateInitialData(googleMapsServicesAdapter: GoogleMapsServicesAdapter) {
     const depots = depotsInfo.depots.map((depot) => 
@@ -85,14 +96,15 @@ async function populateInitialData(googleMapsServicesAdapter: GoogleMapsServices
             _id: new mongoose.Types.ObjectId()
         })
     );
-    const depotsInsertWriteResult = await Depot.insertMany(depots, {
+    const depotsInsertResult = await Depot.insertMany(depots, {
         rawResult: true
     }) as unknown as mongooseInsertWriteOpResult;
-    if (depotsInsertWriteResult.result?.ok === 1) {
-        console.log("Initial population of depots data completed successfully");
-    } else {
-        console.log(`Initial population of depots data failed with error code ${depotsInsertWriteResult.result?.ok}`);
+    if (depotsInsertResult.result?.ok !== 1) {
+        Logger.verboseError(INDEX_LOG_TAG, "depotsInsertResult", depotsInsertResult, "\n");
+        throw new Error("Failed to insert initial depots data");
     }
+    Logger.verboseLog(INDEX_LOG_TAG, "depotsInsertResult", depotsInsertResult, "\n");
+    Logger.log("Population of initial depots data completed successfully", "\n")
 
     const fleetVehicles = fleetVehiclesInfo.fleetVehicles.map((fleetVehicle) => 
         Object.assign(fleetVehicle, {
@@ -100,14 +112,15 @@ async function populateInitialData(googleMapsServicesAdapter: GoogleMapsServices
             homeDepot: depots[0]._id
         })
     );
-    const fleetVehiclesInsertWriteResult = await FleetVehicle.insertMany(fleetVehicles, {
+    const fleetVehiclesInsertResult = await FleetVehicle.insertMany(fleetVehicles, {
         rawResult: true
     }) as unknown as mongooseInsertWriteOpResult;
-    if (fleetVehiclesInsertWriteResult.result?.ok === 1) {
-        console.log("Initial population of fleet vehicles data completed successfully");
-    } else {
-        console.log(`Initial population of fleet vehicles data failed with error code ${fleetVehiclesInsertWriteResult.result?.ok}`);
+    if (fleetVehiclesInsertResult.result?.ok !== 1) {
+        Logger.verboseError(INDEX_LOG_TAG, "fleetVehiclesInsertResult", fleetVehiclesInsertResult, "\n");
+        throw new Error("Failed to insert initial fleet vehicles data");
     }
+    Logger.verboseLog(INDEX_LOG_TAG, "fleetVehiclesInsertResult", fleetVehiclesInsertResult, "\n");
+    Logger.log("Population of initial fleet vehicles data completed successfully", "\n");
 
     const smartBinsCurrentFillLevelsInfo = 
         await fetch(process.env.SMART_BINS_CURRENT_FILL_LEVELS_URL as string)
@@ -138,24 +151,27 @@ async function populateInitialData(googleMapsServicesAdapter: GoogleMapsServices
         currentFullness: smartBinsCurrentFillLevels[smartBinInfo.properties.serial_number].fullness,
         lastUpdated: smartBinInfo.properties.last_updated
     }));
-    const smartBinsInsertWriteResult = await SmartBin.insertMany(smartBins, {
+    const smartBinsInsertResult = await SmartBin.insertMany(smartBins, {
         rawResult: true
     }) as unknown as mongooseInsertWriteOpResult;
-    if (smartBinsInsertWriteResult.result?.ok === 1) {
-        console.log("Initial population of smart bins data completed successfully");
-    } else {
-        console.log(`Initial population of smart bins data failed with error code ${smartBinsInsertWriteResult.result?.ok}`);
+    if (smartBinsInsertResult.result?.ok !== 1) {
+        Logger.verboseError(INDEX_LOG_TAG, "smartBinsInsertResult", smartBinsInsertResult, "\n");
+        throw new Error("Failed to insert initial smart bins data with their current fill levels");
     }
-    const smartBinDailyFillLevelsInsertWriteResult = await SmartBinDailyFillLevel.insertMany(
+    Logger.verboseLog(INDEX_LOG_TAG, "smartBinsInsertResult", smartBinsInsertResult, "\n");
+    Logger.log("Population of initial smart bins data with their current fill levels completed successfully", "\n");
+
+    const smartBinFillLevelsInsertResult = await SmartBinFillLevel.insertMany(
         Object.values(smartBinsCurrentFillLevels), {
             rawResult: true
         }
     ) as unknown as mongooseInsertWriteOpResult;
-    if (smartBinDailyFillLevelsInsertWriteResult.result?.ok === 1) {
-        console.log("Initial population of smart bin daily fill levels data completed successfully");
-    } else {
-        console.log(`Initial population of smart bin daily fill levels data failed with error code ${smartBinDailyFillLevelsInsertWriteResult.result?.ok}`);
+    if (smartBinFillLevelsInsertResult.result?.ok !== 1) {
+        Logger.verboseError(INDEX_LOG_TAG, "smartBinFillLevelsInsertResult", smartBinFillLevelsInsertResult, "\n");
+        throw new Error("Failed to insert initial smart bins daily fill levels data");
     }
+    Logger.verboseLog(INDEX_LOG_TAG, "smartBinFillLevelsInsertResult", smartBinFillLevelsInsertResult, "\n");
+    Logger.log("Population of initial smart bins daily fill levels data completed successfully", "\n");
 
     const nearestSmartBins = await BinHelper.computeNearestSmartBins(
         dumbBinsInfo.dumbBins.map((dumbBin) => ({
@@ -169,29 +185,32 @@ async function populateInitialData(googleMapsServicesAdapter: GoogleMapsServices
             nearestSmartBin: nearestSmartBins[index]
         })
     );
-    const dumbBinsInsertWriteResult = await DumbBin.insertMany(dumbBins, {
+    const dumbBinsInsertResult = await DumbBin.insertMany(dumbBins, {
         rawResult: true
     }) as unknown as mongooseInsertWriteOpResult;
-    if (dumbBinsInsertWriteResult.result?.ok === 1) {
-        console.log("Initial population of dumb bins data completed successfully");
-    } else {
-        console.log(`Initial population of dumb bins data failed with error code ${dumbBinsInsertWriteResult.result?.ok}`);
+    if (dumbBinsInsertResult.result?.ok !== 1) {
+        Logger.verboseError(INDEX_LOG_TAG, "dumbBinsInsertResult", dumbBinsInsertResult, "\n");
+        throw new Error("Failed to insert initial dumb bins data");
     }
+    Logger.verboseLog(INDEX_LOG_TAG, "dumbBinsInsertResult", dumbBinsInsertResult, "\n");
+    Logger.log("Population of initial dumb bins data completed successfully", "\n");
 
-    const allBinDistancesInsertWriteResult = await BinDistanceHelper.updateAllBinDistances(googleMapsServicesAdapter);
-    if (allBinDistancesInsertWriteResult.result?.ok === 1) {
-        console.log("Initial population of all bin distances data completed successfully");
-    } else {
-        console.log(`Initial population of all bin distances data failed with error code ${allBinDistancesInsertWriteResult.result?.ok}`);
+    const allBinDistancesUpdateResult = await BinDistanceHelper.updateAllBinDistances(googleMapsServicesAdapter);
+    if (!allBinDistancesUpdateResult) {
+        Logger.verboseError(INDEX_LOG_TAG, "allBinDistancesUpdateResult", allBinDistancesUpdateResult, "\n");
+        throw new Error("Failed to insert initial bin distances data");
     }
+    Logger.verboseLog(INDEX_LOG_TAG, "allBinDistancesUpdateResult", allBinDistancesUpdateResult, "\n");
+    Logger.log("Population of initial bin distances data completed successfully", "\n");
 
-    const binCollectionSchedulesInsertWriteResult = 
+    const binCollectionSchedulesUpdateResult = 
         await BinCollectionScheduleHelper.updateBinCollectionSchedules(googleMapsServicesAdapter);
-    if (binCollectionSchedulesInsertWriteResult.result?.ok === 1) {
-        console.log("Initial population of bin collection schedules data completed successfully");
-    } else {
-        console.log(`Initial population of bin collection schedules data failed with error code ${binCollectionSchedulesInsertWriteResult.result?.ok}`);
+    if (!binCollectionSchedulesUpdateResult) {
+        Logger.verboseError(INDEX_LOG_TAG, "binCollectionSchedulesUpdateResult", binCollectionSchedulesUpdateResult, "\n");
+        throw new Error("Failed to insert initial bin collection schedules data");
     }
+    Logger.verboseLog(INDEX_LOG_TAG, "binCollectionSchedulesUpdateResult", binCollectionSchedulesUpdateResult, "\n");
+    Logger.log("Population of initial bin collection schedules data completed successfully", "\n");
 }
 
 async function syncSmartBinsAndUpdateBinDistances(googleMapsServicesAdapter: GoogleMapsServicesAdapter) {
@@ -226,6 +245,7 @@ async function syncSmartBinsAndUpdateBinDistances(googleMapsServicesAdapter: Goo
         remoteSmartBinsSerialNumbers
             .filter((serialNumber) => !localSmartBinsSerialNumbers.includes(serialNumber))
             .map((serialNumber) => ({
+                _id: new mongoose.Types.ObjectId() as unknown as string,
                 longitude: remoteSmartBins[serialNumber].location.coordinates[0],
                 latitude: remoteSmartBins[serialNumber].location.coordinates[1],
                 address: remoteSmartBins[serialNumber].address,
@@ -251,81 +271,113 @@ async function syncSmartBinsAndUpdateBinDistances(googleMapsServicesAdapter: Goo
             .filter(smartBin => smartBin) as BinUpdateInfo[];
     
     if (smartBinsDelete.length !== 0 || smartBinsCreate.length !== 0 || smartBinsUpdate.length !== 0) {
-        const smartBinsDeleteCreateUpdateBulkWriteResult = await BinHelper.updateBins(
+        const smartBinsUpdateBulkWriteResult = await BinHelper.updateBins(
             smartBinsDelete, 
             smartBinsCreate,
             smartBinsUpdate,
             true
         );
-
-        if (smartBinsDeleteCreateUpdateBulkWriteResult.result?.ok === 1 && 
-            smartBinsDeleteCreateUpdateBulkWriteResult.result?.writeErrors.length === 0) {
-            const smartBinsCreateFormatted = smartBinsCreate.map((smartBin, index) => ({
-                _id: smartBinsDeleteCreateUpdateBulkWriteResult.insertedIds[index] as string,
-                longitude: smartBin.longitude,
-                latitude: smartBin.latitude,
-            }));
-            const smartBinsUpdateFormatted = smartBinsUpdate.map((smartBin) => ({
-                _id: smartBin._id,
-                longitude: smartBin.longitude,
-                latitude: smartBin.latitude,
-            }));
-            const binDistancesUpdateResult = await BinDistanceHelper.updateBinDistances(
-                googleMapsServicesAdapter, 
-                smartBinsDelete, 
-                smartBinsCreateFormatted, 
-                smartBinsUpdateFormatted, 
-                true 
-            );
-            
-            if (binDistancesUpdateResult) {
-                const dumbBinsUpdateOnNearestSmartBinBulkWriteResult = 
-                    await BinHelper.updateNearestSmartBins(
-                        await DumbBin.aggregate([
-                            {
-                                $project: {
-                                    longitude: {
-                                        $arrayElemAt: ["$location.coordinates", 0]
-                                    },
-                                    latitude: {
-                                        $arrayElemAt: ["$location.coordinates", 1]
-                                    }
-                                }
-                            }
-                        ]) as IdLatLng[]
-                    );
-                
-                if (dumbBinsUpdateOnNearestSmartBinBulkWriteResult.result?.ok !== 1 || 
-                    dumbBinsUpdateOnNearestSmartBinBulkWriteResult.result?.writeErrors.length !== 0) {
-                    console.error(dumbBinsUpdateOnNearestSmartBinBulkWriteResult);
-                }
-            }
+        if (!smartBinsUpdateBulkWriteResult) {
+            Logger.verboseError(INDEX_LOG_TAG, "smartBinsUpdateBulkWriteResult", smartBinsUpdateBulkWriteResult, "\n");
+            throw new Error("Failed to synchronise smart bins data with the remote server");
         }
+        Logger.verboseLog(INDEX_LOG_TAG, "smartBinsUpdateBulkWriteResult", smartBinsUpdateBulkWriteResult, "\n");
+        Logger.log("Synchronisation of smart bins data with the remote server completed successfully", "\n");
+
+        const binDistancesUpdateResult = await BinDistanceHelper.updateBinDistances(
+            googleMapsServicesAdapter, 
+            smartBinsDelete, 
+            smartBinsCreate, 
+            smartBinsUpdate, 
+            true 
+        );
+        if (!binDistancesUpdateResult) {
+            Logger.verboseError(INDEX_LOG_TAG, "binDistancesUpdateResult", binDistancesUpdateResult, "\n");
+            throw new Error("Failed to update bins distances");
+        }
+        Logger.verboseLog(INDEX_LOG_TAG, "binDistancesUpdateResult", binDistancesUpdateResult, "\n");
+        Logger.log("Update of bins distances completed successfully", "\n");
+        
+        const dumbBinsUpdateOnNearestSmartBinsResult = 
+            await BinHelper.updateNearestSmartBins(
+                await DumbBin.aggregate([
+                    {
+                        $project: {
+                            longitude: {
+                                $arrayElemAt: ["$location.coordinates", 0]
+                            },
+                            latitude: {
+                                $arrayElemAt: ["$location.coordinates", 1]
+                            }
+                        }
+                    }
+                ]) as IdLatLng[]
+            );
+        if (!dumbBinsUpdateOnNearestSmartBinsResult) {
+            Logger.verboseError(INDEX_LOG_TAG, "dumbBinsUpdateOnNearestSmartBinsResult", dumbBinsUpdateOnNearestSmartBinsResult, "\n");
+            throw new Error("Failed to update dumb bins' nearest smart bins");
+        }
+        Logger.verboseLog(INDEX_LOG_TAG, "dumbBinsUpdateOnNearestSmartBinsResult", dumbBinsUpdateOnNearestSmartBinsResult, "\n");
+        Logger.log("Update of dumb bins' nearest smart bins completed successfully", "\n");
     }
 }
 
 async function syncSmartBinsCurrentFillLevels() {
-    const smartBinsUpdateOnCurrentFullnessBulkWriteResult = await SmartBin.bulkWrite(
+    const smartBinsCurrentFillLevels = 
         (await fetch(process.env.SMART_BINS_CURRENT_FILL_LEVELS_URL as string).then(response => response.json() as Promise<SmartBinsCurrentFillLevelsJSON>))
             .features
             .map((smartBinCurrentFillLevelInfo) => ({
-                updateOne: {
-                    filter: {
-                        serialNumber: smartBinCurrentFillLevelInfo.properties.serial_num,
-                    },
-                    update: {
-                        currentFullness: smartBinCurrentFillLevelInfo.properties.fill_lvl 
-                    }
-                }
-            }))
-    );
+                serialNumber: smartBinCurrentFillLevelInfo.properties.serial_num,
+                fullness: smartBinCurrentFillLevelInfo.properties.fill_lvl,
+                timestamp: new Date(smartBinCurrentFillLevelInfo.properties.timestamp)
+            }));
     
-    if (smartBinsUpdateOnCurrentFullnessBulkWriteResult.result?.ok !== 1 || 
-        smartBinsUpdateOnCurrentFullnessBulkWriteResult.result?.writeErrors.length !== 0) {
-        console.error(smartBinsUpdateOnCurrentFullnessBulkWriteResult);
+    if (smartBinsCurrentFillLevels.length > 0) {
+        const smartBinMatchedDoc = await smartBinFillLevel.findOne({
+            timestamp: smartBinsCurrentFillLevels[0].timestamp
+        });
+        if (!smartBinMatchedDoc) {
+            const smartBinsUpdateOnCurrentFullnessesBulkWriteResult = await SmartBin.bulkWrite(
+                smartBinsCurrentFillLevels.map((smartBinCurrentFillLevel) => ({
+                    updateOne: {
+                        filter: {
+                            serialNumber: smartBinCurrentFillLevel.serialNumber
+                        },
+                        update: {
+                            currentFullness: smartBinCurrentFillLevel.fullness
+                        }
+                    }
+                }))
+            );
+            if (!smartBinsUpdateOnCurrentFullnessesBulkWriteResult) {
+                Logger.verboseError(
+                    INDEX_LOG_TAG, 
+                    "smartBinsUpdateOnCurrentFullnessesBulkWriteResult", 
+                    smartBinsUpdateOnCurrentFullnessesBulkWriteResult, 
+                    "\n"
+                );
+                throw new Error("Failed to update smart bins' current fullnesses");
+            }
+            Logger.verboseLog(
+                INDEX_LOG_TAG, 
+                "smartBinsUpdateOnCurrentFullnessesBulkWriteResult", 
+                smartBinsUpdateOnCurrentFullnessesBulkWriteResult, 
+                "\n"
+            );
+            Logger.log("Update of smart bins' current fullnesses completed successfully", "\n");
+
+            const smartBinFillLevelsInsertResult = await SmartBinFillLevel.insertMany(smartBinsCurrentFillLevels, {
+                rawResult: true
+            }) as unknown as mongooseInsertWriteOpResult;
+            if (smartBinFillLevelsInsertResult.result?.ok !== 1) {
+                Logger.verboseError(INDEX_LOG_TAG, "smartBinFillLevelsInsertResult", smartBinFillLevelsInsertResult, "\n");
+                throw new Error("Failed to insert smart bin fill levels");
+            }
+            Logger.verboseLog(INDEX_LOG_TAG, "smartBinFillLevelsInsertResult", smartBinFillLevelsInsertResult, "\n");
+            Logger.log("Insertion of current smart bin fill levels completed successfully", "\n");        
+        }
     }
 }
-
 
 // DumbBin.aggregate([
 //     {

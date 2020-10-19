@@ -1,6 +1,7 @@
+import { ChildProcessWithoutNullStreams, spawn } from "child_process";
 import { $enum } from "ts-enum-util";
 import { ROUTING_SOLVER_EXECUTABLE_RELATIVE_PATH } from "../constants/misc";
-import { ChildProcessWithoutNullStreams, spawn } from "child_process";
+import { Logger } from "./logger";
 
 export enum RoutingStrategy {
     AUTOMATIC = -1,
@@ -51,6 +52,8 @@ export class RoutingSolverAdapter {
                 }
             );
             
+            const startTime = Date.now();
+
             RoutingSolverAdapter.routingSolverProcess.stdout.on("data", (result: Buffer) => {
                 result
                     .toString()
@@ -61,25 +64,32 @@ export class RoutingSolverAdapter {
             });
 
             RoutingSolverAdapter.routingSolverProcess.on("exit", (code, signal) => {
+                const endTime = Date.now();
+                const routingStrategyString = $enum.mapValue(routingStrategy).with({
+                    [RoutingStrategy.AUTOMATIC]: "AUTOMATIC",
+                    [RoutingStrategy.GREEDY_DESCENT]: "GREEDY_DESCENT",
+                    [RoutingStrategy.GUIDED_LOCAL_SEARCH]: "GUIDED_LOCAL_SEARCH",
+                    [RoutingStrategy.SIMULATED_ANNEALING]: "SIMULATED_ANNEALING",
+                    [RoutingStrategy.TABU_SEARCH]: "TABU_SEARCH"
+                })
+                Logger.logPerformance(
+                    `Routing solver using ${routingStrategyString} took ${(endTime - startTime) / 1000} seconds ` + 
+                    `to finish processing a distance matrix of size ${distanceMatrix.length}x${distanceMatrix[0].length}`,
+                    "\n"
+                );
                 RoutingSolverAdapter.routingSolverProcess = null;
                 if (code === 0 && signal === null) {
-                    console.log(`Routing solver ${$enum.mapValue(routingStrategy).with({
-                        [RoutingStrategy.AUTOMATIC]: "AUTOMATIC",
-                        [RoutingStrategy.GREEDY_DESCENT]: "GREEDY_DESCENT",
-                        [RoutingStrategy.GUIDED_LOCAL_SEARCH]: "GUIDED_LOCAL_SEARCH",
-                        [RoutingStrategy.SIMULATED_ANNEALING]: "SIMULATED_ANNEALING",
-                        [RoutingStrategy.TABU_SEARCH]: "TABU_SEARCH"
-                    })} successfully generated the following routes: `, routes);
+                    Logger.log(`Routing solver using ${routingStrategyString} successfully generated the following routes: `, routes, "\n");
                     resolve(routes)
                 } else {
-                    console.log(`Routing solver did not terminate correctly with the exit code ${code} and ${signal} signal`);
+                    Logger.error(`Routing solver using ${routingStrategyString} did not terminate correctly with the exit code ${code} and ${signal} signal`, "\n");
                     resolve([]);
                 }
             });
 
             RoutingSolverAdapter.routingSolverProcess.on("error", (error) => {
                 RoutingSolverAdapter.routingSolverProcess = null;
-                console.error(error);
+                Logger.error(error, "\n");
                 reject(error);
             });
         });

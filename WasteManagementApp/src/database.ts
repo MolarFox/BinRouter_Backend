@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { Logger } from "./utils/logger";
 
 export default class Database {
     private static connection: null | mongoose.Connection = null;
@@ -10,7 +11,7 @@ export default class Database {
             return Promise.resolve(Database.connection);
         } else {
             return new Promise((resolve, reject) => {
-                console.log("Start connecting to the database...");
+                Logger.log("Start connecting to the database...", "\n");
                 mongoose.connect(
                     "mongodb://" + process.env.DB_HOST + ":" + process.env.DB_PORT + "/" + process.env.DB_NAME,
                     {
@@ -19,13 +20,13 @@ export default class Database {
                         useUnifiedTopology: true,
                         poolSize: 10,
                     }
-                ).catch(console.error.bind(console, "Initial connection error: "));
-                mongoose.connection.on("error", function(error) {
-                    console.error("Connection error: ", error);
+                ).catch(error => Logger.error("Initial connection error: ", error, "\n"));
+                mongoose.connection.on("error", (error) => {
+                    Logger.error("Connection error: ", error, "\n");
                     reject(error);
                 });
                 mongoose.connection.once("open", function() {
-                    console.log("A connection to the database is successfully established");
+                    Logger.log("A connection to the database has been successfully established", "\n");
                     Database.connection = mongoose.connection;
                     resolve(mongoose.connection);
                 });

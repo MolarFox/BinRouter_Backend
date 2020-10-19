@@ -1,5 +1,7 @@
 import { Client, TravelMode, UnitSystem, Status, Language } from "@googlemaps/google-maps-services-js";
 import { DirectionsResponseData } from "@googlemaps/google-maps-services-js/dist/directions";
+import { COMPUTE_DIRECTIONS_LOG_TAG, COMPUTE_DISTANCE_MATRIX_LOG_TAG } from "../constants/log-tag";
+import { Logger } from "./logger";
 import { DistanceMatrixElement, LatLng } from "./type-information";
 
 export class GoogleMapsServicesAdapter {
@@ -8,6 +10,7 @@ export class GoogleMapsServicesAdapter {
     private maxDestinationsPerRequest: number;
     private maxPairsPerRequest: number;
     private maxWaypointsPerRequest: number;
+    private maxRetryLimit: number;
 
     constructor() {
         this.client = new Client({});
@@ -15,6 +18,7 @@ export class GoogleMapsServicesAdapter {
         this.maxDestinationsPerRequest = 25;
         this.maxPairsPerRequest = 100;
         this.maxWaypointsPerRequest = 25;
+        this.maxRetryLimit = 2;
     }
     
     public async computeDistanceMatrix(
@@ -22,8 +26,8 @@ export class GoogleMapsServicesAdapter {
         destinations: LatLng[]
     ): Promise<DistanceMatrixElement[][]> {
         const distanceMatrix: DistanceMatrixElement[][] = Array.from(new Array(origins.length), () => []);
-        let numOfOriginsPerRequest; 
-        let numOfDestinationsPerRequest; 
+        let numOfOriginsPerRequest: number; 
+        let numOfDestinationsPerRequest: number; 
         for (let i = 0; i < origins.length; i += numOfOriginsPerRequest) {
             numOfOriginsPerRequest = Math.min(origins.length - i, this.maxOriginsPerRequest);
             for (let j = 0; j < destinations.length; j += numOfDestinationsPerRequest) {
@@ -32,7 +36,7 @@ export class GoogleMapsServicesAdapter {
                     this.maxDestinationsPerRequest,
                     Math.floor(this.maxPairsPerRequest / numOfOriginsPerRequest)
                 );
-                const response = await this.client.distancematrix({
+                const getDistanceMatrix = () => this.client.distancematrix({
                     params: {
                         origins: origins.slice(i, i + numOfOriginsPerRequest),
                         destinations: destinations.slice(j, j + numOfDestinationsPerRequest),
@@ -42,7 +46,17 @@ export class GoogleMapsServicesAdapter {
                         key: process.env.GOOGLE_MAPS_API_KEY as string
                     }
                 });
+                let retryCount = 0;
+                let retryTimeInterval = 1000;
+                let response = await getDistanceMatrix();
+                while (retryCount < this.maxRetryLimit && response.data.status === Status.OVER_QUERY_LIMIT) {
+                    await new Promise(resolve => setTimeout(resolve, retryTimeInterval));
+                    response = await getDistanceMatrix();
+                    retryCount++;
+                    retryTimeInterval += 1000;
+                }
                 if (response.status === 200 && response.data.status === Status.OK) {
+                    Logger.verboseLog(COMPUTE_DISTANCE_MATRIX_LOG_TAG, "response", response, "\n");
                     response.data.rows.forEach((row, offset) => 
                         row.elements.forEach(col => 
                             distanceMatrix[i + offset].push({
@@ -52,7 +66,7 @@ export class GoogleMapsServicesAdapter {
                         )
                     );
                 } else {
-                    console.error(response.data.error_message);
+                    Logger.verboseError(COMPUTE_DISTANCE_MATRIX_LOG_TAG, "response", response, "\n");
                 }
             }
         }
@@ -68,7 +82,7 @@ export class GoogleMapsServicesAdapter {
         const allWaypoints = [origin].concat(waypoints ? waypoints : []).concat([destination]);
         for (let i = 0; i < allWaypoints.length - 1; i += (this.maxWaypointsPerRequest - 1)) {
             const destinationIndex = Math.min(i + this.maxWaypointsPerRequest - 1, allWaypoints.length - 1);
-            const response = await this.client.directions({
+            const getDirections = () => this.client.directions({
                 params: {
                     origin: allWaypoints[i],
                     destination: allWaypoints[destinationIndex],
@@ -81,11 +95,21 @@ export class GoogleMapsServicesAdapter {
                     key: process.env.GOOGLE_MAPS_API_KEY as string
                 }
             });
+            let retryCount = 0;
+            let retryTimeInterval = 1000;
+            let response = await getDirections();
+            while (retryCount < this.maxRetryLimit && response.data.status === Status.OVER_QUERY_LIMIT) {
+                await new Promise(resolve => setTimeout(resolve, retryTimeInterval));
+                response = await getDirections();
+                retryCount++;
+                retryTimeInterval += 1000;
+            }
             if (response.status === 200 && response.data.status === Status.OK) {
+                Logger.verboseLog(COMPUTE_DIRECTIONS_LOG_TAG, "response", response, "\n");
                 directions.push(response.data);
             } else {
-                console.error(response.data);
-            } 
+                Logger.verboseError(COMPUTE_DIRECTIONS_LOG_TAG, "response", response, "\n");
+            }
         }
         return directions;
     }

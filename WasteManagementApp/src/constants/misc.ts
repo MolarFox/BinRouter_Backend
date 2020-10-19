@@ -20,3 +20,4 @@ export const FULLNESS_THRESHOLD_RATIO_SELECTION_CRITERION = 0.5;
 export const LOG_DIRECTORY_RELATIVE_PATH = "./logs";
 export const SYSTEM_LOG_FILENAME = "system_log.log";
 export const SYSTEM_ERROR_FILENAME = "system_error.log";
+export const SYSTEM_PERFORMANCE_LOG_FILENAME = "system_performance_log.log";
