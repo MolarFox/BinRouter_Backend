@@ -11,7 +11,6 @@ export async function getBinCollectionSchedules(request: express.Request, respon
         Logger.verboseLog(GET_BIN_COLLECTION_SCHEDULES_LOG_TAG, "depots", depots, "\n");
 
         const binCollectionSchedules = await BinCollectionSchedule.find({});
-        console.log(binCollectionSchedules);
         Logger.verboseLog(GET_BIN_COLLECTION_SCHEDULES_LOG_TAG, "binCollectionSchedules", binCollectionSchedules, "\n");
 
         response.status(HTTP.OK).json({

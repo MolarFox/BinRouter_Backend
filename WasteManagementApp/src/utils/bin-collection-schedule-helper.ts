@@ -309,14 +309,15 @@ export class BinCollectionScheduleHelper {
             const setOfBinCollectionSchedules = 
                 uniqueSetOfRoutesUsingIndex.map((routesUsingIndex) => ({
                     _id: new mongoose.Types.ObjectId(),
-                    routes: routesUsingIndex.map((routeUsingIndex, index) => ({
-                        vehicle: fleetVehicles[index]._id,
-                        visitingOrder: routeUsingIndex.length < 2 ? [] : 
-                            routeUsingIndex.map((nodeInIndex) => ({
+                    routes: routesUsingIndex.map((routeUsingIndex, index) => 
+                        routeUsingIndex.length < 2 ? null : ({
+                            vehicle: fleetVehicles[index]._id,
+                            visitingOrder: routeUsingIndex.map((nodeInIndex) => ({
                                 longitude: dictFromMatrixIndexToDocument[nodeInIndex].longitude as number,
                                 latitude: dictFromMatrixIndexToDocument[nodeInIndex].latitude as number
                             }))
-                    })),
+                        })
+                    ).filter(route => route !== null),
                     timestamp: new Date()
                 }));
             Logger.verboseLog(UPDATE_BIN_COLLECTION_SCHEDULES_LOG_TAG, "setOfBinCollectionSchedules", setOfBinCollectionSchedules, "\n");
@@ -327,7 +328,7 @@ export class BinCollectionScheduleHelper {
                 throw new Error("Failed to delete old bin collection schedules");
             }
             Logger.verboseLog(UPDATE_BIN_COLLECTION_SCHEDULES_LOG_TAG, "oldBinCollectionSchedulesDeleteResult", oldBinCollectionSchedulesDeleteResult, "\n");
-            
+
             const newBinCollectionSchedulesInsertResult = 
                 await BinCollectionSchedule.insertMany(setOfBinCollectionSchedules, {
                     rawResult: true
