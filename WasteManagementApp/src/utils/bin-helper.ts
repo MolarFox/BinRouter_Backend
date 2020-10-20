@@ -7,6 +7,45 @@ import { Logger } from "./logger";
 import { BinCreateInfo, BinDeleteInfo, BinUpdateInfo, IdLatLng, LatLng } from "./type-information";
 
 export class BinHelper {
+    public static verifyDumbBinDeleteInfo(dumbBinDeleteInfo: any): boolean {
+        return typeof dumbBinDeleteInfo === "string" && mongoose.Types.ObjectId.isValid(dumbBinDeleteInfo);
+    }
+
+    public static verifyDumbBinCreateInfo(dumbBinCreateInfo: any): boolean {
+        if (!dumbBinCreateInfo || typeof dumbBinCreateInfo !== "object") {
+            return false;
+        }
+
+        const dumbBinCreateInfoCorePropertiesTypes: {
+            [property: string]: string
+        } = {
+            longitude: "number",
+            latitude: "number",
+            address: "string",
+            capacity: "number",
+        }
+        const dumbBinCreateInfoCorePropertiesTypesCheckResult =
+            Object
+                .keys(dumbBinCreateInfoCorePropertiesTypes)
+                .map(property => typeof dumbBinCreateInfo[property] === dumbBinCreateInfoCorePropertiesTypes[property])
+                .every(isMatched => isMatched)
+        
+        if (!dumbBinCreateInfoCorePropertiesTypesCheckResult) {
+            return false;
+        }
+
+        const dumbBinCreateInfoValuesCheckResult = 
+            dumbBinCreateInfo.longitude >= -180 && dumbBinCreateInfo.longitude <= 180 && 
+            dumbBinCreateInfo.latitude >= -90 && dumbBinCreateInfo.latitude <= 90 && 
+            dumbBinCreateInfo.capacity >= 1 && dumbBinCreateInfo.capacity <= 1000;
+            dumbBinCreateInfo.address !== "" 
+        return dumbBinCreateInfoValuesCheckResult;
+    }
+
+    public static verifyDumbBinUpdateInfo(dumbBinUpdateInfo: any): boolean {
+        return BinHelper.verifyDumbBinCreateInfo(dumbBinUpdateInfo) && mongoose.Types.ObjectId.isValid(dumbBinUpdateInfo?._id);
+    }
+
     public static async computeNearestSmartBins(dumbBins: LatLng[]): Promise<(string | null)[]> {
         const nearestSmartBins: (string | null)[] = await Promise.all(
             dumbBins.map(async (dumbBin) => 
@@ -39,7 +78,7 @@ export class BinHelper {
                 nearestSmartBins.map((nearestSmartBin, index) => ({
                     updateOne: {
                         filter: {
-                            _id: dumbBins[index]._id,
+                            _id: new mongoose.Types.ObjectId(dumbBins[index]._id),
                         },
                         update: {
                             nearestSmartBin: nearestSmartBin ? nearestSmartBin : undefined
@@ -55,6 +94,7 @@ export class BinHelper {
                     dumbBinsUpdateOnNearestSmartBinsBulkWriteResult, 
                     "\n"
                 );
+                throw new Error("Failed to update dumb bins' nearest smart bins");
             } 
             Logger.verboseLog(
                 UPDATE_NEAREST_SMART_BINS_LOG_TAG, 

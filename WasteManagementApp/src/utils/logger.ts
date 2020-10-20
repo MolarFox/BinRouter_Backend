@@ -2,11 +2,12 @@ import fs from "fs";
 import path from "path";
 import util from "util";
 import { Console } from "console";
-import { LOG_DIRECTORY_RELATIVE_PATH, SYSTEM_ERROR_FILENAME, SYSTEM_LOG_FILENAME, SYSTEM_PERFORMANCE_LOG_FILENAME } from "../constants/misc";
+import { INCOMING_REQUEST_LOG_FILENAME, LOG_DIRECTORY_RELATIVE_PATH, SYSTEM_ERROR_FILENAME, SYSTEM_LOG_FILENAME, SYSTEM_PERFORMANCE_LOG_FILENAME } from "../constants/misc";
 
 export class Logger {
     private static generalConsole: Console;
-    private static specialConsole: Console;
+    private static performanceConsole: Console;
+    private static incomingRequestConsole: Console;
 
     public static initialise() {
         if (!Logger.generalConsole) {
@@ -35,12 +36,21 @@ export class Logger {
                 fs.closeSync(fs.openSync(systemPerformanceLogFilePath, "w"));
             }
 
+            const incomingRequestLogFilePath = path.resolve(LOG_DIRECTORY_RELATIVE_PATH, INCOMING_REQUEST_LOG_FILENAME);
+            const incomingRequestLogFileExisted = fs.existsSync(incomingRequestLogFilePath);
+            if (!incomingRequestLogFileExisted) {
+                fs.closeSync(fs.openSync(incomingRequestLogFilePath, "w"));
+            }
+
             Logger.generalConsole = new Console({
                 stdout: fs.createWriteStream(systemLogFilePath),
                 stderr: fs.createWriteStream(systemErrorFilePath),
             });
-            Logger.specialConsole = new Console({
+            Logger.performanceConsole = new Console({
                 stdout: fs.createWriteStream(systemPerformanceLogFilePath)
+            });
+            Logger.incomingRequestConsole = new Console({
+                stdout: fs.createWriteStream(incomingRequestLogFilePath)
             });
         }
     }
@@ -86,8 +96,16 @@ export class Logger {
     public static logPerformance(message?: any, ...optionalParams: any[]) {
         message = Logger.stringify(message);
         optionalParams = optionalParams.map(Logger.stringify);
-        if (Logger.specialConsole) {
-            Logger.specialConsole.log(message, ...optionalParams);
+        if (Logger.performanceConsole) {
+            Logger.performanceConsole.log(message, ...optionalParams);
+        }
+    }
+
+    public static logRequest(message?: any, ...optionalParams: any[]) {
+        message = Logger.stringify(message);
+        optionalParams = optionalParams.map(Logger.stringify);
+        if (Logger.incomingRequestConsole) {
+            Logger.incomingRequestConsole.log(message, ...optionalParams);
         }
     }
 }

@@ -8,7 +8,7 @@
 		},
 		{
 			"rego": "GHIJKL",
-			"capacity": 20000,
+			"capacity": 10000,
 			"available": true,
 			"icon": 10
 		}

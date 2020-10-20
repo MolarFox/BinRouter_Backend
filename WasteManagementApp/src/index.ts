@@ -50,7 +50,6 @@ if (dotenvResult.error) {
     Logger.verboseError(dotenvResult.error);
     throw dotenvResult.error;
 }
-
 Logger.log("Environment has been initialized successfully", "\n");
 
 // Start connecting to mongodb first
@@ -84,11 +83,16 @@ Database.connect()
         }
 
         app.use(express.json());
+        app.use(function (request, response, next) {
+            Logger.logRequest(new Date(), request.method, request.url, request.body);
+            next();
+        });
         app.use("/", express.static(path.join(__dirname, "views/")));
         app.use("/", router);
         app.listen(80);
     })
     .catch(error => Logger.error(error, "\n"));
+
 
 async function populateInitialData(googleMapsServicesAdapter: GoogleMapsServicesAdapter) {
     const depots = depotsInfo.depots.map((depot) => 

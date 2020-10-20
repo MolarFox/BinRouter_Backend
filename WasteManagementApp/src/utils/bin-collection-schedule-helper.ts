@@ -18,6 +18,10 @@ import { RoutingSolverAdapter } from "./routing-solver-adapter";
 import { BinDistanceInfo, DepotCollectInfo, DumbBinCollectInfo, FleetVehicleCollectInfo, mongooseInsertWriteOpResult, SmartBinCollectInfo } from "./type-information";
 
 export class BinCollectionScheduleHelper {
+    /**
+     * 
+     * @param googleMapsServicesAdapter 
+     */
     public static async updateBinCollectionSchedules(
         googleMapsServicesAdapter: GoogleMapsServicesAdapter
     ): Promise<boolean> {

@@ -21,3 +21,4 @@ export const LOG_DIRECTORY_RELATIVE_PATH = "./logs";
 export const SYSTEM_LOG_FILENAME = "system_log.log";
 export const SYSTEM_ERROR_FILENAME = "system_error.log";
 export const SYSTEM_PERFORMANCE_LOG_FILENAME = "system_performance_log.log";
+export const INCOMING_REQUEST_LOG_FILENAME = "incoming_request_log.log";

@@ -18,7 +18,10 @@ const fleetVehicle = new mongoose.Schema({
         required: true
     },
     icon: {
-        type: mongoose.Schema.Types.Number
+        type: mongoose.Schema.Types.Number,
+        min: 0,
+        max: 11,
+        required: true
     },
     homeDepot: {
         type: mongoose.Schema.Types.ObjectId,
