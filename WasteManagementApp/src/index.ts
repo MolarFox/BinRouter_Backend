@@ -383,6 +383,7 @@ async function syncSmartBinsCurrentFillLevels() {
     }
 }
 
+
 // DumbBin.aggregate([
 //     {
 //         $project: {

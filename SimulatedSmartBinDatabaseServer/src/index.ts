@@ -9,11 +9,16 @@ const app = express();
 // bins' data with timestamps indicating when they are last updated, and this server 
 // is mainly used for sending the data that has been manually modifed to that format
 // to the main application for smart bins' information
-app.get("/smartBins", function(request, response) {
-    const options = {
-        root: path.join(__dirname, "../public")
-    }
+const options = {
+    root: path.join(__dirname, "../public")
+}
+
+app.get("/smart_bins", function(request, response) {
     response.sendFile("/assets/json/smart_bins.json", options);
+});
+
+app.get("/smart_bins_current_fill_levels", function(request, response) {
+    response.sendFile("/assets/json/smart_bins_current_fill_levels.json", options);
 });
 
 app.listen(8081);

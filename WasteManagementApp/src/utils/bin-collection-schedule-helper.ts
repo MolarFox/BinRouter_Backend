@@ -280,31 +280,45 @@ export class BinCollectionScheduleHelper {
             const uniqueSetOfRoutesUsingIndex = await RoutingSolverAdapter.executeAllStrategies(binDistanceMatrix, binWeights, vehicleCapacities);
             Logger.verboseLog(UPDATE_BIN_COLLECTION_SCHEDULES_LOG_TAG, "uniqueSetOfRoutesUsingIndex", uniqueSetOfRoutesUsingIndex, "\n");
 
-            const uniqueSetOfRoutesUsingCoordinates = uniqueSetOfRoutesUsingIndex.map((routesUsingIndex) => 
-                routesUsingIndex.map((routeUsingIndex) => 
-                    routeUsingIndex.length < 2 ? [] : routeUsingIndex.map((nodeInIndex) => ({
-                        longitude: dictFromMatrixIndexToDocument[nodeInIndex].longitude as number,
-                        latitude: dictFromMatrixIndexToDocument[nodeInIndex].latitude as number
-                    }))
-                )
-            );
+            // const uniqueSetOfRoutesUsingCoordinates = uniqueSetOfRoutesUsingIndex.map((routesUsingIndex) => 
+            //     routesUsingIndex.map((routeUsingIndex) => 
+            //         routeUsingIndex.length < 2 ? [] : routeUsingIndex.map((nodeInIndex) => ({
+            //             longitude: dictFromMatrixIndexToDocument[nodeInIndex].longitude as number,
+            //             latitude: dictFromMatrixIndexToDocument[nodeInIndex].latitude as number
+            //         }))
+            //     )
+            // );
+
+            // const setOfBinCollectionSchedules = 
+            //     await Promise.all(
+            //         uniqueSetOfRoutesUsingCoordinates.map(async (routesUsingCoordinates) => ({
+            //             routes: await Promise.all(
+            //                 routesUsingCoordinates.map(async (routeUsingCoordinates, index) => ({
+            //                     vehicle: fleetVehicles[index]._id,
+            //                     directions: await googleMapsServicesAdapter.computeDirections(
+            //                         routeUsingCoordinates[0],
+            //                         routeUsingCoordinates[routeUsingCoordinates.length - 1],
+            //                         routeUsingCoordinates.slice(1, routeUsingCoordinates.length - 1)
+            //                     )
+            //                 }))
+            //             ),
+            //             timestamp: new Date()
+            //         }))
+            //     );
 
             const setOfBinCollectionSchedules = 
-                await Promise.all(
-                    uniqueSetOfRoutesUsingCoordinates.map(async (routesUsingCoordinates) => ({
-                        routes: await Promise.all(
-                            routesUsingCoordinates.map(async (routeUsingCoordinates, index) => ({
-                                vehicle: fleetVehicles[index]._id,
-                                directions: await googleMapsServicesAdapter.computeDirections(
-                                    routeUsingCoordinates[0],
-                                    routeUsingCoordinates[routeUsingCoordinates.length - 1],
-                                    routeUsingCoordinates.slice(1, routeUsingCoordinates.length - 1)
-                                )
+                uniqueSetOfRoutesUsingIndex.map((routesUsingIndex) => ({
+                    _id: new mongoose.Types.ObjectId(),
+                    routes: routesUsingIndex.map((routeUsingIndex, index) => ({
+                        vehicle: fleetVehicles[index]._id,
+                        visitingOrder: routeUsingIndex.length < 2 ? [] : 
+                            routeUsingIndex.map((nodeInIndex) => ({
+                                longitude: dictFromMatrixIndexToDocument[nodeInIndex].longitude as number,
+                                latitude: dictFromMatrixIndexToDocument[nodeInIndex].latitude as number
                             }))
-                        ),
-                        timestamp: new Date()
-                    }))
-                );
+                    })),
+                    timestamp: new Date()
+                }));
             Logger.verboseLog(UPDATE_BIN_COLLECTION_SCHEDULES_LOG_TAG, "setOfBinCollectionSchedules", setOfBinCollectionSchedules, "\n");
 
             const oldBinCollectionSchedulesDeleteResult = await BinCollectionSchedule.deleteMany({});
@@ -314,15 +328,10 @@ export class BinCollectionScheduleHelper {
             }
             Logger.verboseLog(UPDATE_BIN_COLLECTION_SCHEDULES_LOG_TAG, "oldBinCollectionSchedulesDeleteResult", oldBinCollectionSchedulesDeleteResult, "\n");
             
-            const newBinCollectionSchedulesInsertResult = await BinCollectionSchedule.insertMany(
-                setOfBinCollectionSchedules.map(binCollectionSchedule => 
-                    Object.assign(binCollectionSchedule, {
-                        _id: new mongoose.Types.ObjectId()
-                    })
-                ), {
+            const newBinCollectionSchedulesInsertResult = 
+                await BinCollectionSchedule.insertMany(setOfBinCollectionSchedules, {
                     rawResult: true
-                }
-            ) as unknown as mongooseInsertWriteOpResult;
+                }) as unknown as mongooseInsertWriteOpResult;
             if (newBinCollectionSchedulesInsertResult.result?.ok !== 1) {
                 Logger.verboseError(UPDATE_BIN_COLLECTION_SCHEDULES_LOG_TAG, "newBinCollectionSchedulesInsertResult", newBinCollectionSchedulesInsertResult, "\n");
                 throw new Error("Failed to insert new bin collection schedules");

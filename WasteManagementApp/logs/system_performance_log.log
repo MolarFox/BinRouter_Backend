@@ -1,10 +1,10 @@
-Routing solver using AUTOMATIC took 0.156 seconds to finish processing a distance matrix of size 63x63 
+Routing solver using AUTOMATIC took 0.134 seconds to finish processing a distance matrix of size 64x64 
 
-Routing solver using GREEDY_DESCENT took 0.102 seconds to finish processing a distance matrix of size 63x63 
+Routing solver using GREEDY_DESCENT took 0.124 seconds to finish processing a distance matrix of size 64x64 
 
-Routing solver using GUIDED_LOCAL_SEARCH took 0.106 seconds to finish processing a distance matrix of size 63x63 
+Routing solver using GUIDED_LOCAL_SEARCH took 0.188 seconds to finish processing a distance matrix of size 64x64 
 
-Routing solver using SIMULATED_ANNEALING took 0.117 seconds to finish processing a distance matrix of size 63x63 
+Routing solver using SIMULATED_ANNEALING took 0.128 seconds to finish processing a distance matrix of size 64x64 
 
-Routing solver using TABU_SEARCH took 0.104 seconds to finish processing a distance matrix of size 63x63 
+Routing solver using TABU_SEARCH took 0.126 seconds to finish processing a distance matrix of size 64x64 
 

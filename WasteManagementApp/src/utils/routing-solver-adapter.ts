@@ -13,7 +13,7 @@ export enum RoutingStrategy {
 
 export class RoutingSolverAdapter {
     private static readonly DISTANCE_MATRIX_COL_DELIMITER: string = ",";
-    private static readonly DISTANCE_MATRIX_ROW_DELIMITER: string = "-";
+    private static readonly DISTANCE_MATRIX_ROW_DELIMITER: string = "#";
     private static readonly NODE_WEIGHT_DELIMITER: string = ",";
     private static readonly VEHICLE_CAPACITY_DELIMITER: string = ",";
     private static readonly ROUTE_DELIMITER: string = "\n";
