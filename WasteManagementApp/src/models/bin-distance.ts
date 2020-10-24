@@ -1,5 +1,13 @@
+/**
+ * Author name: Yisong Yu
+ * Last modified date: October 25, 2020
+ * Description: 
+ * This source code file includes the definition of a database schema and a model compiled from it for bin distances.
+ */
+
 import mongoose from "mongoose";
 
+// Define a mongoose schema for bin distances
 const binDistanceSchema = new mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     origin: {
@@ -34,4 +42,6 @@ const binDistanceSchema = new mongoose.Schema({
     collection: "BinDistances"
 });
 
+// Compile a mongoose model named "BinDistance" on binDistanceSchema defined above, which will be used as the 
+// main interface to interact with the MongoDB collection named "BinDistances"
 export default mongoose.model("BinDistance", binDistanceSchema);

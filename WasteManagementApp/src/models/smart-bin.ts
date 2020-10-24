@@ -1,5 +1,13 @@
+/**
+ * Author name: Yisong Yu
+ * Last modified date: October 25, 2020
+ * Description: 
+ * This source code file includes the definition of a database schema and a model compiled from it for smart bins.
+ */
+
 import mongoose from "mongoose";
 
+// Define a mongoose schema for smart bins
 const smartBinSchema = new mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     serialNumber: {
@@ -54,8 +62,12 @@ const smartBinSchema = new mongoose.Schema({
     collection: "SmartBins"
 });
 
+// Create a 2dsphere index on the location field of this schema to allow geospatial queries such as $near to be 
+// performed on this field
 smartBinSchema.index({
     location: "2dsphere"
 });
 
+// Compile a mongoose model named "SmartBin" on smartBinSchema defined above, which will be used as the main interface 
+// to interact with the MongoDB collection named "SmartBins"
 export default mongoose.model("SmartBin", smartBinSchema);

@@ -6,7 +6,6 @@ import Depot from "../models/depot";
 import FleetVehicle from "../models/fleet-vehicle";
 import { FleetVehicleCreateInfo, FleetVehicleDeleteInfo, FleetVehicleUpdateInfo, mongooseInsertWriteOpResult } from "../utils/type-information";
 import { BinCollectionScheduleHelper } from "../utils/bin-collection-schedule-helper";
-import { GoogleMapsServicesAdapter } from "../utils/google-maps-services-adapter";
 import { Logger } from "../utils/logger";
 import { FleetVehicleHelper } from "../utils/fleet-vehicle-helper";
 
