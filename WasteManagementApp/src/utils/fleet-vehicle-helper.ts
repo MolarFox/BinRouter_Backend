@@ -4,7 +4,7 @@
  * Description: 
  * This source code file includes all the fleet vehicle-related helper functions grouped in the class named 
  * FleetVehicleHelper that is not intended to be instantiated. It provides the functionality of verifying the 
- * fleet vehicles' delete, create, and update-related information retrieved from the incoming HTTP request
+ * fleet vehicles' delete, create, and update-related information retrieved from the incoming HTTP requests
  * to improve the robustness of the system.
  */
 

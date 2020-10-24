@@ -8,7 +8,7 @@ import { FleetVehicleCreateInfo, FleetVehicleDeleteInfo, FleetVehicleUpdateInfo,
 import { BinCollectionScheduleHelper } from "../utils/bin-collection-schedule-helper";
 import { GoogleMapsServicesAdapter } from "../utils/google-maps-services-adapter";
 import { Logger } from "../utils/logger";
-import { FleetVehicleHelper } from "../utils/fleet_vehicle_helper";
+import { FleetVehicleHelper } from "../utils/fleet-vehicle-helper";
 
 export async function getFleetVehicles(request: express.Request, response: express.Response) {
     try {
@@ -125,9 +125,7 @@ export async function modifyFleetVehicles(request: express.Request, response: ex
 
         if (fleetVehiclesDelete.length > 0 || fleetVehiclesCreate.length > 0 || fleetVehiclesUpdate.length > 0) {
             // Recompute the route by calling the recomputation routine
-            const binCollectionSchedulesUpdateResult = await BinCollectionScheduleHelper.updateBinCollectionSchedules(
-                request.app.get("GoogleMapsServicesAdapter") as GoogleMapsServicesAdapter
-            );
+            const binCollectionSchedulesUpdateResult = await BinCollectionScheduleHelper.updateBinCollectionSchedules();
             if (!binCollectionSchedulesUpdateResult) {
                 Logger.verboseError(MODIFY_FLEET_VEHICLES, "binCollectionSchedulesUpdateResult", binCollectionSchedulesUpdateResult, "\n");
                 throw new Error("Failed to update bin collection schedules");

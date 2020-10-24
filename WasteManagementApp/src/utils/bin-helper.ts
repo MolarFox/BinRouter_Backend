@@ -1,3 +1,15 @@
+/**
+ * Author name: Yisong Yu
+ * Last modified date: October 24, 2020
+ * Description: 
+ * This source code file includes all the bin-related helper functions grouped in the class named 
+ * BinHelper that is not intended to be instantiated. It provides the functionality of verifying the 
+ * dumb bins' delete, create, and update-related information retrieved from the incoming HTTP requests
+ * to improve the robustness of the system, and computing and updating the nearest smart bins for  
+ * the input dumb bins, and updating either dumb bins or smart bins according to the input bins' 
+ * delete, create, and update-related information.
+ */
+
 import mongoose from "mongoose";
 import { COMPUTE_NEAREST_SMART_BINS_LOG_TAG, UPDATE_BINS_LOG_TAG, UPDATE_NEAREST_SMART_BINS_LOG_TAG } from "../constants/log-tag";
 import { BIN_SEARCH_DISTANCE } from "../constants/misc";
@@ -175,11 +187,12 @@ export class BinHelper {
      * @async
      * @param {BinDeleteInfo[]} binsDeleteInfo an array of strings where each represents an ID of a bin to be deleted
      * @param {BinCreateInfo[]} binsCreateInfo an array of objects each containing the _id, longitude, latitude, address,
-     *                                         capacity and if the bin is of type smart bin, then each object also contains 
-     *                                         serialNumber, threshold, and lastUpdate properties of a bin to be created 
+     *                                         capacity properties and if the bin is of type smart bin, then each object 
+     *                                         also contains serialNumber, threshold, and lastUpdate properties of a bin 
+     *                                         to be created 
      * @param {BinUpdateInfo[]} binsUpdateInfo an array of objects each containing the _id, longitude, latitude, address,
-     *                                         capacity and if the bin is of type smart bin, then each object also contains 
-     *                                         threshold, and lastUpdate properties of a bin to be created 
+     *                                         capacity properties and if the bin is of type smart bin, then each object 
+     *                                         also contains threshold, and lastUpdate properties of a bin to be created 
      * @param {boolean} isSmart whether the input bin information is for a smart bin or not
      * 
      * @returns {boolean} true if the update succeeds without errors, false otherwise

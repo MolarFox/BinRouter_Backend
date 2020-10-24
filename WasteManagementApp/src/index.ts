@@ -69,7 +69,7 @@ Database.connect()
             await syncSmartBinsAndUpdateBinDistances(googleMapsServicesAdapter);
             await syncSmartBinsCurrentFillLevels();
             const binCollectionSchedulesUpdateResult = 
-                await BinCollectionScheduleHelper.updateBinCollectionSchedules(googleMapsServicesAdapter);
+                await BinCollectionScheduleHelper.updateBinCollectionSchedules();
             if (!binCollectionSchedulesUpdateResult) {
                 Logger.verboseError(INDEX_LOG_TAG, "binCollectionSchedulesUpdateResult", binCollectionSchedulesUpdateResult, "\n");
                 throw new Error("Failed to update bin collection schedules");
@@ -208,7 +208,7 @@ async function populateInitialData(googleMapsServicesAdapter: GoogleMapsServices
     Logger.log("Population of initial bin distances data completed successfully", "\n");
 
     const binCollectionSchedulesUpdateResult = 
-        await BinCollectionScheduleHelper.updateBinCollectionSchedules(googleMapsServicesAdapter);
+        await BinCollectionScheduleHelper.updateBinCollectionSchedules();
     if (!binCollectionSchedulesUpdateResult) {
         Logger.verboseError(INDEX_LOG_TAG, "binCollectionSchedulesUpdateResult", binCollectionSchedulesUpdateResult, "\n");
         throw new Error("Failed to insert initial bin collection schedules data");

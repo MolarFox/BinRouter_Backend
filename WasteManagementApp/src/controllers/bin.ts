@@ -4,7 +4,6 @@ import * as HTTP from "../constants/http"
 import { GET_BINS_LOG_TAG, MODIFY_BINS_LOG_TAG } from "../constants/log-tag";
 import SmartBin from "../models/smart-bin";
 import DumbBin from "../models/dumb-bin";
-import BinCollectionSchedule from "../models/bin-collection-schedule";
 import { BinCreateInfo, BinDeleteInfo, BinUpdateInfo, mongooseInsertWriteOpResult } from "../utils/type-information";
 import { GoogleMapsServicesAdapter } from "../utils/google-maps-services-adapter";
 import { BinDistanceHelper } from "../utils/bin-distance-helper";
@@ -121,9 +120,7 @@ export async function modifyBins(request: express.Request, response: express.Res
             }
             Logger.verboseLog(MODIFY_BINS_LOG_TAG, "dumbBinsUpdateOnNearestSmartBinsResult", dumbBinsUpdateOnNearestSmartBinsResult, "\n");
 
-            const binCollectionSchedulesUpdateResult = await BinCollectionScheduleHelper.updateBinCollectionSchedules(
-                request.app.get("GoogleMapsServicesAdapter") as GoogleMapsServicesAdapter
-            );
+            const binCollectionSchedulesUpdateResult = await BinCollectionScheduleHelper.updateBinCollectionSchedules();
             if (!binCollectionSchedulesUpdateResult) {
                 Logger.verboseError(MODIFY_BINS_LOG_TAG, "binCollectionSchedulesUpdateResult", binCollectionSchedulesUpdateResult, "\n");
                 throw new Error("Failed to update bin collection schedules");
