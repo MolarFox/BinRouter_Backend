@@ -1,3 +1,11 @@
+/**
+ * Author name: Yisong Yu
+ * Last modified date: October 24, 2020
+ * Description: 
+ * This source code file only includes the type definitions used to facilitate the development of this application, 
+ * and is not intended to be transpiled to JavaScript as the type system is specific to TypeScript.
+ */
+
 import { DirectionsResponseData } from "@googlemaps/google-maps-services-js/dist/directions";
 
 export type SmartBinsJSON = {

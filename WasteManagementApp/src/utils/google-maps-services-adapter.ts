@@ -30,8 +30,6 @@ export class GoogleMapsServicesAdapter {
 
     /**
      * Construct a GoogleMapsServicesAdapter instance
-     * 
-     * @returns a GoogleMapsServicesAdapter instance
      */
     constructor() {
         this.client = new Client({});

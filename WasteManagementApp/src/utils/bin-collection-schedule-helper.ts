@@ -19,6 +19,11 @@ import { BinDistanceInfo, DepotCollectInfo, DumbBinCollectInfo, FleetVehicleColl
 
 export class BinCollectionScheduleHelper {
     /**
+     * Prevent others from instantiating this class
+     */
+    private constructor() {}
+
+    /**
      * Description here
      * @param googleMapsServicesAdapter 
      * @returns

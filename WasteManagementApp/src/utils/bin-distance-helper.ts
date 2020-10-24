@@ -9,6 +9,11 @@ import { Logger } from "./logger";
 import { UPDATE_ALL_BIN_DISTANCES_LOG_TAG, UPDATE_BIN_DISTANCES_LOG_TAG } from "../constants/log-tag";
 
 export class BinDistanceHelper {
+    /**
+     * Prevent others from instantiating this class
+     */
+    private constructor() {}
+
     public static async updateAllBinDistances(
         googleMapsServicesAdapter: GoogleMapsServicesAdapter
     ): Promise<boolean> {

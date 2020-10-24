@@ -41,6 +41,11 @@ export class RoutingSolverAdapter {
     private static routingSolverProcess: ChildProcessWithoutNullStreams | null = null;
 
     /**
+     * Prevent others from instantiating this class
+     */
+    private constructor() {}
+
+    /**
      * Execute the external (C++) routing solver program to compute an optimised routing schedule (i.e., in
      * terms of the total distances that need to be travelled) that allow all the nodes each with a fixed demand
      * (i.e., weight or volume) to be collected by only a limited number of vehicles each with a fixed capacity
@@ -186,7 +191,7 @@ export class RoutingSolverAdapter {
             );
         }
 
-        // Eliminate the duplicates of the same routing schedule results before returning
+        // Eliminate the duplicates of the routing schedule results before returning them
         return Array.from(
             new Set(
                 routesByStrategy.map(routeByStrategy => JSON.stringify(routeByStrategy))
