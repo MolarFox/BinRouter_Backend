@@ -1,6 +1,6 @@
 /**
- * Author name:
- * Last modified date: 
+ * Author name: Yisong Yu
+ * Last modified date: October 24, 2020
  * Description: 
  */
 import mongoose from "mongoose";
@@ -19,8 +19,9 @@ import { BinDistanceInfo, DepotCollectInfo, DumbBinCollectInfo, FleetVehicleColl
 
 export class BinCollectionScheduleHelper {
     /**
-     * 
+     * Description here
      * @param googleMapsServicesAdapter 
+     * @returns
      */
     public static async updateBinCollectionSchedules(
         googleMapsServicesAdapter: GoogleMapsServicesAdapter

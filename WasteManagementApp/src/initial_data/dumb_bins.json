@@ -279,17 +279,6 @@
 			"location":{
 			   "type":"Point",
 			   "coordinates":[
-				  144.6780052,
-				  -36.5986096
-			   ]
-			},
-			"address":"Victoria, Australia",
-			"capacity":485
-		 },
-		 {
-			"location":{
-			   "type":"Point",
-			   "coordinates":[
 				  144.6571881,
 				  -37.9212778
 			   ]

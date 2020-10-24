@@ -7,7 +7,7 @@ Start connecting to the database...
 A connection to the database has been successfully established 
 
 bin_router.utils.bin_collection_schedule_helper.updateBinCollectionSchedules depot {
-  _id: 5f8f040ddc015ae210eab740,
+  _id: 5f8fa09790b9ff0a55ede358,
   longitude: 145.133957,
   latitude: -37.907803,
   volume: 0
@@ -15,85 +15,85 @@ bin_router.utils.bin_collection_schedule_helper.updateBinCollectionSchedules dep
 
 bin_router.utils.bin_collection_schedule_helper.updateBinCollectionSchedules smartBins [
   {
-    _id: 5f8f040edc015ae210eab744,
+    _id: 5f8fa09790b9ff0a55ede35c,
     longitude: 144.7356233333,
     latitude: -37.8825216667,
     volume: 50
   },
   {
-    _id: 5f8f040edc015ae210eab746,
+    _id: 5f8fa09790b9ff0a55ede35e,
     longitude: 144.66128,
     latitude: -37.900181,
     volume: 100
   },
   {
-    _id: 5f8f040edc015ae210eab747,
+    _id: 5f8fa09790b9ff0a55ede35f,
     longitude: 144.6575503108,
     latitude: -37.9030024868,
     volume: 100
   },
   {
-    _id: 5f8f040edc015ae210eab74b,
+    _id: 5f8fa09790b9ff0a55ede363,
     longitude: 144.6619166667,
     latitude: -37.9011583333,
     volume: 75
   },
   {
-    _id: 5f8f040edc015ae210eab74e,
+    _id: 5f8fa09790b9ff0a55ede366,
     longitude: 144.6607366667,
     latitude: -37.9016183333,
     volume: 50
   },
   {
-    _id: 5f8f040edc015ae210eab750,
+    _id: 5f8fa09790b9ff0a55ede368,
     longitude: 144.661445,
     latitude: -37.9000316667,
     volume: 50
   },
   {
-    _id: 5f8f040edc015ae210eab751,
+    _id: 5f8fa09790b9ff0a55ede369,
     longitude: 144.6619166667,
     latitude: -37.9006433333,
     volume: 100
   },
   {
-    _id: 5f8f040edc015ae210eab752,
+    _id: 5f8fa09790b9ff0a55ede36a,
     longitude: 144.6613755151,
     latitude: -37.9011926717,
     volume: 50
   },
   {
-    _id: 5f8f040edc015ae210eab755,
+    _id: 5f8fa09790b9ff0a55ede36d,
     longitude: 144.735345,
     latitude: -37.8827266667,
     volume: 100
   },
   {
-    _id: 5f8f040edc015ae210eab757,
+    _id: 5f8fa09790b9ff0a55ede36f,
     longitude: 144.6575183333,
     latitude: -37.903025,
     volume: 125
   },
   {
-    _id: 5f8f040edc015ae210eab75a,
+    _id: 5f8fa09790b9ff0a55ede372,
     longitude: 144.6611613075,
     latitude: -37.9013126406,
     volume: 50
   },
   {
-    _id: 5f8f040edc015ae210eab75c,
+    _id: 5f8fa09790b9ff0a55ede374,
     longitude: 144.7351335129,
     latitude: -37.884073105,
     volume: 125
   },
   {
-    _id: 5f8f040edc015ae210eab75d,
+    _id: 5f8fa09790b9ff0a55ede375,
     longitude: 144.661874373,
     latitude: -37.9005884942,
     volume: 100
   },
   {
-    _id: 5f8f040edc015ae210eab761,
+    _id: 5f8fa09790b9ff0a55ede379,
     longitude: 144.7352166667,
     latitude: -37.88323,
     volume: 100
@@ -102,295 +102,247 @@ bin_router.utils.bin_collection_schedule_helper.updateBinCollectionSchedules sma
 
 bin_router.utils.bin_collection_schedule_helper.updateBinCollectionSchedules dumbBins [
   {
-    _id: 5f8f040edc015ae210eab783,
+    _id: 5f8fa09790b9ff0a55ede39b,
     longitude: 144.7331147,
     latitude: -37.8932189,
     volume: 347
   },
   {
-    _id: 5f8f040edc015ae210eab784,
+    _id: 5f8fa09790b9ff0a55ede39c,
     longitude: 144.76199238594253,
     latitude: -37.92533475,
     volume: 234
   },
   {
-    _id: 5f8f040edc015ae210eab785,
+    _id: 5f8fa09790b9ff0a55ede39d,
     longitude: 144.719789,
     latitude: -37.6555917,
     volume: 278
   },
   {
-    _id: 5f8f040edc015ae210eab786,
+    _id: 5f8fa09790b9ff0a55ede39e,
     longitude: 144.6398406,
     latitude: -37.8478183,
     volume: 151
   },
   {
-    _id: 5f8f040edc015ae210eab787,
+    _id: 5f8fa09790b9ff0a55ede39f,
     longitude: 144.7077463,
     latitude: -37.8761503,
     volume: 196
   },
   {
-    _id: 5f8f040edc015ae210eab788,
+    _id: 5f8fa09790b9ff0a55ede3a0,
     longitude: 144.6906656,
     latitude: -37.8857409,
     volume: 158
   },
   {
-    _id: 5f8f040edc015ae210eab789,
-    longitude: 144.7963634,
-    latitude: -37.8821372,
-    volume: 472
-  },
-  {
-    _id: 5f8f040edc015ae210eab78a,
+    _id: 5f8fa09790b9ff0a55ede3a2,
     longitude: 144.5919382,
     latitude: -37.9053532,
     volume: 198
   },
   {
-    _id: 5f8f040edc015ae210eab78b,
-    longitude: 144.7012669,
-    latitude: -37.864668,
-    volume: 184
-  },
-  {
-    _id: 5f8f040edc015ae210eab78c,
+    _id: 5f8fa09790b9ff0a55ede3a4,
     longitude: 144.5845217,
     latitude: -37.8392179,
     volume: 354
   },
   {
-    _id: 5f8f040edc015ae210eab78d,
+    _id: 5f8fa09790b9ff0a55ede3a5,
     longitude: 144.7650453,
     latitude: -37.9101396,
     volume: 337
   },
   {
-    _id: 5f8f040edc015ae210eab78e,
+    _id: 5f8fa09790b9ff0a55ede3a6,
     longitude: 144.7091116,
     latitude: -37.925814,
     volume: 122
   },
   {
-    _id: 5f8f040edc015ae210eab78f,
+    _id: 5f8fa09790b9ff0a55ede3a7,
     longitude: 144.719789,
     latitude: -37.6555917,
     volume: 454
   },
   {
-    _id: 5f8f040edc015ae210eab790,
+    _id: 5f8fa09790b9ff0a55ede3a8,
     longitude: 144.7060389,
     latitude: -37.8757367,
     volume: 181
   },
   {
-    _id: 5f8f040edc015ae210eab791,
-    longitude: 144.703414,
-    latitude: -37.8209958,
-    volume: 465
-  },
-  {
-    _id: 5f8f040edc015ae210eab792,
-    longitude: 144.81019271582454,
-    latitude: -37.8391534,
+    _id: 5f8fa09790b9ff0a55ede3aa,
+    longitude: 144.90164392643769,
+    latitude: -37.80842801889412,
     volume: 318
   },
   {
-    _id: 5f8f040edc015ae210eab793,
+    _id: 5f8fa09790b9ff0a55ede3ab,
     longitude: 144.6736408,
     latitude: -37.8999415,
     volume: 277
   },
   {
-    _id: 5f8f040edc015ae210eab794,
+    _id: 5f8fa09790b9ff0a55ede3ac,
     longitude: 144.6373449,
     latitude: -37.842572,
     volume: 275
   },
   {
-    _id: 5f8f040edc015ae210eab795,
+    _id: 5f8fa09790b9ff0a55ede3ad,
     longitude: 144.7045887,
     latitude: -37.8972515,
     volume: 328
   },
   {
-    _id: 5f8f040edc015ae210eab796,
-    longitude: 144.6765344,
-    latitude: -37.8627356,
+    _id: 5f8fa09790b9ff0a55ede3ae,
+    longitude: 144.65715741207276,
+    latitude: -37.817825744109044,
     volume: 424
   },
   {
-    _id: 5f8f040edc015ae210eab797,
+    _id: 5f8fa09790b9ff0a55ede3af,
     longitude: 144.6536102,
     latitude: -37.8826914,
     volume: 416
   },
   {
-    _id: 5f8f040edc015ae210eab798,
+    _id: 5f8fa09790b9ff0a55ede3b0,
     longitude: 144.6769283,
     latitude: -37.9211348,
     volume: 320
   },
   {
-    _id: 5f8f040edc015ae210eab799,
+    _id: 5f8fa09790b9ff0a55ede3b1,
     longitude: 144.7950889,
     latitude: -37.8520775,
     volume: 471
   },
   {
-    _id: 5f8f040edc015ae210eab79a,
-    longitude: 144.735035,
-    latitude: -37.8242766,
-    volume: 405
-  },
-  {
-    _id: 5f8f040edc015ae210eab79b,
+    _id: 5f8fa09790b9ff0a55ede3b3,
     longitude: 144.655948,
     latitude: -37.926216,
     volume: 218
   },
   {
-    _id: 5f8f040edc015ae210eab79c,
-    longitude: 144.6780052,
-    latitude: -36.5986096,
-    volume: 485
-  },
-  {
-    _id: 5f8f040edc015ae210eab79d,
+    _id: 5f8fa09790b9ff0a55ede3b4,
     longitude: 144.6571881,
     latitude: -37.9212778,
     volume: 143
   },
   {
-    _id: 5f8f040edc015ae210eab79e,
+    _id: 5f8fa09790b9ff0a55ede3b5,
     longitude: 144.6784907,
     latitude: -37.9041918,
     volume: 334
   },
   {
-    _id: 5f8f040edc015ae210eab79f,
-    longitude: 144.6634438,
-    latitude: -37.8508007,
+    _id: 5f8fa09790b9ff0a55ede3b6,
+    longitude: 144.7599645684658,
+    latitude: -37.74628628057363,
     volume: 116
   },
   {
-    _id: 5f8f040edc015ae210eab7a0,
-    longitude: 144.6200485,
-    latitude: -37.840776,
+    _id: 5f8fa09790b9ff0a55ede3b7,
+    longitude: 144.80871639952048,
+    latitude: -37.76447289345878,
     volume: 119
   },
   {
-    _id: 5f8f040edc015ae210eab7a1,
+    _id: 5f8fa09790b9ff0a55ede3b8,
     longitude: 144.6334621,
     latitude: -37.8910811,
     volume: 370
   },
   {
-    _id: 5f8f040edc015ae210eab7a2,
+    _id: 5f8fa09790b9ff0a55ede3b9,
     longitude: 144.5930506,
     latitude: -37.9061735,
     volume: 267
   },
   {
-    _id: 5f8f040edc015ae210eab7a3,
-    longitude: 144.8043032,
-    latitude: -37.8155283,
-    volume: 308
-  },
-  {
-    _id: 5f8f040edc015ae210eab7a4,
-    longitude: 144.6621966,
-    latitude: -37.8365961,
-    volume: 136
-  },
-  {
-    _id: 5f8f040edc015ae210eab7a5,
+    _id: 5f8fa09790b9ff0a55ede3bc,
     longitude: 144.6896866,
     latitude: -37.9154122,
     volume: 403
   },
   {
-    _id: 5f8f040edc015ae210eab7a6,
+    _id: 5f8fa09790b9ff0a55ede3bd,
     longitude: 144.6615621,
     latitude: -37.9146919,
     volume: 230
   },
   {
-    _id: 5f8f040edc015ae210eab7a7,
+    _id: 5f8fa09790b9ff0a55ede3be,
     longitude: 144.7645583,
     latitude: -37.8848613,
     volume: 229
   },
   {
-    _id: 5f8f040edc015ae210eab7a9,
-    longitude: 144.6872588,
-    latitude: -37.8701996,
-    volume: 225
-  },
-  {
-    _id: 5f8f040edc015ae210eab7aa,
+    _id: 5f8fa09790b9ff0a55ede3c1,
     longitude: 144.7850633,
     latitude: -37.8560508,
     volume: 344
   },
   {
-    _id: 5f8f040edc015ae210eab7ab,
+    _id: 5f8fa09790b9ff0a55ede3c2,
     longitude: 144.7543930363833,
     latitude: -37.93110825,
     volume: 344
   },
   {
-    _id: 5f8f040edc015ae210eab7ac,
+    _id: 5f8fa09790b9ff0a55ede3c3,
     longitude: 144.6739163,
     latitude: -37.8913249,
     volume: 400
   },
   {
-    _id: 5f8f040edc015ae210eab7ad,
+    _id: 5f8fa09790b9ff0a55ede3c4,
     longitude: 144.7018364,
     latitude: -37.9019127,
     volume: 276
   },
   {
-    _id: 5f8f040edc015ae210eab7ae,
+    _id: 5f8fa09790b9ff0a55ede3c5,
     longitude: 144.5903845,
     latitude: -37.8618526,
     volume: 173
   },
   {
-    _id: 5f8f040edc015ae210eab7af,
+    _id: 5f8fa09790b9ff0a55ede3c6,
     longitude: 144.5845217,
     latitude: -37.8392179,
     volume: 303
   },
   {
-    _id: 5f8f040edc015ae210eab7b0,
+    _id: 5f8fa09790b9ff0a55ede3c7,
     longitude: 144.5884681,
     latitude: -37.870333,
     volume: 328
   },
   {
-    _id: 5f8f040edc015ae210eab7b1,
+    _id: 5f8fa09790b9ff0a55ede3c8,
     longitude: 144.76367330107155,
     latitude: -37.89960765,
     volume: 490
   },
   {
-    _id: 5f8f040edc015ae210eab7b2,
+    _id: 5f8fa09790b9ff0a55ede3c9,
     longitude: 144.7270034,
     latitude: -37.9252958,
     volume: 274
   },
   {
-    _id: 5f8f040edc015ae210eab7b3,
+    _id: 5f8fa09790b9ff0a55ede3ca,
     longitude: 144.6084185,
     latitude: -37.8722432,
     volume: 384
   },
   {
-    _id: 5f8f040edc015ae210eab7b4,
+    _id: 5f8fa09790b9ff0a55ede3cb,
     longitude: 144.7401004,
     latitude: -37.9133493,
     volume: 316
@@ -398,831 +350,969 @@ bin_router.utils.bin_collection_schedule_helper.updateBinCollectionSchedules dum
 ] 
 
 bin_router.utils.bin_collection_schedule_helper.updateBinCollectionSchedules fleetVehicles [
-  { _id: 5f8f040ddc015ae210eab741, capacity: 10000 },
-  { _id: 5f8f040ddc015ae210eab742, capacity: 5000 }
+  { _id: 5f8fa09790b9ff0a55ede359, capacity: 50000 },
+  { _id: 5f8fa3d1cd3c100af0dae47f, capacity: 10000 }
 ] 
 
 bin_router.utils.bin_collection_schedule_helper.updateBinCollectionSchedules binDistances [
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040ddc015ae210eab740,
+    destination: 5f8fa09790b9ff0a55ede358,
     destinationType: 'Depot',
     distance: 0,
     duration: 0
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab744,
+    destination: 5f8fa09790b9ff0a55ede35c,
     destinationType: 'SmartBin',
     distance: 44712,
     duration: 2286
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab746,
+    destination: 5f8fa09790b9ff0a55ede35e,
     destinationType: 'SmartBin',
     distance: 51223,
     duration: 2715
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab747,
+    destination: 5f8fa09790b9ff0a55ede35f,
     destinationType: 'SmartBin',
     distance: 51587,
     duration: 2717
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab74b,
+    destination: 5f8fa09790b9ff0a55ede363,
     destinationType: 'SmartBin',
     distance: 51097,
     duration: 2642
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab74e,
+    destination: 5f8fa09790b9ff0a55ede366,
     destinationType: 'SmartBin',
     distance: 51211,
     duration: 2668
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab750,
+    destination: 5f8fa09790b9ff0a55ede368,
     destinationType: 'SmartBin',
     distance: 51242,
     duration: 2736
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab751,
+    destination: 5f8fa09790b9ff0a55ede369,
     destinationType: 'SmartBin',
     distance: 51323,
     duration: 2800
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab752,
+    destination: 5f8fa09790b9ff0a55ede36a,
     destinationType: 'SmartBin',
     distance: 51138,
     duration: 2651
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab755,
+    destination: 5f8fa09790b9ff0a55ede36d,
     destinationType: 'SmartBin',
     distance: 44959,
     duration: 2359
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab757,
+    destination: 5f8fa09790b9ff0a55ede36f,
     destinationType: 'SmartBin',
     distance: 51587,
     duration: 2717
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab75a,
+    destination: 5f8fa09790b9ff0a55ede372,
     destinationType: 'SmartBin',
     distance: 51161,
     duration: 2656
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab75c,
+    destination: 5f8fa09790b9ff0a55ede374,
     destinationType: 'SmartBin',
     distance: 45152,
     duration: 2334
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab75d,
+    destination: 5f8fa09790b9ff0a55ede375,
     destinationType: 'SmartBin',
     distance: 51312,
     duration: 2784
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab761,
+    destination: 5f8fa09790b9ff0a55ede379,
     destinationType: 'SmartBin',
     distance: 44900,
     duration: 2325
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab783,
+    destination: 5f8fa09790b9ff0a55ede39b,
     destinationType: 'DumbBin',
     distance: 46172,
     duration: 2426
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab784,
+    destination: 5f8fa09790b9ff0a55ede39c,
     destinationType: 'DumbBin',
     distance: 48244,
     duration: 2621
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab785,
+    destination: 5f8fa09790b9ff0a55ede39d,
     destinationType: 'DumbBin',
     distance: 56152,
     duration: 2745
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab786,
+    destination: 5f8fa09790b9ff0a55ede39e,
     destinationType: 'DumbBin',
     distance: 57076,
     duration: 3224
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab787,
+    destination: 5f8fa09790b9ff0a55ede39f,
     destinationType: 'DumbBin',
     distance: 48929,
     duration: 2591
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab788,
+    destination: 5f8fa09790b9ff0a55ede3a0,
     destinationType: 'DumbBin',
     distance: 48474,
     duration: 2514
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab789,
-    destinationType: 'DumbBin',
-    distance: 43441,
-    duration: 2417
-  },
-  {
-    origin: 5f8f040ddc015ae210eab740,
-    originType: 'Depot',
-    destination: 5f8f040edc015ae210eab78a,
+    destination: 5f8fa09790b9ff0a55ede3a2,
     destinationType: 'DumbBin',
     distance: 63575,
     duration: 3285
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab78b,
-    destinationType: 'DumbBin',
-    distance: 49525,
-    duration: 2582
-  },
-  {
-    origin: 5f8f040ddc015ae210eab740,
-    originType: 'Depot',
-    destination: 5f8f040edc015ae210eab78c,
+    destination: 5f8fa09790b9ff0a55ede3a4,
     destinationType: 'DumbBin',
     distance: 62538,
     duration: 3431
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab78d,
+    destination: 5f8fa09790b9ff0a55ede3a5,
     destinationType: 'DumbBin',
     distance: 47481,
     duration: 2501
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab78e,
+    destination: 5f8fa09790b9ff0a55ede3a6,
     destinationType: 'DumbBin',
     distance: 53723,
     duration: 2586
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab78f,
+    destination: 5f8fa09790b9ff0a55ede3a7,
     destinationType: 'DumbBin',
     distance: 56152,
     duration: 2745
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab790,
+    destination: 5f8fa09790b9ff0a55ede3a8,
     destinationType: 'DumbBin',
     distance: 48723,
     duration: 2553
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab791,
-    destinationType: 'DumbBin',
-    distance: 46504,
-    duration: 2666
-  },
-  {
-    origin: 5f8f040ddc015ae210eab740,
-    originType: 'Depot',
-    destination: 5f8f040edc015ae210eab792,
-    destinationType: 'DumbBin',
-    distance: 39964,
-    duration: 2091
-  },
-  {
-    origin: 5f8f040ddc015ae210eab740,
-    originType: 'Depot',
-    destination: 5f8f040edc015ae210eab793,
+    destination: 5f8fa09790b9ff0a55ede3ab,
     destinationType: 'DumbBin',
     distance: 50728,
     duration: 2585
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab794,
+    destination: 5f8fa09790b9ff0a55ede3ac,
     destinationType: 'DumbBin',
     distance: 57046,
     duration: 3169
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab795,
+    destination: 5f8fa09790b9ff0a55ede3ad,
     destinationType: 'DumbBin',
     distance: 48648,
     duration: 2364
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab796,
-    destinationType: 'DumbBin',
-    distance: 51910,
-    duration: 2765
-  },
-  {
-    origin: 5f8f040ddc015ae210eab740,
-    originType: 'Depot',
-    destination: 5f8f040edc015ae210eab797,
+    destination: 5f8fa09790b9ff0a55ede3af,
     destinationType: 'DumbBin',
     distance: 53593,
     duration: 2848
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab798,
+    destination: 5f8fa09790b9ff0a55ede3b0,
     destinationType: 'DumbBin',
     distance: 52209,
     duration: 2554
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab799,
+    destination: 5f8fa09790b9ff0a55ede3b1,
     destinationType: 'DumbBin',
     distance: 38661,
     duration: 2027
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab79a,
-    destinationType: 'DumbBin',
-    distance: 43703,
-    duration: 2485
-  },
-  {
-    origin: 5f8f040ddc015ae210eab740,
-    originType: 'Depot',
-    destination: 5f8f040edc015ae210eab79b,
+    destination: 5f8fa09790b9ff0a55ede3b3,
     destinationType: 'DumbBin',
     distance: 60104,
     duration: 3066
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab79c,
-    destinationType: 'DumbBin',
-    distance: 181844,
-    duration: 7932
-  },
-  {
-    origin: 5f8f040ddc015ae210eab740,
-    originType: 'Depot',
-    destination: 5f8f040edc015ae210eab79d,
+    destination: 5f8fa09790b9ff0a55ede3b4,
     destinationType: 'DumbBin',
     distance: 53230,
     duration: 2502
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab79e,
+    destination: 5f8fa09790b9ff0a55ede3b5,
     destinationType: 'DumbBin',
     distance: 52087,
     duration: 2559
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab79f,
-    destinationType: 'DumbBin',
-    distance: 54102,
-    duration: 2977
-  },
-  {
-    origin: 5f8f040ddc015ae210eab740,
-    originType: 'Depot',
-    destination: 5f8f040edc015ae210eab7a0,
-    destinationType: 'DumbBin',
-    distance: 58576,
-    duration: 3278
-  },
-  {
-    origin: 5f8f040ddc015ae210eab740,
-    originType: 'Depot',
-    destination: 5f8f040edc015ae210eab7a1,
+    destination: 5f8fa09790b9ff0a55ede3b8,
     destinationType: 'DumbBin',
     distance: 54984,
     duration: 2971
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab7a2,
+    destination: 5f8fa09790b9ff0a55ede3b9,
     destinationType: 'DumbBin',
     distance: 63575,
     duration: 3285
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab7a3,
-    destinationType: 'DumbBin',
-    distance: 36153,
-    duration: 1851
-  },
-  {
-    origin: 5f8f040ddc015ae210eab740,
-    originType: 'Depot',
-    destination: 5f8f040edc015ae210eab7a4,
-    destinationType: 'DumbBin',
-    distance: 50474,
-    duration: 3108
-  },
-  {
-    origin: 5f8f040ddc015ae210eab740,
-    originType: 'Depot',
-    destination: 5f8f040edc015ae210eab7a5,
+    destination: 5f8fa09790b9ff0a55ede3bc,
     destinationType: 'DumbBin',
     distance: 51533,
     duration: 2481
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab7a6,
+    destination: 5f8fa09790b9ff0a55ede3bd,
     destinationType: 'DumbBin',
     distance: 53882,
     duration: 2734
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab7a7,
+    destination: 5f8fa09790b9ff0a55ede3be,
     destinationType: 'DumbBin',
     distance: 46534,
     duration: 2497
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab7a9,
-    destinationType: 'DumbBin',
-    distance: 49645,
-    duration: 2632
-  },
-  {
-    origin: 5f8f040ddc015ae210eab740,
-    originType: 'Depot',
-    destination: 5f8f040edc015ae210eab7aa,
+    destination: 5f8fa09790b9ff0a55ede3c1,
     destinationType: 'DumbBin',
     distance: 38868,
     duration: 2075
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab7ab,
+    destination: 5f8fa09790b9ff0a55ede3c2,
     destinationType: 'DumbBin',
     distance: 47653,
     duration: 2499
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab7ac,
+    destination: 5f8fa09790b9ff0a55ede3c3,
     destinationType: 'DumbBin',
     distance: 50501,
     duration: 2548
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab7ad,
+    destination: 5f8fa09790b9ff0a55ede3c4,
     destinationType: 'DumbBin',
     distance: 54519,
     duration: 2670
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab7ae,
+    destination: 5f8fa09790b9ff0a55ede3c5,
     destinationType: 'DumbBin',
     distance: 59793,
     duration: 3319
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab7af,
+    destination: 5f8fa09790b9ff0a55ede3c6,
     destinationType: 'DumbBin',
     distance: 62538,
     duration: 3431
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab7b0,
+    destination: 5f8fa09790b9ff0a55ede3c7,
     destinationType: 'DumbBin',
     distance: 60505,
     duration: 3403
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab7b1,
+    destination: 5f8fa09790b9ff0a55ede3c8,
     destinationType: 'DumbBin',
     distance: 45766,
     duration: 2422
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab7b2,
+    destination: 5f8fa09790b9ff0a55ede3c9,
     destinationType: 'DumbBin',
     distance: 50133,
     duration: 2663
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab7b3,
+    destination: 5f8fa09790b9ff0a55ede3ca,
     destinationType: 'DumbBin',
     distance: 58127,
     duration: 3310
   },
   {
-    origin: 5f8f040ddc015ae210eab740,
+    origin: 5f8fa09790b9ff0a55ede358,
     originType: 'Depot',
-    destination: 5f8f040edc015ae210eab7b4,
+    destination: 5f8fa09790b9ff0a55ede3cb,
     destinationType: 'DumbBin',
     distance: 47503,
     duration: 2601
   },
   {
-    origin: 5f8f040edc015ae210eab744,
+    origin: 5f8fa09790b9ff0a55ede35c,
     originType: 'SmartBin',
-    destination: 5f8f040ddc015ae210eab740,
+    destination: 5f8fa09790b9ff0a55ede358,
     destinationType: 'Depot',
     distance: 45543,
     duration: 2452
   },
   {
-    origin: 5f8f040edc015ae210eab744,
+    origin: 5f8fa09790b9ff0a55ede35c,
     originType: 'SmartBin',
-    destination: 5f8f040edc015ae210eab744,
+    destination: 5f8fa09790b9ff0a55ede35c,
     destinationType: 'SmartBin',
     distance: 0,
     duration: 0
   },
   {
-    origin: 5f8f040edc015ae210eab744,
+    origin: 5f8fa09790b9ff0a55ede35c,
     originType: 'SmartBin',
-    destination: 5f8f040edc015ae210eab746,
+    destination: 5f8fa09790b9ff0a55ede35e,
     destinationType: 'SmartBin',
     distance: 8329,
     duration: 885
   },
   {
-    origin: 5f8f040edc015ae210eab744,
+    origin: 5f8fa09790b9ff0a55ede35c,
     originType: 'SmartBin',
-    destination: 5f8f040edc015ae210eab747,
+    destination: 5f8fa09790b9ff0a55ede35f,
     destinationType: 'SmartBin',
     distance: 8693,
     duration: 887
   },
   {
-    origin: 5f8f040edc015ae210eab744,
+    origin: 5f8fa09790b9ff0a55ede35c,
     originType: 'SmartBin',
-    destination: 5f8f040edc015ae210eab74b,
+    destination: 5f8fa09790b9ff0a55ede363,
     destinationType: 'SmartBin',
     distance: 8203,
     duration: 812
   },
   {
-    origin: 5f8f040edc015ae210eab744,
+    origin: 5f8fa09790b9ff0a55ede35c,
     originType: 'SmartBin',
-    destination: 5f8f040edc015ae210eab74e,
+    destination: 5f8fa09790b9ff0a55ede366,
     destinationType: 'SmartBin',
     distance: 8317,
     duration: 839
   },
   {
-    origin: 5f8f040edc015ae210eab744,
+    origin: 5f8fa09790b9ff0a55ede35c,
     originType: 'SmartBin',
-    destination: 5f8f040edc015ae210eab750,
+    destination: 5f8fa09790b9ff0a55ede368,
     destinationType: 'SmartBin',
     distance: 8348,
     duration: 906
   },
   {
-    origin: 5f8f040edc015ae210eab744,
+    origin: 5f8fa09790b9ff0a55ede35c,
     originType: 'SmartBin',
-    destination: 5f8f040edc015ae210eab751,
+    destination: 5f8fa09790b9ff0a55ede369,
     destinationType: 'SmartBin',
     distance: 8429,
     duration: 971
   },
   {
-    origin: 5f8f040edc015ae210eab744,
+    origin: 5f8fa09790b9ff0a55ede35c,
     originType: 'SmartBin',
-    destination: 5f8f040edc015ae210eab752,
+    destination: 5f8fa09790b9ff0a55ede36a,
     destinationType: 'SmartBin',
     distance: 8244,
     duration: 822
   },
   {
-    origin: 5f8f040edc015ae210eab744,
+    origin: 5f8fa09790b9ff0a55ede35c,
     originType: 'SmartBin',
-    destination: 5f8f040edc015ae210eab755,
+    destination: 5f8fa09790b9ff0a55ede36d,
     destinationType: 'SmartBin',
     distance: 131,
     duration: 92
   },
   {
-    origin: 5f8f040edc015ae210eab744,
+    origin: 5f8fa09790b9ff0a55ede35c,
     originType: 'SmartBin',
-    destination: 5f8f040edc015ae210eab757,
+    destination: 5f8fa09790b9ff0a55ede36f,
     destinationType: 'SmartBin',
     distance: 8693,
     duration: 887
   },
   {
-    origin: 5f8f040edc015ae210eab744,
+    origin: 5f8fa09790b9ff0a55ede35c,
     originType: 'SmartBin',
-    destination: 5f8f040edc015ae210eab75a,
+    destination: 5f8fa09790b9ff0a55ede372,
     destinationType: 'SmartBin',
     distance: 8267,
     duration: 827
   },
   {
-    origin: 5f8f040edc015ae210eab744,
+    origin: 5f8fa09790b9ff0a55ede35c,
     originType: 'SmartBin',
-    destination: 5f8f040edc015ae210eab75c,
+    destination: 5f8fa09790b9ff0a55ede374,
     destinationType: 'SmartBin',
     distance: 700,
     duration: 221
   },
   {
-    origin: 5f8f040edc015ae210eab744,
+    origin: 5f8fa09790b9ff0a55ede35c,
     originType: 'SmartBin',
-    destination: 5f8f040edc015ae210eab75d,
+    destination: 5f8fa09790b9ff0a55ede375,
     destinationType: 'SmartBin',
     distance: 8418,
     duration: 954
   },
   {
-    origin: 5f8f040edc015ae210eab744,
+    origin: 5f8fa09790b9ff0a55ede35c,
     originType: 'SmartBin',
-    destination: 5f8f040edc015ae210eab761,
+    destination: 5f8fa09790b9ff0a55ede379,
     destinationType: 'SmartBin',
     distance: 92,
     duration: 51
   },
   {
-    origin: 5f8f040edc015ae210eab744,
+    origin: 5f8fa09790b9ff0a55ede35c,
     originType: 'SmartBin',
-    destination: 5f8f040edc015ae210eab783,
+    destination: 5f8fa09790b9ff0a55ede39b,
     destinationType: 'DumbBin',
     distance: 1708,
     duration: 284
   },
   {
-    origin: 5f8f040edc015ae210eab744,
+    origin: 5f8fa09790b9ff0a55ede35c,
     originType: 'SmartBin',
-    destination: 5f8f040edc015ae210eab784,
+    destination: 5f8fa09790b9ff0a55ede39c,
     destinationType: 'DumbBin',
     distance: 6758,
     duration: 701
   },
   {
-    origin: 5f8f040edc015ae210eab744,
+    origin: 5f8fa09790b9ff0a55ede35c,
     originType: 'SmartBin',
-    destination: 5f8f040edc015ae210eab785,
+    destination: 5f8fa09790b9ff0a55ede39d,
     destinationType: 'DumbBin',
     distance: 40537,
     duration: 2085
   },
   {
-    origin: 5f8f040edc015ae210eab744,
+    origin: 5f8fa09790b9ff0a55ede35c,
     originType: 'SmartBin',
-    destination: 5f8f040edc015ae210eab786,
+    destination: 5f8fa09790b9ff0a55ede39e,
     destinationType: 'DumbBin',
     distance: 14683,
     duration: 1380
   },
   {
-    origin: 5f8f040edc015ae210eab744,
+    origin: 5f8fa09790b9ff0a55ede35c,
     originType: 'SmartBin',
-    destination: 5f8f040edc015ae210eab787,
+    destination: 5f8fa09790b9ff0a55ede39f,
     destinationType: 'DumbBin',
     distance: 6536,
     duration: 746
   },
   {
-    origin: 5f8f040edc015ae210eab744,
+    origin: 5f8fa09790b9ff0a55ede35c,
     originType: 'SmartBin',
-    destination: 5f8f040edc015ae210eab788,
+    destination: 5f8fa09790b9ff0a55ede3a0,
     destinationType: 'DumbBin',
     distance: 6081,
     duration: 669
   },
   {
-    origin: 5f8f040edc015ae210eab744,
+    origin: 5f8fa09790b9ff0a55ede35c,
     originType: 'SmartBin',
-    destination: 5f8f040edc015ae210eab789,
-    destinationType: 'DumbBin',
-    distance: 8024,
-    duration: 914
-  },
-  {
-    origin: 5f8f040edc015ae210eab744,
-    originType: 'SmartBin',
-    destination: 5f8f040edc015ae210eab78a,
+    destination: 5f8fa09790b9ff0a55ede3a2,
     destinationType: 'DumbBin',
     distance: 21182,
     duration: 1440
   },
   {
-    origin: 5f8f040edc015ae210eab744,
+    origin: 5f8fa09790b9ff0a55ede35c,
     originType: 'SmartBin',
-    destination: 5f8f040edc015ae210eab78b,
-    destinationType: 'DumbBin',
-    distance: 7132,
-    duration: 738
-  },
-  {
-    origin: 5f8f040edc015ae210eab744,
-    originType: 'SmartBin',
-    destination: 5f8f040edc015ae210eab78c,
+    destination: 5f8fa09790b9ff0a55ede3a4,
     destinationType: 'DumbBin',
     distance: 20145,
     duration: 1587
   },
   {
-    origin: 5f8f040edc015ae210eab744,
+    origin: 5f8fa09790b9ff0a55ede35c,
     originType: 'SmartBin',
-    destination: 5f8f040edc015ae210eab78d,
+    destination: 5f8fa09790b9ff0a55ede3a5,
     destinationType: 'DumbBin',
     distance: 5995,
     duration: 581
   },
   {
-    origin: 5f8f040edc015ae210eab744,
+    origin: 5f8fa09790b9ff0a55ede35c,
     originType: 'SmartBin',
-    destination: 5f8f040edc015ae210eab78e,
+    destination: 5f8fa09790b9ff0a55ede3a6,
     destinationType: 'DumbBin',
     distance: 6640,
     duration: 600
   },
   {
-    origin: 5f8f040edc015ae210eab744,
+    origin: 5f8fa09790b9ff0a55ede35c,
     originType: 'SmartBin',
-    destination: 5f8f040edc015ae210eab78f,
+    destination: 5f8fa09790b9ff0a55ede3a7,
     destinationType: 'DumbBin',
     distance: 40537,
     duration: 2085
   },
   {
-    origin: 5f8f040edc015ae210eab744,
+    origin: 5f8fa09790b9ff0a55ede35c,
     originType: 'SmartBin',
-    destination: 5f8f040edc015ae210eab790,
+    destination: 5f8fa09790b9ff0a55ede3a8,
     destinationType: 'DumbBin',
     distance: 6330,
     duration: 709
   },
   {
-    origin: 5f8f040edc015ae210eab744,
+    origin: 5f8fa09790b9ff0a55ede35c,
     originType: 'SmartBin',
-    destination: 5f8f040edc015ae210eab791,
-    destinationType: 'DumbBin',
-    distance: 12152,
-    duration: 1082
-  },
-  {
-    origin: 5f8f040edc015ae210eab744,
-    originType: 'SmartBin',
-    destination: 5f8f040edc015ae210eab792,
-    destinationType: 'DumbBin',
-    distance: 10973,
-    duration: 820
-  },
-  {
-    origin: 5f8f040edc015ae210eab744,
-    originType: 'SmartBin',
-    destination: 5f8f040edc015ae210eab793,
+    destination: 5f8fa09790b9ff0a55ede3ab,
     destinationType: 'DumbBin',
     distance: 7834,
     duration: 756
   },
   {
-    origin: 5f8f040edc015ae210eab744,
+    origin: 5f8fa09790b9ff0a55ede35c,
     originType: 'SmartBin',
-    destination: 5f8f040edc015ae210eab794,
+    destination: 5f8fa09790b9ff0a55ede3ac,
     destinationType: 'DumbBin',
     distance: 14653,
     duration: 1325
   },
   {
-    origin: 5f8f040edc015ae210eab744,
+    origin: 5f8fa09790b9ff0a55ede35c,
     originType: 'SmartBin',
-    destination: 5f8f040edc015ae210eab795,
+    destination: 5f8fa09790b9ff0a55ede3ad,
     destinationType: 'DumbBin',
     distance: 4314,
     duration: 486
   },
   {
-    origin: 5f8f040edc015ae210eab744,
+    origin: 5f8fa09790b9ff0a55ede35c,
     originType: 'SmartBin',
-    destination: 5f8f040edc015ae210eab796,
-    destinationType: 'DumbBin',
-    distance: 9517,
-    duration: 921
-  },
-  {
-    origin: 5f8f040edc015ae210eab744,
-    originType: 'SmartBin',
-    destination: 5f8f040edc015ae210eab797,
+    destination: 5f8fa09790b9ff0a55ede3af,
     destinationType: 'DumbBin',
     distance: 11200,
     duration: 1004
   },
-  ... 3996 more items
+  {
+    origin: 5f8fa09790b9ff0a55ede35c,
+    originType: 'SmartBin',
+    destination: 5f8fa09790b9ff0a55ede3b0,
+    destinationType: 'DumbBin',
+    distance: 9816,
+    duration: 710
+  },
+  {
+    origin: 5f8fa09790b9ff0a55ede35c,
+    originType: 'SmartBin',
+    destination: 5f8fa09790b9ff0a55ede3b1,
+    destinationType: 'DumbBin',
+    distance: 9669,
+    duration: 756
+  },
+  {
+    origin: 5f8fa09790b9ff0a55ede35c,
+    originType: 'SmartBin',
+    destination: 5f8fa09790b9ff0a55ede3b3,
+    destinationType: 'DumbBin',
+    distance: 17711,
+    duration: 1222
+  },
+  {
+    origin: 5f8fa09790b9ff0a55ede35c,
+    originType: 'SmartBin',
+    destination: 5f8fa09790b9ff0a55ede3b4,
+    destinationType: 'DumbBin',
+    distance: 10837,
+    duration: 657
+  },
+  {
+    origin: 5f8fa09790b9ff0a55ede35c,
+    originType: 'SmartBin',
+    destination: 5f8fa09790b9ff0a55ede3b5,
+    destinationType: 'DumbBin',
+    distance: 9694,
+    duration: 714
+  },
+  {
+    origin: 5f8fa09790b9ff0a55ede35c,
+    originType: 'SmartBin',
+    destination: 5f8fa09790b9ff0a55ede3b8,
+    destinationType: 'DumbBin',
+    distance: 12591,
+    duration: 1127
+  },
+  {
+    origin: 5f8fa09790b9ff0a55ede35c,
+    originType: 'SmartBin',
+    destination: 5f8fa09790b9ff0a55ede3b9,
+    destinationType: 'DumbBin',
+    distance: 21182,
+    duration: 1440
+  },
+  {
+    origin: 5f8fa09790b9ff0a55ede35c,
+    originType: 'SmartBin',
+    destination: 5f8fa09790b9ff0a55ede3bc,
+    destinationType: 'DumbBin',
+    distance: 9140,
+    duration: 637
+  },
+  {
+    origin: 5f8fa09790b9ff0a55ede35c,
+    originType: 'SmartBin',
+    destination: 5f8fa09790b9ff0a55ede3bd,
+    destinationType: 'DumbBin',
+    distance: 11489,
+    duration: 890
+  },
+  {
+    origin: 5f8fa09790b9ff0a55ede35c,
+    originType: 'SmartBin',
+    destination: 5f8fa09790b9ff0a55ede3be,
+    destinationType: 'DumbBin',
+    distance: 5048,
+    duration: 577
+  },
+  {
+    origin: 5f8fa09790b9ff0a55ede35c,
+    originType: 'SmartBin',
+    destination: 5f8fa09790b9ff0a55ede3c1,
+    destinationType: 'DumbBin',
+    distance: 9877,
+    duration: 805
+  },
+  {
+    origin: 5f8fa09790b9ff0a55ede35c,
+    originType: 'SmartBin',
+    destination: 5f8fa09790b9ff0a55ede3c2,
+    destinationType: 'DumbBin',
+    distance: 6168,
+    duration: 578
+  },
+  {
+    origin: 5f8fa09790b9ff0a55ede35c,
+    originType: 'SmartBin',
+    destination: 5f8fa09790b9ff0a55ede3c3,
+    destinationType: 'DumbBin',
+    distance: 8108,
+    duration: 703
+  },
+  {
+    origin: 5f8fa09790b9ff0a55ede35c,
+    originType: 'SmartBin',
+    destination: 5f8fa09790b9ff0a55ede3c4,
+    destinationType: 'DumbBin',
+    distance: 12126,
+    duration: 826
+  },
+  {
+    origin: 5f8fa09790b9ff0a55ede35c,
+    originType: 'SmartBin',
+    destination: 5f8fa09790b9ff0a55ede3c5,
+    destinationType: 'DumbBin',
+    distance: 17400,
+    duration: 1475
+  },
+  {
+    origin: 5f8fa09790b9ff0a55ede35c,
+    originType: 'SmartBin',
+    destination: 5f8fa09790b9ff0a55ede3c6,
+    destinationType: 'DumbBin',
+    distance: 20145,
+    duration: 1587
+  },
+  {
+    origin: 5f8fa09790b9ff0a55ede35c,
+    originType: 'SmartBin',
+    destination: 5f8fa09790b9ff0a55ede3c7,
+    destinationType: 'DumbBin',
+    distance: 18112,
+    duration: 1558
+  },
+  ... 3036 more items
 ] 
 
-Routing solver using AUTOMATIC successfully generated the following routes:  [ [ -1 ], [ -1 ] ] 
+Routing solver using AUTOMATIC successfully generated the following routes:  [
+  [
+     0, 27, 39, 38, 25, 17, 31, 18, 29, 26, 19, 36,
+    35, 21, 41, 54, 51, 49, 50, 22, 40, 32, 47, 20,
+     1,  9, 14, 12, 15, 44, 52, 55, 23, 16, 46, 53,
+    24, 42, 33, 37, 28,  2,  6, 13,  7,  4,  8, 11,
+     5, 10,  3, 43, 48, 30, 45, 34,  0
+  ],
+  [ 0, 0 ]
+] 
 
-Routing solver using GREEDY_DESCENT successfully generated the following routes:  [ [ -1 ], [ -1 ] ] 
+Routing solver using GREEDY_DESCENT successfully generated the following routes:  [
+  [
+     0, 27, 39, 38, 25, 17, 31, 18, 29, 26, 19, 36,
+    35, 21, 41, 54, 51, 49, 50, 22, 40, 32, 47, 20,
+     1,  9, 14, 12, 15, 44, 52, 55, 23, 16, 46, 53,
+    24, 42, 33, 37, 28,  2,  6, 13,  7,  4,  8, 11,
+     5, 10,  3, 43, 48, 30, 45, 34,  0
+  ],
+  [ 0, 0 ]
+] 
 
-Routing solver using GUIDED_LOCAL_SEARCH successfully generated the following routes:  [ [ -1 ], [ -1 ] ] 
+Routing solver using GUIDED_LOCAL_SEARCH successfully generated the following routes:  [
+  [
+     0, 27, 39, 38, 25, 17, 31, 18, 29, 26, 19, 36,
+    35, 21, 41, 54, 51, 49, 50, 22, 40, 32, 47, 20,
+     1,  9, 14, 12, 15, 44, 52, 55, 23, 16, 46, 53,
+    24, 42, 33, 37, 28,  2,  6, 13,  7,  4,  8, 11,
+     5, 10,  3, 43, 48, 30, 45, 34,  0
+  ],
+  [ 0, 0 ]
+] 
 
-Routing solver using SIMULATED_ANNEALING successfully generated the following routes:  [ [ -1 ], [ -1 ] ] 
+Routing solver using SIMULATED_ANNEALING successfully generated the following routes:  [
+  [
+     0, 27, 39, 38, 25, 17, 31, 18, 29, 26, 19, 36,
+    35, 21, 41, 54, 51, 49, 50, 22, 40, 32, 47, 20,
+     1,  9, 14, 12, 15, 44, 52, 55, 23, 16, 46, 53,
+    24, 42, 33, 37, 28,  2,  6, 13,  7,  4,  8, 11,
+     5, 10,  3, 43, 48, 30, 45, 34,  0
+  ],
+  [ 0, 0 ]
+] 
 
-Routing solver using TABU_SEARCH successfully generated the following routes:  [ [ -1 ], [ -1 ] ] 
+Routing solver using TABU_SEARCH successfully generated the following routes:  [
+  [
+     0, 27, 39, 38, 25, 17, 31, 18, 29, 26, 19, 36,
+    35, 21, 41, 54, 51, 49, 50, 22, 40, 32, 47, 20,
+     1,  9, 14, 12, 15, 44, 52, 55, 23, 16, 46, 53,
+    24, 42, 33, 37, 28,  2,  6, 13,  7,  4,  8, 11,
+     5, 10,  3, 43, 48, 30, 45, 34,  0
+  ],
+  [ 0, 0 ]
+] 
 
-bin_router.utils.bin_collection_schedule_helper.updateBinCollectionSchedules uniqueSetOfRoutesUsingIndex [ [ [ -1 ], [ -1 ] ] ] 
+bin_router.utils.bin_collection_schedule_helper.updateBinCollectionSchedules uniqueSetOfRoutesUsingIndex [
+  [
+    [
+       0, 27, 39, 38, 25, 17, 31, 18, 29, 26, 19, 36,
+      35, 21, 41, 54, 51, 49, 50, 22, 40, 32, 47, 20,
+       1,  9, 14, 12, 15, 44, 52, 55, 23, 16, 46, 53,
+      24, 42, 33, 37, 28,  2,  6, 13,  7,  4,  8, 11,
+       5, 10,  3, 43, 48, 30, 45, 34,  0
+    ],
+    [ 0, 0 ]
+  ]
+] 
 
 bin_router.utils.bin_collection_schedule_helper.updateBinCollectionSchedules setOfBinCollectionSchedules [
   {
-    _id: 5f8f09ae88b3e0e386f11bbb,
-    routes: [],
-    timestamp: 2020-10-20T16:00:46.461Z
+    _id: 5f93b35514b02368af8aa2bb,
+    routes: [
+      {
+        vehicle: 5f8fa09790b9ff0a55ede359,
+        visitingOrder: [
+          { longitude: 145.133957, latitude: -37.907803 },
+          {
+            longitude: 144.90164392643769,
+            latitude: -37.80842801889412
+          },
+          {
+            longitude: 144.80871639952048,
+            latitude: -37.76447289345878
+          },
+          {
+            longitude: 144.7599645684658,
+            latitude: -37.74628628057363
+          },
+          { longitude: 144.719789, latitude: -37.6555917 },
+          { longitude: 144.719789, latitude: -37.6555917 },
+          {
+            longitude: 144.65715741207276,
+            latitude: -37.817825744109044
+          },
+          { longitude: 144.6398406, latitude: -37.8478183 },
+          { longitude: 144.6373449, latitude: -37.842572 },
+          { longitude: 144.7060389, latitude: -37.8757367 },
+          { longitude: 144.7077463, latitude: -37.8761503 },
+          { longitude: 144.6571881, latitude: -37.9212778 },
+          { longitude: 144.655948, latitude: -37.926216 },
+          { longitude: 144.5919382, latitude: -37.9053532 },
+          { longitude: 144.5930506, latitude: -37.9061735 },
+          { longitude: 144.6084185, latitude: -37.8722432 },
+          { longitude: 144.5884681, latitude: -37.870333 },
+          { longitude: 144.5903845, latitude: -37.8618526 },
+          { longitude: 144.5845217, latitude: -37.8392179 },
+          { longitude: 144.5845217, latitude: -37.8392179 },
+          { longitude: 144.6334621, latitude: -37.8910811 },
+          { longitude: 144.6536102, latitude: -37.8826914 },
+          { longitude: 144.6739163, latitude: -37.8913249 },
+          { longitude: 144.6906656, latitude: -37.8857409 },
+          { longitude: 144.7356233333, latitude: -37.8825216667 },
+          { longitude: 144.735345, latitude: -37.8827266667 },
+          { longitude: 144.7352166667, latitude: -37.88323 },
+          { longitude: 144.7351335129, latitude: -37.884073105 },
+          { longitude: 144.7331147, latitude: -37.8932189 },
+          { longitude: 144.7645583, latitude: -37.8848613 },
+          { longitude: 144.76367330107155, latitude: -37.89960765 },
+          { longitude: 144.7401004, latitude: -37.9133493 },
+          { longitude: 144.7650453, latitude: -37.9101396 },
+          { longitude: 144.76199238594253, latitude: -37.92533475 },
+          { longitude: 144.7543930363833, latitude: -37.93110825 },
+          { longitude: 144.7270034, latitude: -37.9252958 },
+          { longitude: 144.7091116, latitude: -37.925814 },
+          { longitude: 144.6896866, latitude: -37.9154122 },
+          { longitude: 144.6769283, latitude: -37.9211348 },
+          { longitude: 144.6784907, latitude: -37.9041918 },
+          { longitude: 144.6736408, latitude: -37.8999415 },
+          { longitude: 144.66128, latitude: -37.900181 },
+          { longitude: 144.661445, latitude: -37.9000316667 },
+          { longitude: 144.661874373, latitude: -37.9005884942 },
+          { longitude: 144.6619166667, latitude: -37.9006433333 },
+          { longitude: 144.6619166667, latitude: -37.9011583333 },
+          { longitude: 144.6613755151, latitude: -37.9011926717 },
+          { longitude: 144.6611613075, latitude: -37.9013126406 },
+          { longitude: 144.6607366667, latitude: -37.9016183333 },
+          { longitude: 144.6575183333, latitude: -37.903025 },
+          { longitude: 144.6575503108, latitude: -37.9030024868 },
+          { longitude: 144.6615621, latitude: -37.9146919 },
+          { longitude: 144.7018364, latitude: -37.9019127 },
+          { longitude: 144.7045887, latitude: -37.8972515 },
+          { longitude: 144.7850633, latitude: -37.8560508 },
+          { longitude: 144.7950889, latitude: -37.8520775 },
+          { longitude: 145.133957, latitude: -37.907803 }
+        ]
+      },
+      {
+        vehicle: 5f8fa3d1cd3c100af0dae47f,
+        visitingOrder: [
+          { longitude: 145.133957, latitude: -37.907803 },
+          { longitude: 145.133957, latitude: -37.907803 }
+        ]
+      }
+    ],
+    timestamp: 2020-10-24T04:53:41.885Z
   }
 ] 
 
@@ -1232,14 +1322,96 @@ bin_router.utils.bin_collection_schedule_helper.updateBinCollectionSchedules new
   result: { ok: 1, n: 1 },
   ops: [
     {
-      _id: 5f8f09ae88b3e0e386f11bbb,
-      routes: [],
-      timestamp: 2020-10-20T16:00:46.461Z,
+      _id: 5f93b35514b02368af8aa2bb,
+      routes: [
+        {
+          vehicle: 5f8fa09790b9ff0a55ede359,
+          visitingOrder: [
+            { longitude: 145.133957, latitude: -37.907803 },
+            {
+              longitude: 144.90164392643769,
+              latitude: -37.80842801889412
+            },
+            {
+              longitude: 144.80871639952048,
+              latitude: -37.76447289345878
+            },
+            {
+              longitude: 144.7599645684658,
+              latitude: -37.74628628057363
+            },
+            { longitude: 144.719789, latitude: -37.6555917 },
+            { longitude: 144.719789, latitude: -37.6555917 },
+            {
+              longitude: 144.65715741207276,
+              latitude: -37.817825744109044
+            },
+            { longitude: 144.6398406, latitude: -37.8478183 },
+            { longitude: 144.6373449, latitude: -37.842572 },
+            { longitude: 144.7060389, latitude: -37.8757367 },
+            { longitude: 144.7077463, latitude: -37.8761503 },
+            { longitude: 144.6571881, latitude: -37.9212778 },
+            { longitude: 144.655948, latitude: -37.926216 },
+            { longitude: 144.5919382, latitude: -37.9053532 },
+            { longitude: 144.5930506, latitude: -37.9061735 },
+            { longitude: 144.6084185, latitude: -37.8722432 },
+            { longitude: 144.5884681, latitude: -37.870333 },
+            { longitude: 144.5903845, latitude: -37.8618526 },
+            { longitude: 144.5845217, latitude: -37.8392179 },
+            { longitude: 144.5845217, latitude: -37.8392179 },
+            { longitude: 144.6334621, latitude: -37.8910811 },
+            { longitude: 144.6536102, latitude: -37.8826914 },
+            { longitude: 144.6739163, latitude: -37.8913249 },
+            { longitude: 144.6906656, latitude: -37.8857409 },
+            { longitude: 144.7356233333, latitude: -37.8825216667 },
+            { longitude: 144.735345, latitude: -37.8827266667 },
+            { longitude: 144.7352166667, latitude: -37.88323 },
+            { longitude: 144.7351335129, latitude: -37.884073105 },
+            { longitude: 144.7331147, latitude: -37.8932189 },
+            { longitude: 144.7645583, latitude: -37.8848613 },
+            { longitude: 144.76367330107155, latitude: -37.89960765 },
+            { longitude: 144.7401004, latitude: -37.9133493 },
+            { longitude: 144.7650453, latitude: -37.9101396 },
+            { longitude: 144.76199238594253, latitude: -37.92533475 },
+            { longitude: 144.7543930363833, latitude: -37.93110825 },
+            { longitude: 144.7270034, latitude: -37.9252958 },
+            { longitude: 144.7091116, latitude: -37.925814 },
+            { longitude: 144.6896866, latitude: -37.9154122 },
+            { longitude: 144.6769283, latitude: -37.9211348 },
+            { longitude: 144.6784907, latitude: -37.9041918 },
+            { longitude: 144.6736408, latitude: -37.8999415 },
+            { longitude: 144.66128, latitude: -37.900181 },
+            { longitude: 144.661445, latitude: -37.9000316667 },
+            { longitude: 144.661874373, latitude: -37.9005884942 },
+            { longitude: 144.6619166667, latitude: -37.9006433333 },
+            { longitude: 144.6619166667, latitude: -37.9011583333 },
+            { longitude: 144.6613755151, latitude: -37.9011926717 },
+            { longitude: 144.6611613075, latitude: -37.9013126406 },
+            { longitude: 144.6607366667, latitude: -37.9016183333 },
+            { longitude: 144.6575183333, latitude: -37.903025 },
+            { longitude: 144.6575503108, latitude: -37.9030024868 },
+            { longitude: 144.6615621, latitude: -37.9146919 },
+            { longitude: 144.7018364, latitude: -37.9019127 },
+            { longitude: 144.7045887, latitude: -37.8972515 },
+            { longitude: 144.7850633, latitude: -37.8560508 },
+            { longitude: 144.7950889, latitude: -37.8520775 },
+            { longitude: 145.133957, latitude: -37.907803 }
+          ]
+        },
+        {
+          vehicle: 5f8fa3d1cd3c100af0dae47f,
+          visitingOrder: [
+            { longitude: 145.133957, latitude: -37.907803 },
+            { longitude: 145.133957, latitude: -37.907803 }
+          ]
+        }
+      ],
+      timestamp: 2020-10-24T04:53:41.885Z,
       __v: 0
     }
   ],
   insertedCount: 1,
-  insertedIds: { '0': 5f8f09ae88b3e0e386f11bbb }
+  insertedIds: { '0': 5f93b35514b02368af8aa2bb }
 } 
 
 bin_router.index binCollectionSchedulesUpdateResult true 

@@ -28,4 +28,3 @@ router.get("/data/routes", schedules.getBinCollectionSchedules);
 // 404 page send
 
 export default router;
-

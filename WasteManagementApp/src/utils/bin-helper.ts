@@ -28,7 +28,7 @@ export class BinHelper {
             Object
                 .keys(dumbBinCreateInfoCorePropertiesTypes)
                 .map(property => typeof dumbBinCreateInfo[property] === dumbBinCreateInfoCorePropertiesTypes[property])
-                .every(isMatched => isMatched)
+                .every(isMatched => isMatched);
         
         if (!dumbBinCreateInfoCorePropertiesTypesCheckResult) {
             return false;
@@ -37,8 +37,8 @@ export class BinHelper {
         const dumbBinCreateInfoValuesCheckResult = 
             dumbBinCreateInfo.longitude >= -180 && dumbBinCreateInfo.longitude <= 180 && 
             dumbBinCreateInfo.latitude >= -90 && dumbBinCreateInfo.latitude <= 90 && 
-            dumbBinCreateInfo.capacity >= 1 && dumbBinCreateInfo.capacity <= 1000;
-            dumbBinCreateInfo.address !== "" 
+            dumbBinCreateInfo.capacity >= 1 && dumbBinCreateInfo.capacity <= 1000 && 
+            dumbBinCreateInfo.address !== "";
         return dumbBinCreateInfoValuesCheckResult;
     }
 

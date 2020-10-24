@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build-dev": "rm -r ./build; tsc && mkdir ./build/config && cp ./src/config/.env.development ./build/config/.env.development",
-    "build-prod": "rm -r ./build; tsc && mkdir ./build/config && cp ./src/config/.env.production ./build/config/.env.production",
-    "start-dev": "export NODE_ENV=development && nodemon ./build/index.js",
-    "start-prod": "export NODE_ENV=production && node ./build/index.js",
+    "build-dev": "rmdir build ; tsc ; mkdir build/config ; cp src/config/.env.development build/config/.env.development",
+    "build-prod": "rmdir build ; tsc ; mkdir build/config ; cp src/config/.env.production build/config/.env.production",
+    "start-dev": "$env:NODE_ENV = 'development' ; nodemon build/index.js",
+    "start-prod": "$env:NODE_ENV = 'production' ; node build/index.js",
     "test": "mocha **/*.spec.js --reporter spec"
   },
   "author": "",

@@ -4,6 +4,7 @@ import util from "util";
 import { Console } from "console";
 import { INCOMING_REQUEST_LOG_FILENAME, LOG_DIRECTORY_RELATIVE_PATH, SYSTEM_ERROR_FILENAME, SYSTEM_LOG_FILENAME, SYSTEM_PERFORMANCE_LOG_FILENAME } from "../constants/misc";
 
+// Log the response information for maintainability and traceability of the history for administration purpose
 export class Logger {
     private static generalConsole: Console;
     private static performanceConsole: Console;
