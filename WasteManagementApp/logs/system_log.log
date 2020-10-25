@@ -1228,7 +1228,7 @@ bin_router.utils.bin_collection_schedule_helper.updateBinCollectionSchedules uni
 
 bin_router.utils.bin_collection_schedule_helper.updateBinCollectionSchedules setOfBinCollectionSchedules [
   {
-    _id: 5f93b35514b02368af8aa2bb,
+    _id: 5f94bd5272a0fc8c21069c70,
     routes: [
       {
         vehicle: 5f8fa09790b9ff0a55ede359,
@@ -1312,7 +1312,7 @@ bin_router.utils.bin_collection_schedule_helper.updateBinCollectionSchedules set
         ]
       }
     ],
-    timestamp: 2020-10-24T04:53:41.885Z
+    timestamp: 2020-10-24T23:48:34.860Z
   }
 ] 
 
@@ -1322,7 +1322,7 @@ bin_router.utils.bin_collection_schedule_helper.updateBinCollectionSchedules new
   result: { ok: 1, n: 1 },
   ops: [
     {
-      _id: 5f93b35514b02368af8aa2bb,
+      _id: 5f94bd5272a0fc8c21069c70,
       routes: [
         {
           vehicle: 5f8fa09790b9ff0a55ede359,
@@ -1406,12 +1406,12 @@ bin_router.utils.bin_collection_schedule_helper.updateBinCollectionSchedules new
           ]
         }
       ],
-      timestamp: 2020-10-24T04:53:41.885Z,
+      timestamp: 2020-10-24T23:48:34.860Z,
       __v: 0
     }
   ],
   insertedCount: 1,
-  insertedIds: { '0': 5f93b35514b02368af8aa2bb }
+  insertedIds: { '0': 5f94bd5272a0fc8c21069c70 }
 } 
 
 bin_router.index binCollectionSchedulesUpdateResult true 
