@@ -1,3 +1,10 @@
+/**
+ * Author name: Yisong Yu
+ * Last modified date: October 25, 2020
+ * Description: 
+ * This source code file includes the definitions of all the HTTP-related constants.
+ */
+
 export const GET = 'GET';
 export const HEAD = 'HEAD';
 export const PUT = 'PUT';

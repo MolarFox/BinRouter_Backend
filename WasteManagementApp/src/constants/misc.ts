@@ -1,3 +1,10 @@
+/**
+ * Author name: Yisong Yu
+ * Last modified date: October 25, 2020
+ * Description: 
+ * This source code file includes the definitions of all the miscellaneous constants.
+ */
+
 /*
     *    *    *    *    *    *
     ┬    ┬    ┬    ┬    ┬    ┬
@@ -11,10 +18,13 @@
 */
 export const DAILY_UPDATE_TIME = "0 0 11 * * *";
 
+// BIN_SEARCH_DISTANCE defines the maximum search distance for a nearest smart bin of a dumb bin in metres
 export const BIN_SEARCH_DISTANCE = 1000;
 
 export const ROUTING_SOLVER_EXECUTABLE_RELATIVE_PATH = "./routing_solver/bin/routing";
 
+// FULLNESS_THRESHOLD_RATIO_SELECTION_CRITERION defines the selection criterion for smart bins to be collected, where
+// any smart bin whose fullness percentage (i.e., currentFullness / threshold) is over this ratio, it gets included 
 export const FULLNESS_THRESHOLD_RATIO_SELECTION_CRITERION = 0.5;
 
 export const LOG_DIRECTORY_RELATIVE_PATH = "./logs";

@@ -1,3 +1,10 @@
+/**
+ * Author name: Yisong Yu
+ * Last modified date: October 25, 2020
+ * Description: 
+ * This source code file includes the definitions of all the logging-related constants.
+ */
+
 const TAG_DELIMITER = ".";
 
 const APP = "bin_router";
