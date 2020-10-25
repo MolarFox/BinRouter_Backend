@@ -12,6 +12,7 @@ const fleetVehicleSchema = new mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     rego: {
         type: mongoose.Schema.Types.String,
+        minlength: 1,
         required: true,
         unique: true
     },

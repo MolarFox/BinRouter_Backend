@@ -43,7 +43,6 @@ describe("RoutingSolverAdapter", function() {
 
     describe("#execute", function() {
         it("should produce 4 routes for 4 vehicles where each route should contain a sequence of nodes in the specified order", async function() {
-
             const vehicleCapacities = [15, 15, 15, 15];
             const expectedResult = [
                 [0, 1, 4, 3, 15, 0],

@@ -13,6 +13,7 @@ describe("GoogleMapsServicesAdapter", function() {
             const actualResult = await googleMapsServicesAdapter.computeDistanceMatrix([], []);
             expect(actualResult).to.be.an("array");
             expect(actualResult.length).to.equal(0);
+            // console.log("actualResult =", actualResult);
         });
 
         it("should return a 1 x 1 distance matrix whose only element contains a distance of 0 and a duration of 0", async function() {
