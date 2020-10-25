@@ -26,7 +26,7 @@ const smartBinFillLevelSchema = new mongoose.Schema({
         required: true
     },
 }, {
-    collection: "SmartBinsFillLevels"
+    collection: "SmartBinFillLevels"
 });
 
 // Create a foreign key on serialNumber to link each document in this collection back to a smart bin document in SmartBins collection

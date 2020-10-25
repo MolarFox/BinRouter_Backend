@@ -260,7 +260,7 @@ export class BinDistanceHelper {
                 ]);
                 Logger.verboseLog(UPDATE_BIN_DISTANCES_LOG_TAG, "depots", depots, "\n");
 
-                // Compute the distance matrix for each of all possible combinations of binsCreatedComplement, binsDifferentType, 
+                // Compute the distance matrix for each of all possible combinations of binsCreated, binsCreatedComplement, binsDifferentType, 
                 // and depots as origins and destinations, and convert each resulting matrix to an array of bin distance documents, 
                 // and eventually flatten the resulting array of arrays of bin distance documents to an array of bin distance 
                 // documents, which can be directly inserted to the corresponding BinDistances database collection right after

@@ -23,10 +23,12 @@ const binCollectionScheduleSchema = new mongoose.Schema({
                     _id: false,
                     longitude: {
                         type: mongoose.Schema.Types.Number,
+                        validate: (longitude: number) => longitude >= -180 && longitude <= 180,
                         required: true
                     },
                     latitude: {
                         type: mongoose.Schema.Types.Number,
+                        validate: (latitude: number) => latitude >= -90 && latitude <= 90,
                         required: true
                     }
                 }

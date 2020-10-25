@@ -23,7 +23,7 @@ const smartBinSchema = new mongoose.Schema({
         },
         coordinates: {
             type: [mongoose.Schema.Types.Number],
-            validate: function(lnglat: Number[]) {
+            validate: function(lnglat: number[]) {
                 if (lnglat.length == 2) {
                     const longitude = lnglat[0];
                     const latitude = lnglat[1];

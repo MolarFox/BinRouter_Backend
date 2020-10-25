@@ -283,8 +283,8 @@ bin_router.utils.bin_collection_schedule_helper.updateBinCollectionSchedules dum
   },
   {
     _id: 5f8fa09790b9ff0a55ede3c1,
-    longitude: 144.7850633,
-    latitude: -37.8560508,
+    longitude: 144.7963631979309,
+    latitude: -37.854902824255454,
     volume: 344
   },
   {
@@ -682,14 +682,6 @@ bin_router.utils.bin_collection_schedule_helper.updateBinCollectionSchedules bin
     destinationType: 'DumbBin',
     distance: 46534,
     duration: 2497
-  },
-  {
-    origin: 5f8fa09790b9ff0a55ede358,
-    originType: 'Depot',
-    destination: 5f8fa09790b9ff0a55ede3c1,
-    destinationType: 'DumbBin',
-    distance: 38868,
-    duration: 2075
   },
   {
     origin: 5f8fa09790b9ff0a55ede358,
@@ -1102,14 +1094,6 @@ bin_router.utils.bin_collection_schedule_helper.updateBinCollectionSchedules bin
   {
     origin: 5f8fa09790b9ff0a55ede35c,
     originType: 'SmartBin',
-    destination: 5f8fa09790b9ff0a55ede3c1,
-    destinationType: 'DumbBin',
-    distance: 9877,
-    duration: 805
-  },
-  {
-    origin: 5f8fa09790b9ff0a55ede35c,
-    originType: 'SmartBin',
     destination: 5f8fa09790b9ff0a55ede3c2,
     destinationType: 'DumbBin',
     distance: 6168,
@@ -1155,12 +1139,28 @@ bin_router.utils.bin_collection_schedule_helper.updateBinCollectionSchedules bin
     distance: 18112,
     duration: 1558
   },
+  {
+    origin: 5f8fa09790b9ff0a55ede35c,
+    originType: 'SmartBin',
+    destination: 5f8fa09790b9ff0a55ede3c8,
+    destinationType: 'DumbBin',
+    distance: 4281,
+    duration: 502
+  },
+  {
+    origin: 5f8fa09790b9ff0a55ede35c,
+    originType: 'SmartBin',
+    destination: 5f8fa09790b9ff0a55ede3c9,
+    destinationType: 'DumbBin',
+    distance: 8103,
+    duration: 696
+  },
   ... 3036 more items
 ] 
 
 Routing solver using AUTOMATIC successfully generated the following routes:  [
   [
-     0, 27, 39, 38, 25, 17, 31, 18, 29, 26, 19, 36,
+     0, 27, 39, 38, 25, 17, 31, 29, 18, 26, 19, 36,
     35, 21, 41, 54, 51, 49, 50, 22, 40, 32, 47, 20,
      1,  9, 14, 12, 15, 44, 52, 55, 23, 16, 46, 53,
     24, 42, 33, 37, 28,  2,  6, 13,  7,  4,  8, 11,
@@ -1171,7 +1171,7 @@ Routing solver using AUTOMATIC successfully generated the following routes:  [
 
 Routing solver using GREEDY_DESCENT successfully generated the following routes:  [
   [
-     0, 27, 39, 38, 25, 17, 31, 18, 29, 26, 19, 36,
+     0, 27, 39, 38, 25, 17, 31, 29, 18, 26, 19, 36,
     35, 21, 41, 54, 51, 49, 50, 22, 40, 32, 47, 20,
      1,  9, 14, 12, 15, 44, 52, 55, 23, 16, 46, 53,
     24, 42, 33, 37, 28,  2,  6, 13,  7,  4,  8, 11,
@@ -1182,7 +1182,7 @@ Routing solver using GREEDY_DESCENT successfully generated the following routes:
 
 Routing solver using GUIDED_LOCAL_SEARCH successfully generated the following routes:  [
   [
-     0, 27, 39, 38, 25, 17, 31, 18, 29, 26, 19, 36,
+     0, 27, 39, 38, 25, 17, 31, 29, 18, 26, 19, 36,
     35, 21, 41, 54, 51, 49, 50, 22, 40, 32, 47, 20,
      1,  9, 14, 12, 15, 44, 52, 55, 23, 16, 46, 53,
     24, 42, 33, 37, 28,  2,  6, 13,  7,  4,  8, 11,
@@ -1193,7 +1193,7 @@ Routing solver using GUIDED_LOCAL_SEARCH successfully generated the following ro
 
 Routing solver using SIMULATED_ANNEALING successfully generated the following routes:  [
   [
-     0, 27, 39, 38, 25, 17, 31, 18, 29, 26, 19, 36,
+     0, 27, 39, 38, 25, 17, 31, 29, 18, 26, 19, 36,
     35, 21, 41, 54, 51, 49, 50, 22, 40, 32, 47, 20,
      1,  9, 14, 12, 15, 44, 52, 55, 23, 16, 46, 53,
     24, 42, 33, 37, 28,  2,  6, 13,  7,  4,  8, 11,
@@ -1204,7 +1204,7 @@ Routing solver using SIMULATED_ANNEALING successfully generated the following ro
 
 Routing solver using TABU_SEARCH successfully generated the following routes:  [
   [
-     0, 27, 39, 38, 25, 17, 31, 18, 29, 26, 19, 36,
+     0, 27, 39, 38, 25, 17, 31, 29, 18, 26, 19, 36,
     35, 21, 41, 54, 51, 49, 50, 22, 40, 32, 47, 20,
      1,  9, 14, 12, 15, 44, 52, 55, 23, 16, 46, 53,
     24, 42, 33, 37, 28,  2,  6, 13,  7,  4,  8, 11,
@@ -1216,7 +1216,7 @@ Routing solver using TABU_SEARCH successfully generated the following routes:  [
 bin_router.utils.bin_collection_schedule_helper.updateBinCollectionSchedules uniqueSetOfRoutesUsingIndex [
   [
     [
-       0, 27, 39, 38, 25, 17, 31, 18, 29, 26, 19, 36,
+       0, 27, 39, 38, 25, 17, 31, 29, 18, 26, 19, 36,
       35, 21, 41, 54, 51, 49, 50, 22, 40, 32, 47, 20,
        1,  9, 14, 12, 15, 44, 52, 55, 23, 16, 46, 53,
       24, 42, 33, 37, 28,  2,  6, 13,  7,  4,  8, 11,
@@ -1228,7 +1228,7 @@ bin_router.utils.bin_collection_schedule_helper.updateBinCollectionSchedules uni
 
 bin_router.utils.bin_collection_schedule_helper.updateBinCollectionSchedules setOfBinCollectionSchedules [
   {
-    _id: 5f94ea47eb08979856e85327,
+    _id: 5f9562e2326a94ab09aff9d1,
     routes: [
       {
         vehicle: 5f8fa09790b9ff0a55ede359,
@@ -1252,8 +1252,8 @@ bin_router.utils.bin_collection_schedule_helper.updateBinCollectionSchedules set
             longitude: 144.65715741207276,
             latitude: -37.817825744109044
           },
-          { longitude: 144.6398406, latitude: -37.8478183 },
           { longitude: 144.6373449, latitude: -37.842572 },
+          { longitude: 144.6398406, latitude: -37.8478183 },
           { longitude: 144.7060389, latitude: -37.8757367 },
           { longitude: 144.7077463, latitude: -37.8761503 },
           { longitude: 144.6571881, latitude: -37.9212778 },
@@ -1299,7 +1299,10 @@ bin_router.utils.bin_collection_schedule_helper.updateBinCollectionSchedules set
           { longitude: 144.6615621, latitude: -37.9146919 },
           { longitude: 144.7018364, latitude: -37.9019127 },
           { longitude: 144.7045887, latitude: -37.8972515 },
-          { longitude: 144.7850633, latitude: -37.8560508 },
+          {
+            longitude: 144.7963631979309,
+            latitude: -37.854902824255454
+          },
           { longitude: 144.7950889, latitude: -37.8520775 },
           { longitude: 145.133957, latitude: -37.907803 }
         ]
@@ -1312,7 +1315,7 @@ bin_router.utils.bin_collection_schedule_helper.updateBinCollectionSchedules set
         ]
       }
     ],
-    timestamp: 2020-10-25T03:00:23.912Z
+    timestamp: 2020-10-25T11:34:58.009Z
   }
 ] 
 
@@ -1322,7 +1325,7 @@ bin_router.utils.bin_collection_schedule_helper.updateBinCollectionSchedules new
   result: { ok: 1, n: 1 },
   ops: [
     {
-      _id: 5f94ea47eb08979856e85327,
+      _id: 5f9562e2326a94ab09aff9d1,
       routes: [
         {
           vehicle: 5f8fa09790b9ff0a55ede359,
@@ -1346,8 +1349,8 @@ bin_router.utils.bin_collection_schedule_helper.updateBinCollectionSchedules new
               longitude: 144.65715741207276,
               latitude: -37.817825744109044
             },
-            { longitude: 144.6398406, latitude: -37.8478183 },
             { longitude: 144.6373449, latitude: -37.842572 },
+            { longitude: 144.6398406, latitude: -37.8478183 },
             { longitude: 144.7060389, latitude: -37.8757367 },
             { longitude: 144.7077463, latitude: -37.8761503 },
             { longitude: 144.6571881, latitude: -37.9212778 },
@@ -1393,7 +1396,10 @@ bin_router.utils.bin_collection_schedule_helper.updateBinCollectionSchedules new
             { longitude: 144.6615621, latitude: -37.9146919 },
             { longitude: 144.7018364, latitude: -37.9019127 },
             { longitude: 144.7045887, latitude: -37.8972515 },
-            { longitude: 144.7850633, latitude: -37.8560508 },
+            {
+              longitude: 144.7963631979309,
+              latitude: -37.854902824255454
+            },
             { longitude: 144.7950889, latitude: -37.8520775 },
             { longitude: 145.133957, latitude: -37.907803 }
           ]
@@ -1406,12 +1412,12 @@ bin_router.utils.bin_collection_schedule_helper.updateBinCollectionSchedules new
           ]
         }
       ],
-      timestamp: 2020-10-25T03:00:23.912Z,
+      timestamp: 2020-10-25T11:34:58.009Z,
       __v: 0
     }
   ],
   insertedCount: 1,
-  insertedIds: { '0': 5f94ea47eb08979856e85327 }
+  insertedIds: { '0': 5f9562e2326a94ab09aff9d1 }
 } 
 
 bin_router.index binCollectionSchedulesUpdateResult true 

@@ -31,7 +31,7 @@ import depotsInfo from "./initial_data/depots.json";
 import dumbBinsInfo from "./initial_data/dumb_bins.json";
 import fleetVehiclesInfo from "./initial_data/fleet_vehicles.json";
 import router from "./router";
-import Database from "./database";
+import { Database } from "./database";
 
 //Initialise the logger
 Logger.initialise();

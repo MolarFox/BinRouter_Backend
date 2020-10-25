@@ -10,7 +10,7 @@
 import mongoose from "mongoose";
 import { Logger } from "./utils/logger";
 
-export default class Database {
+export class Database {
     // connection stores a handle to a mongoose connection
     private static connection: null | mongoose.Connection = null;
 
