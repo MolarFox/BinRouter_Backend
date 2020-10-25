@@ -142,8 +142,8 @@ export class BinHelper {
             const nearestSmartBins = await BinHelper.computeNearestSmartBins(dumbBins);
             Logger.verboseLog(UPDATE_NEAREST_SMART_BINS_LOG_TAG, "nearestSmartBins", nearestSmartBins, "\n");
             
-            // Update the nearest smart bin field for each of the input dumb bins to its nearest smart bin's ID if 
-            // there's any within the predefined search range, otherwise update it to undefined in a bulk write operation 
+            // Update the nearestSmartBin field for each of the input dumb bins to its nearest smart bin's ID if there
+            // is any within the predefined search range, otherwise update it to undefined in a bulk write operation 
             const dumbBinsUpdateOnNearestSmartBinsBulkWriteResult = await DumbBin.bulkWrite(
                 nearestSmartBins.map((nearestSmartBin, index) => ({
                     updateOne: {

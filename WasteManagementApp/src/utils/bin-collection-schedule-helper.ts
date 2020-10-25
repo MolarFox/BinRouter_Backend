@@ -30,7 +30,7 @@ export class BinCollectionScheduleHelper {
      * 
      * @async
      * 
-     * @returns true if the update succeeds without errors, false otherwise
+     * @returns {boolean} true if the update succeeds without errors, false otherwise
      */
     public static async updateBinCollectionSchedules(): Promise<boolean> {
         try {
