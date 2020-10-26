@@ -16,7 +16,7 @@ import { BinDistanceHelper } from "../bin-distance-helper";
 chai.use(chaiAsPromised);
 const expect = chai.expect;
 
-describe("BinHelper", function() {
+describe("BinCollectionScheduleHelper", function() {
     const googleMapsServicesAdapter: GoogleMapsServicesAdapter = new GoogleMapsServicesAdapter();
     let connection: mongoose.Connection | undefined;
     let depots: mongoose.Document[] | undefined;
