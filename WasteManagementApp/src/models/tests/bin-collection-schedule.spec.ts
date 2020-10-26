@@ -50,7 +50,8 @@ describe("BinCollectionSchedule", function() {
                 timestamp: new Date()
             };
             await BinCollectionSchedule.create(binCollectionScheduleDoc);
-            const actualResult = await BinCollectionSchedule.findOne(binCollectionScheduleDoc) as any;
+            const actualResult = await BinCollectionSchedule.findById(binCollectionScheduleDoc._id) as any;
+            expect(actualResult).to.be.not.null;
             expect(actualResult?._id).to.deep.equal(binCollectionScheduleDoc._id);
             for (let i = 0; i < binCollectionScheduleDoc.routes.length; i++) {
                 expect(actualResult?.routes[i].vehicle).to.deep.equal(binCollectionScheduleDoc.routes[i].vehicle);
@@ -65,7 +66,7 @@ describe("BinCollectionSchedule", function() {
             await BinCollectionSchedule.findByIdAndDelete(binCollectionScheduleDoc._id);
         });
 
-        it("should fail to create a new bin collection schedule document in BinCollectionSchedules collection", function() {
+        it("should fail to create a new bin collection schedule document in BinCollectionSchedules collection", async function() {
             const binCollectionScheduleDoc = {
                 _id: new mongoose.Types.ObjectId(),
                 routes: [
@@ -90,6 +91,8 @@ describe("BinCollectionSchedule", function() {
                 timestamp: false
             };
             expect(BinCollectionSchedule.create(binCollectionScheduleDoc)).to.be.rejectedWith(mongoose.Error.ValidationError);
+            const actualResult = await BinCollectionSchedule.findById(binCollectionScheduleDoc._id);
+            expect(actualResult).to.be.null;
         });
     });
 });
