@@ -29,7 +29,7 @@ describe("SmartBinFillLevel", function() {
                 timestamp: new Date()
             };
             await SmartBinFillLevel.create(smartBinFillLevelDoc);
-            const actualResult = await SmartBinFillLevel.findById(smartBinFillLevelDoc) as any;
+            const actualResult = await SmartBinFillLevel.findById(smartBinFillLevelDoc._id) as any;
             expect(actualResult).to.be.not.null;
             expect(actualResult?._id).to.deep.equal(smartBinFillLevelDoc._id);
             expect(actualResult?.serialNumber).to.equal(smartBinFillLevelDoc.serialNumber);

@@ -32,7 +32,8 @@ describe("BinDistance", function() {
                 duration: 12345
             };
             await BinDistance.create(binDistanceDoc);
-            const actualResult = await BinDistance.findOne(binDistanceDoc) as any;
+            const actualResult = await BinDistance.findById(binDistanceDoc._id) as any;
+            expect(actualResult).to.be.not.null;
             expect(actualResult?._id).to.deep.equal(binDistanceDoc._id);
             expect(actualResult?.origin).to.deep.equal(binDistanceDoc.origin);
             expect(actualResult?.originType).to.equal(binDistanceDoc.originType);
@@ -43,7 +44,7 @@ describe("BinDistance", function() {
             await BinDistance.findByIdAndDelete(binDistanceDoc._id);
         });
 
-        it("should fail to create a new bin distance document in BinDistances collection", function() {
+        it("should fail to create a new bin distance document in BinDistances collection", async function() {
             const binDistanceDoc = {
                 _id: new mongoose.Types.ObjectId(),
                 origin: undefined,
@@ -54,6 +55,8 @@ describe("BinDistance", function() {
                 duration: true
             };
             expect(BinDistance.create(binDistanceDoc)).to.be.rejectedWith(mongoose.Error.ValidationError);
+            const actualResult = await BinDistance.findById(binDistanceDoc._id);
+            expect(actualResult).to.be.null;
         });
     });
 });
