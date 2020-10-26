@@ -34,6 +34,7 @@ describe("DumbBin", function() {
             };
             await DumbBin.create(dumbBinDoc) as any;
             const actualResult = await DumbBin.findById(dumbBinDoc._id) as any;
+            expect(actualResult).to.be.not.null;
             expect(actualResult?._id).to.deep.equal(dumbBinDoc._id);
             expect(actualResult?.location.type).to.equal(dumbBinDoc.location.type);
             expect(actualResult?.location.coordinates).to.deep.equal(dumbBinDoc.location.coordinates);
