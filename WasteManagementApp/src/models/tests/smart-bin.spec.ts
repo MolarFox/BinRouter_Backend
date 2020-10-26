@@ -39,7 +39,8 @@ describe("SmartBin", function() {
                 serialNumber: 123456789
             });
             await SmartBin.create(smartBinDoc);
-            const actualResult = await SmartBin.findOne(smartBinDoc) as any;
+            const actualResult = await SmartBin.findById(smartBinDoc._id) as any;
+            expect(actualResult).to.be.not.null;
             expect(actualResult?._id).to.deep.equal(smartBinDoc._id);
             expect(actualResult?.location.type).to.equal(smartBinDoc.location.type);
             expect(actualResult?.location.coordinates).to.deep.equal(smartBinDoc.location.coordinates);
@@ -51,7 +52,7 @@ describe("SmartBin", function() {
             await SmartBin.findByIdAndDelete(smartBinDoc._id);
         });
 
-        it("should fail to create a new smart bin document in SmartBins collection", function() {
+        it("should fail to create a new smart bin document in SmartBins collection", async function() {
             const smartBinDoc = {
                 _id: new mongoose.Types.ObjectId(),
                 serialNumber: undefined,
@@ -66,6 +67,8 @@ describe("SmartBin", function() {
                 lastUpdated: "some random value"
             };
             expect(SmartBin.create(smartBinDoc)).to.be.rejectedWith(mongoose.Error.ValidationError);
+            const actualResult = await SmartBin.findById(smartBinDoc._id);
+            expect(actualResult).to.be.null;
         });
     });
 });
