@@ -31,7 +31,8 @@ describe("Depot", function() {
                 address: "Monash University, Wellington Rd, Clayton VIC 3800"
             };
             await Depot.create(depotDoc);
-            const actualResult = await Depot.findOne(depotDoc) as any;
+            const actualResult = await Depot.findById(depotDoc._id) as any;
+            expect(actualResult).to.be.not.null;
             expect(actualResult?._id).to.deep.equal(depotDoc._id);
             expect(actualResult?.location.type).to.equal(depotDoc.location.type);
             expect(actualResult?.location.coordinates).to.deep.equal(depotDoc.location.coordinates);
@@ -39,7 +40,7 @@ describe("Depot", function() {
             await Depot.findByIdAndDelete(depotDoc._id);
         });
 
-        it("should fail to create a new depot document in Depots collection", function() {
+        it("should fail to create a new depot document in Depots collection", async function() {
             const depotDoc = {
                 _id: new mongoose.Types.ObjectId(),
                 location: {
@@ -49,6 +50,8 @@ describe("Depot", function() {
                 address: ""
             };
             expect(Depot.create(depotDoc)).to.be.rejectedWith(mongoose.Error.ValidationError);
+            const actualResult = await Depot.findById(depotDoc);
+            expect(actualResult).to.be.null;
         });
     });
 });
