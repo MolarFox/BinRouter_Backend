@@ -34,7 +34,8 @@ describe("FleetVehicle", function() {
                 rego: "ZZZZZZ"
             });
             await FleetVehicle.create(fleetVehicleDoc);
-            const actualResult = await FleetVehicle.findOne(fleetVehicleDoc) as any;
+            const actualResult = await FleetVehicle.findById(fleetVehicleDoc._id) as any;
+            expect(actualResult).to.be.not.null;
             expect(actualResult?._id).to.deep.equal(fleetVehicleDoc._id);
             expect(actualResult?.rego).to.equal(fleetVehicleDoc.rego);
             expect(actualResult?.capacity).to.equal(fleetVehicleDoc.capacity);
@@ -44,7 +45,7 @@ describe("FleetVehicle", function() {
             await FleetVehicle.findByIdAndDelete(fleetVehicleDoc._id);
         });
 
-        it("should fail to create a new fleet vehicle document in FleetVehicles collection", function() {
+        it("should fail to create a new fleet vehicle document in FleetVehicles collection", async function() {
             const fleetVehicleDoc = {
                 _id: new mongoose.Types.ObjectId(),
                 rego: "ZZZZZZ",
@@ -53,6 +54,8 @@ describe("FleetVehicle", function() {
                 icon: -1
             };
             expect(FleetVehicle.create(fleetVehicleDoc)).to.be.rejectedWith(mongoose.Error.ValidationError);
+            const actualResult = await FleetVehicle.findById(fleetVehicleDoc._id);
+            expect(actualResult).to.be.null;
         });
     });
 });

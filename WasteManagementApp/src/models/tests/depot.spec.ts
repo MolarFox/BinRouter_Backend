@@ -50,7 +50,7 @@ describe("Depot", function() {
                 address: ""
             };
             expect(Depot.create(depotDoc)).to.be.rejectedWith(mongoose.Error.ValidationError);
-            const actualResult = await Depot.findById(depotDoc);
+            const actualResult = await Depot.findById(depotDoc._id);
             expect(actualResult).to.be.null;
         });
     });
