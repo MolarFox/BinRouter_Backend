@@ -33,7 +33,7 @@ describe("DumbBin", function() {
                 nearestSmartBin: new mongoose.Types.ObjectId()
             };
             await DumbBin.create(dumbBinDoc) as any;
-            const actualResult = await DumbBin.findOne(dumbBinDoc) as any;
+            const actualResult = await DumbBin.findById(dumbBinDoc._id) as any;
             expect(actualResult?._id).to.deep.equal(dumbBinDoc._id);
             expect(actualResult?.location.type).to.equal(dumbBinDoc.location.type);
             expect(actualResult?.location.coordinates).to.deep.equal(dumbBinDoc.location.coordinates);
@@ -43,7 +43,7 @@ describe("DumbBin", function() {
             await DumbBin.findByIdAndDelete(dumbBinDoc._id);
         });
 
-        it("should fail to create a new dumb bin document in DumbBins collection", function() {
+        it("should fail to create a new dumb bin document in DumbBins collection", async function() {
             const dumbBinDoc = {
                 _id: new mongoose.Types.ObjectId(),
                 location: {
@@ -54,6 +54,8 @@ describe("DumbBin", function() {
                 capacity: -1
             };
             expect(DumbBin.create(dumbBinDoc)).to.be.rejectedWith(mongoose.Error.ValidationError);
+            const actualResult = await DumbBin.findById(dumbBinDoc._id);
+            expect(actualResult).to.be.null;
         });
     });
 });
