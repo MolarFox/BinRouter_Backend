@@ -41,7 +41,7 @@ describe("Logger", function() {
     });
 
     describe("#verboseError", function() {
-        it("should write to system_log.log", function() {
+        it("should write to system_error.log", function() {
             Logger.verboseError("Hello ", "this is the second test");
             Logger.verboseError({x: 2, y: 2});
         });
