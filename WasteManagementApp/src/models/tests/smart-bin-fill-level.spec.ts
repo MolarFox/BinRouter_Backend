@@ -29,9 +29,8 @@ describe("SmartBinFillLevel", function() {
                 timestamp: new Date()
             };
             await SmartBinFillLevel.create(smartBinFillLevelDoc);
-            const actualResult = await SmartBinFillLevel.findOne(smartBinFillLevelDoc) as any;
-            console.log(actualResult);
-            console.log(await SmartBinFillLevel.countDocuments());
+            const actualResult = await SmartBinFillLevel.findById(smartBinFillLevelDoc) as any;
+            expect(actualResult).to.be.not.null;
             expect(actualResult?._id).to.deep.equal(smartBinFillLevelDoc._id);
             expect(actualResult?.serialNumber).to.equal(smartBinFillLevelDoc.serialNumber);
             expect(actualResult?.fullness).to.equal(smartBinFillLevelDoc.fullness);
@@ -39,7 +38,7 @@ describe("SmartBinFillLevel", function() {
             await SmartBinFillLevel.findByIdAndDelete(smartBinFillLevelDoc._id);
         });
 
-        it("should fail to create a new smart bin fill level document in SmartBinFillLevels collection", function() {
+        it("should fail to create a new smart bin fill level document in SmartBinFillLevels collection", async function() {
             const smartBinFillLevelDoc = {
                 _id: new mongoose.Types.ObjectId(),
                 serialNumber: true,
@@ -47,6 +46,8 @@ describe("SmartBinFillLevel", function() {
                 timestamp: undefined
             };
             expect(SmartBinFillLevel.create(smartBinFillLevelDoc)).to.be.rejectedWith(mongoose.Error.ValidationError);
+            const actualResult = await SmartBinFillLevel.findById(smartBinFillLevelDoc._id);
+            expect(actualResult).to.be.null;
         });
     });
 });
