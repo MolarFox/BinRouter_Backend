@@ -103,8 +103,8 @@ export class BinHelper {
      * @returns {(string | null)[]} an array of IDs of the smart bins or nulls where an ID string is present only if that input 
      *                              dumb bin has at least one smart bin around it within the predefined range, and a null otherwise
      */
-    public static async computeNearestSmartBins(dumbBins: LatLng[]): Promise<(string | null)[]> {
-        const nearestSmartBins: (string | null)[] = await Promise.all(
+    public static async computeNearestSmartBins(dumbBins: LatLng[]): Promise<(string | undefined)[]> {
+        const nearestSmartBins: (string | undefined)[] = await Promise.all(
             // Find the nearest smart bin that is within the range of BIN_SEARCH_DISTANCE and return its ID if there exists one, 
             // otherwise a null is returned
             dumbBins.map(async (dumbBin) => 
@@ -143,7 +143,7 @@ export class BinHelper {
             Logger.verboseLog(UPDATE_NEAREST_SMART_BINS_LOG_TAG, "nearestSmartBins", nearestSmartBins, "\n");
             
             // Update the nearestSmartBin field for each of the input dumb bins to its nearest smart bin's ID if there
-            // is any within the predefined search range, otherwise update it to undefined in a bulk write operation 
+            // is any within the predefined search range, otherwise update it to null in a bulk write operation 
             const dumbBinsUpdateOnNearestSmartBinsBulkWriteResult = await DumbBin.bulkWrite(
                 nearestSmartBins.map((nearestSmartBin, index) => ({
                     updateOne: {

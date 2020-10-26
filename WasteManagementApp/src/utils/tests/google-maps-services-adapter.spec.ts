@@ -5,7 +5,7 @@ describe("GoogleMapsServicesAdapter", function() {
     const googleMapsServicesAdapter: GoogleMapsServicesAdapter = new GoogleMapsServicesAdapter();
 
     before("initialise the environment", function() {
-        process.env.GOOGLE_MAPS_API_KEY = "AIzaSyD2XBXROlPbiqozvTPTtH_gQRPs-qx6t6A";
+        process.env.GOOGLE_MAPS_API_KEY = "AIzaSyB1p_lDJ2L-DH5GSnWtpqDs-Nol1vaDuG0";
     });
 
     describe("#computeDistanceMatrix", function() {
