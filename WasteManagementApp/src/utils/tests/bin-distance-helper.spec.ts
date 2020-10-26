@@ -235,6 +235,6 @@ describe("BinDistanceHelper", function() {
                 expect(matchedDestinationDocsForSmartBin[i].distance).to.not.equal(-1);
                 expect(matchedDestinationDocsForSmartBin[i].duration).to.not.equal(-1);
             }
-        });
+        }).timeout(10000);
     });
 });
