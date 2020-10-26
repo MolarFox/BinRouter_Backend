@@ -109,7 +109,6 @@ describe("RoutingSolverAdapter", function() {
                 nodeWeights, 
                 vehicleCapacities
             );
-            console.log(actualResult);
             expect(actualResult.length).to.equal(1);
             expect(actualResult[0]).to.deep.equal(expectedResult);
         }).timeout(50000);
