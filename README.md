@@ -1,5 +1,5 @@
 # Project BinRouter 
-## Frontend and Routing Solver
+## Backend
 A final year computer science project by FIT3162 Team 14 2020. 
 
 * [Yisong Yu](https://github.com/YuuYouYoo)
